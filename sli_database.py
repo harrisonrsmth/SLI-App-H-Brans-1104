@@ -3,7 +3,7 @@ import mysql.connector as mysql
 db = mysql.connect(
     host = "localhost",
     user = "root",
-    passwd = "hoanhtuan2204"
+    passwd = ""
 )
 
 print(db)
@@ -19,7 +19,7 @@ cursor.close()
 db1 = mysql.connect(
     host = "localhost",
     user = "root",
-    passwd = "hoanhtuan2204",
+    passwd = "",
     database = "sli_database"
 )
 
@@ -38,9 +38,30 @@ cursor.execute("CREATE TABLE teacher (school_code int, email VARCHAR(50) NOT NUL
 cursor.execute("INSERT INTO student VALUES (\"student\", \"student\")")
 cursor.execute("INSERT INTO teacher VALUES (1, \"teacher\", \"teacher\", \"ABC\", \"DEF\")")
 
-cursor.close()
+role = input("Are you a teacher(0) or a student(1)?: ")
+def createUserStudent(cursor, username, password,
+               querynum=0, 
+               updatenum=0, 
+               connection_num=0):
+    try:
+        cursor.execute("INSERT INTO student VALUES (\"%s\", \"%s\")"%(username, password))
+        print("Student account successfully created.")
+    except Exception as Ex:
+        print("Error creating Student account: %s"%(Ex))
 
-role = input("Are you teacher(0) or student(1) ?: ")
+createUserStudent(cursor, "user_test", "pass_test")
+
+def createUserTeacher(cursor, school_code, email, password, fname, lname,
+               querynum=0, 
+               updatenum=0, 
+               connection_num=0):
+    try:
+        cursor.execute("INSERT INTO teacher VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"%(school_code, email, password, fname, lname))
+        print("Teacher account successfully created.")
+    except Exception as Ex:
+        print("Error creating Teacher account: %s"%(Ex))
+
+createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
 def login(role: int):
 	if role == '1':
@@ -53,10 +74,10 @@ def login(role: int):
 
 			records = cursor.fetchall()
 			if records and password in records[0]:
-				print("You are successfully login !")
+				print("You are successfully logged in!")
 				break
 			else:
-				print("Your username or password is incorrect. Please try again !")
+				print("Your username or password is incorrect. Please try again!")
 
 	elif role == '0':
 		while True:
@@ -68,11 +89,11 @@ def login(role: int):
 
 			records = cursor.fetchall()
 			if records and password in records[0]:
-				print("You are successfully login !")
+				print("You are successfully logged in!")
 				break
 			else:
-				print("Your email or password is incorrect. Please try again !")
+				print("Your email or password is incorrect. Please try again!")
 
 login(role)
 
-
+cursor.close()
