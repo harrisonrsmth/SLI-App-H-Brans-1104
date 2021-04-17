@@ -131,10 +131,12 @@ def login(role: int):
 
 def main():
 	logged_in = False
+	teacher = False
 	print(("Welcome to the S.L.I. App!"))
 	while True:
 		action = input("\nTo login, press 'l' then ENTER\n"
 			+ "To create an account, press 'c' then ENTER\n"
+			+ "\t- Must be logged in as a teacher to create student accounts\n"
 			+ "To logout, press 'o' then ENTER\n"
 			+ "To quit, press 'q' then ENTER\n")
 		if action == 'l':
@@ -148,6 +150,7 @@ def main():
 						l = login(0)
 						if l == 0:
 							logged_in = True
+							teacher = True
 						break
 					elif role == 's':
 						l = login(1)
@@ -158,47 +161,53 @@ def main():
 						print("Please enter either 't' or 's'")
 		elif action == 'c':
 			print("\n### Create Accounnt ###")
-			if logged_in:
-				print("You are already logged in. Please logout to create a new account.")
-			else:	
-				while True:
+			#if logged_in:
+				#print("You are already logged in. Please logout to create a new account.")
+			#else:	
+			while True:
+				if teacher:
 					role = input("Are you creating a teacher or student account? (t/s): ")
-					if role == 't':
-						fname = input("First Name (type '/exit' to exit create account): ")
-						if fname == "/exit":
+				else:
+					role = 't'
+				if role == 't':
+					print("Creating teacher account")
+					fname = input("First Name (type '/exit' to exit create account): ")
+					if fname == "/exit":
+						break
+					lname = input("Last Name: ")
+					email = input("Email: ")
+					while True:
+						password = input("Create Password: ")
+						confirm_pass = input("Confirm Password: ")
+						if confirm_pass != password:
+							print("Password does not match. Please try again")
+						else:
 							break
-						lname = input("Last Name: ")
-						email = input("Email: ")
-						while True:
-							password = input("Create Password: ")
-							confirm_pass = input("Confirm Password: ")
-							if confirm_pass != password:
-								print("Password does not match. Please try again")
-							else:
-								break
-						school_code = input("School Code: ")
-						createUserTeacher(school_code, email, password, fname, lname)
-						break
-					elif role == 's':
-						username = input("Username: ")
-						while True:
-							password = input("Create Password: ")
-							confirm_pass = input("Confirm Password: ")
-							if confirm_pass != password:
-								print("Password does not match. Please try again")
-							else:
-								break
-						createUserStudent(username, password)
-						break
-					else:
-						print("Please enter either 't' or 's'")
+					school_code = input("School Code: ")
+					createUserTeacher(school_code, email, password, fname, lname)
+					break
+				elif role == 's':
+					print("Creating student account")
+					username = input("Username: ")
+					while True:
+						password = input("Create Password: ")
+						confirm_pass = input("Confirm Password: ")
+						if confirm_pass != password:
+							print("Password does not match. Please try again")
+						else:
+							break
+					createUserStudent(username, password)
+					break
+				else:
+					print("Please enter either 't' or 's'")
 		elif action == 'o':
 			print("\n### Logout ###")
 			if not logged_in:
-				print("You cannot logout since you are not logged into an account")
+				print("You are already logged out")
 			else:
 				print("You successfully logged out!")
 				logged_in = False
+				teacher = False
 		elif action == 'q':
 			print("\nGoodbye!")
 			break
