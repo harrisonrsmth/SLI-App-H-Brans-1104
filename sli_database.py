@@ -6,7 +6,7 @@ key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 db = mysql.connect(
 	host = "localhost",
 	user = "root",
-	passwd = "1059071hrs"
+	passwd = ""
 )
 
 #print(db)
@@ -22,7 +22,7 @@ cursor.close()
 db1 = mysql.connect(
 	host = "localhost",
 	user = "root",
-	passwd = "1059071hrs",
+	passwd = "",
 	database = "sli_database",
 	autocommit = True
 )
