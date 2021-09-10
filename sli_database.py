@@ -1,12 +1,18 @@
 import mysql.connector as mysql
+from dotenv import load_dotenv
+
+load_dotenv()
+SQL_HOST = os.getenv("SQL_HOST")
+SQL_USER = os.getenv('SQL_USER')
+SQL_PASSWORD = os.getenv('SQL_PASSWORD')
 
 class DB:
 
 	def __init__(self):
 		db_create = mysql.connect(
-		host = "localhost",
-		user = "root",
-		passwd = ""
+		host = SQL_HOST,
+		user = SQL_USER,
+		passwd = SQL_PASSWORD
 		)
 
 		cursor = db_create.cursor()
@@ -15,9 +21,9 @@ class DB:
 		cursor.close()
 
 		self.db = mysql.connect(
-			host = "localhost",
-			user = "root",
-			passwd = "",
+			host = SQL_HOST,
+			user = SQL_USER,
+			passwd = SQL_PASSWORD,
 			database = "sli_database",
 			autocommit = True
 		)
