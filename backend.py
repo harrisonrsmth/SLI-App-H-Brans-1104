@@ -2,6 +2,8 @@ from cryptography.fernet import Fernet
 from flask import Flask
 import mysql.connector as mysql
 import sli_database
+from flask import request
+import requests
 
 app = Flask(__name__)
 
@@ -83,6 +85,17 @@ def createClass(role, email, class_name):
             records = db.createNewClass(email, class_name)
 
 
+
+@app.route("/hello", methods=['POST'])
+def getHello():
+    data = request.get_json(force=True)
+    print(data)
+    email = str(data["email"])
+    name = str(data["name"])
+    print(email, name)
+    records = db.createNewClass(email, name)
+    print(records)
+    return {"sucess": data}
 '''
 def main():
 	logged_in = False
