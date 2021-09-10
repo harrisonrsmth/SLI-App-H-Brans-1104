@@ -6,7 +6,7 @@ class DB:
 		db_create = mysql.connect(
 		host = "localhost",
 		user = "root",
-		passwd = "hoanhtuan2204"
+		passwd = ""
 		)
 
 		cursor = db_create.cursor()
@@ -17,7 +17,7 @@ class DB:
 		self.db = mysql.connect(
 			host = "localhost",
 			user = "root",
-			passwd = "hoanhtuan2204",
+			passwd = "",
 			database = "sli_database",
 			autocommit = True
 		)
