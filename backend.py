@@ -76,6 +76,17 @@ def login(role, username, password):
 			else:
 				return {"code": 0} # failure- email doesn't exist
 
+@app.route("/createAccount", methods=['POST'])
+def createAccount(role, username, password, email, fname, lname, schoolCode):
+	try:
+		if role == "student":
+			createUserStudent(username, password)
+		else:
+			createUserTeacher(schoolCode, email, password, fname, lname)
+		return {"code": 200}
+	except Exception as ex:
+		return {"code": 100}
+
 @app.route("/createClass")
 def createClass(role, email, class_name):
     if role != 1:
