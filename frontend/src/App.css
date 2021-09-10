@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+#createAccount {
+  text-align: left;
+}
+
+#login {
+  text-align: left;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
