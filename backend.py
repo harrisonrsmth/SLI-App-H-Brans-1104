@@ -3,7 +3,7 @@ from flask import Flask
 import mysql.connector as mysql
 import sli_database
 
-app = Flask("SLIApp")
+app = Flask(__name__)
 
 key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 
@@ -73,6 +73,15 @@ def login(role, username, password):
 					return {"code": 0} # failure- password incorrect
 			else:
 				return {"code": 0} # failure- email doesn't exist
+
+@app.route("/createClass")
+def createClass(role, email, class_name):
+    if role != 1:
+        return "Only teacher can create an account"
+    else:
+        if email and class_name:
+            records = db.createNewClass(email, class_name)
+
 
 '''
 def main():

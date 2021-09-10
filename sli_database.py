@@ -6,7 +6,7 @@ class DB:
 		db_create = mysql.connect(
 		host = "localhost",
 		user = "root",
-		passwd = ""
+		passwd = "hoanhtuan2204"
 		)
 
 		cursor = db_create.cursor()
@@ -17,7 +17,7 @@ class DB:
 		self.db = mysql.connect(
 			host = "localhost",
 			user = "root",
-			passwd = "",
+			passwd = "hoanhtuan2204",
 			database = "sli_database",
 			autocommit = True
 		)
@@ -28,8 +28,8 @@ class DB:
 			+ "username VARCHAR(20) NOT NULL UNIQUE, "  # when creating account, supply first and last name, 
 														# then auto generate username by doing 
 														# fname[0] + lname + str(round(abs(hash(fname) / hash(lname)),4))[-4:]
-			+ "password VARBINARY(100))"
-			+ "fname VARCHAR(25), " 
+			+ "password VARBINARY(100), "
+			+ "fname VARCHAR(25), "
 			+ "lname VARCHAR(25))")
 
 		self.cursor.execute("DROP TABLE IF EXISTS teacher")
@@ -42,7 +42,7 @@ class DB:
 		self.cursor.execute("DROP TABLE IF EXISTS class")
 		self.cursor.execute("CREATE TABLE class ("
 			+ "teacher_email VARCHAR(50) NOT NULL UNIQUE, "
-			+ "name VARCHAR(100)")
+			+ "name VARCHAR(100))")
 
 	def getStudentLogin(self, username):
 		self.cursor.execute("SELECT username, password FROM student WHERE username LIKE \"%" + str(username) + "\"")
@@ -50,3 +50,6 @@ class DB:
 
 	def getTeacherLogin(self, email):
 		self.cursor.execute("SELECT email, password FROM teacher WHERE email LIKE \"%" + str(email) + "\"")
+
+	def createNewClass(self, teacher_email, class_name):
+	    self.cursor.execute("INSERT INTO class VALUES ( " + str(teacher_email) + ", " + str(class_name) + ")")
