@@ -11,13 +11,6 @@ class DB:
 
 	def __init__(self):
 
-		db_create = mysql.connect(
-		host = SQL_HOST,
-		user = SQL_USER,
-		passwd = SQL_PASSWORD
-		)
-
-
 		self.db = mysql.connect(
 
 			host = SQL_HOST,
