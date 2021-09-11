@@ -9,33 +9,35 @@ SQL_PASSWORD = os.getenv('SQL_PASSWORD')
 
 class DB:
 
-	def __init__(self):
+    def __init__(self):
 
-		db_create = mysql.connect(
-		host = SQL_HOST,
-		user = SQL_USER,
-		passwd = SQL_PASSWORD
-		)
+        db_create = mysql.connect(
+        host = SQL_HOST,
+        user = SQL_USER,
+        passwd = SQL_PASSWORD
+        )
 
 
-		self.db = mysql.connect(
+        self.db = mysql.connect(
 
-			host = SQL_HOST,
-			user = SQL_USER,
-			passwd = SQL_PASSWORD,
-			database = "sli_database",
-			autocommit = True
-		)
+            host = SQL_HOST,
+            user = SQL_USER,
+            passwd = SQL_PASSWORD,
+            database = "sli_database",
+            autocommit = True
+        )
 
-		self.cursor = self.db.cursor()
+        self.cursor = self.db.cursor()
 
-	def getStudentLogin(self, username):
-		self.cursor.execute("SELECT username, password FROM student WHERE username LIKE \"%" + str(username) + "\"")
-		return self.cursor.fetchall()
+    def getStudentLogin(self, username):
+        self.cursor.execute("SELECT username, password FROM student WHERE username LIKE \"%" + str(username) + "\"")
+        return self.cursor.fetchall()
 
-	def getTeacherLogin(self, email):
-		self.cursor.execute("SELECT email, password FROM teacher WHERE email LIKE \"%" + str(email) + "\"")
+    def getTeacherLogin(self, email):
+        sql = "SELECT email, password FROM teacher WHERE email = %s"
+        get_email = (str(email), )
+        self.cursor.execute(sql, get_email)
+        return self.cursor.fetchall()
 
-	def createNewClass(self, teacher_email, class_name):
-
-	    self.cursor.execute("INSERT INTO class VALUES (teacher_email='" + str(teacher_email) + "', name='" + str(class_name) + "')")
+    def createNewClass(self, teacher_email, class_name):
+        self.cursor.execute("INSERT INTO class VALUES (teacher_email='" + str(teacher_email) + "', name='" + str(class_name) + "')")

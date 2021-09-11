@@ -20,5 +20,7 @@ teacher_email VARCHAR(50) NOT NULL UNIQUE,
 name VARCHAR(100));
 
 INSERT INTO class VALUES ("hello", "hi");
+INSERT INTO teacher VALUES ("hey", "whatsup", "anh", "ho");
+
 
 

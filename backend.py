@@ -4,88 +4,90 @@ import mysql.connector as mysql
 import sli_database
 from flask import request
 import requests
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 
 db = sli_database.DB()
 
 def createUserStudent(username, password,
-               querynum=0, 
-               updatenum=0, 
-               connection_num=0):
-	cipher_suite = Fernet(key)
-	password = str.encode(password)
-	ciphered_password = cipher_suite.encrypt(password)
-	ciphered_password = bytes(ciphered_password).decode("utf-8")
+                      querynum=0,
+                      updatenum=0,
+                      connection_num=0):
+    cipher_suite = Fernet(key)
+    password = str.encode(password)
+    ciphered_password = cipher_suite.encrypt(password)
+    ciphered_password = bytes(ciphered_password).decode("utf-8")
 
-	cursor = db.cursor()
-	try:
-		cursor.execute("INSERT INTO student VALUES (\"%s\", \"%s\")"%(username, ciphered_password))
-		print("Student account successfully created.")
-	except Exception as Ex:
-		print("Error creating Student account: %s"%(Ex))
+    cursor = db.cursor()
+    try:
+        cursor.execute("INSERT INTO student VALUES (\"%s\", \"%s\")"%(username, ciphered_password))
+        print("Student account successfully created.")
+    except Exception as Ex:
+        print("Error creating Student account: %s"%(Ex))
 
 #createUserStudent(cursor, "user_test", "pass_test")
 
 def createUserTeacher(school_code, email, password, fname, lname,
-               querynum=0, 
-               updatenum=0, 
-               connection_num=0):	
-	cipher_suite = Fernet(key)
-	password = str.encode(password)
-	ciphered_password = cipher_suite.encrypt(password)
-	ciphered_password = bytes(ciphered_password).decode("utf-8")
+                      querynum=0,
+                      updatenum=0,
+                      connection_num=0):
+    cipher_suite = Fernet(key)
+    password = str.encode(password)
+    ciphered_password = cipher_suite.encrypt(password)
+    ciphered_password = bytes(ciphered_password).decode("utf-8")
 
-	cursor = db.cursor()
-	try:
-		cursor.execute("INSERT INTO teacher VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"%(school_code, email, ciphered_password, fname, lname))
-		print("Teacher account successfully created.")
-	except Exception as Ex:
-		print("Error creating Teacher account: %s"%(Ex))
+    cursor = db.cursor()
+    try:
+        cursor.execute("INSERT INTO teacher VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"%(school_code, email, ciphered_password, fname, lname))
+        print("Teacher account successfully created.")
+    except Exception as Ex:
+        print("Error creating Teacher account: %s"%(Ex))
 
 #createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
 @app.route("/authenticateLogin")
 def login(role, username, password):
-	if role == 1: # student
-		records = db.getStudentLogin(username)
-		if len(records) > 0:
-			cipher_suite = Fernet(key)
-			encrypted_pwd = str.encode(records[0][1])
-			unciphered_text = cipher_suite.decrypt(encrypted_pwd)
-			fetched = bytes(unciphered_text).decode("utf-8")
-			if password == fetched:
-				return {"code": 1} # success
-			else:
-				return {"code": 0} # failure- password incorrect
-		else:
-			return {"code": 0} # failure- username doesn't exist
-	else: #teacher
-			records = db.getTeacherLogin(username)
-			if len(records) > 0:
-				cipher_suite = Fernet(key)
-				encrypted_pwd = str.encode(records[0][1])
-				unciphered_text = cipher_suite.decrypt(encrypted_pwd)
-				fetched = bytes(unciphered_text).decode("utf-8")
-				if password == fetched:
-					return {"code": 1} # success
-				else:
-					return {"code": 0} # failure- password incorrect
-			else:
-				return {"code": 0} # failure- email doesn't exist
+    if role == 1: # student
+        records = db.getStudentLogin(username)
+        if len(records) > 0:
+            cipher_suite = Fernet(key)
+            encrypted_pwd = str.encode(records[0][1])
+            unciphered_text = cipher_suite.decrypt(encrypted_pwd)
+            fetched = bytes(unciphered_text).decode("utf-8")
+            if password == fetched:
+                return {"code": 1} # success
+            else:
+                return {"code": 0} # failure- password incorrect
+        else:
+            return {"code": 0} # failure- username doesn't exist
+    else: #teacher
+        records = db.getTeacherLogin(username)
+        if len(records) > 0:
+            cipher_suite = Fernet(key)
+            encrypted_pwd = str.encode(records[0][1])
+            unciphered_text = cipher_suite.decrypt(encrypted_pwd)
+            fetched = bytes(unciphered_text).decode("utf-8")
+            if password == fetched:
+                return {"code": 1} # success
+            else:
+                return {"code": 0} # failure- password incorrect
+        else:
+            return {"code": 0} # failure- email doesn't exist
 
 @app.route("/createAccount", methods=['POST'])
 def createAccount(role, username, password, email, fname, lname, schoolCode):
-	try:
-		if role == "student":
-			createUserStudent(username, password)
-		else:
-			createUserTeacher(schoolCode, email, password, fname, lname)
-		return {"code": 200}
-	except Exception as ex:
-		return {"code": 100}
+    try:
+        if role == "student":
+            createUserStudent(username, password)
+        else:
+            createUserTeacher(schoolCode, email, password, fname, lname)
+        return {"code": 200}
+    except Exception as ex:
+        return {"code": 100}
 
 @app.route("/createClass")
 def createClass(role, email, class_name):
@@ -107,6 +109,20 @@ def getHello():
     records = db.createNewClass(email, name)
     print(records)
     return {"sucess": data}
+
+@app.route("/login", methods=['POST'])
+@cross_origin()
+def getTestLogin():
+    data = request.get_json(force=True)
+    username = str(data["username"])
+    password = str(data["password"])
+    result = db.getTeacherLogin(username)
+    get_mail = result[0][0]
+    get_password = result[0][1]
+    print(result)
+    if get_mail == username and get_password == password:
+        return {"code": 1}
+    return {"code": 0}
 '''
 def main():
 	logged_in = False
