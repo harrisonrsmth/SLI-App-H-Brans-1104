@@ -27,11 +27,12 @@ class Login extends React.Component {
 
                     alert(data.msg);
                 } else {
-                    console.log(this.state);
+
                     this.setState({isLoggedIn: true});
+                    localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
+                    console.log(this.state);
                     console.log("success");
-                    alert(data.msg);
                 }
             }
         );
@@ -40,14 +41,16 @@ class Login extends React.Component {
     componentDidMount() {
         this.api.getCurrentUser().then(
                 response => {
-                    this.setState({isLoggedIn: response.data["isLoggedIn"]})
+
+                    console.log(response.data["isLoggedIn"]);
+
+                    this.setState({isLoggedIn: response.data["isLoggedIn"]});
                 })
             .catch(() => console.log("ok"))
     }
 
     render() {
-        console.log(this.state.isLoggedIn);
-        if (this.state.isLoggedIn) {
+        if (localStorage.getItem("isLoggedIn")) {
             return <Redirect push to="/dashboard" />
         }
         return (

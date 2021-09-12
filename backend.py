@@ -128,7 +128,7 @@ def createAccount(role, username, password, email, fname, lname, schoolCode):
     except Exception as ex:
         return {"code": 100}
 
-@app.route("/createClass")
+@app.route("/api/createClass", methods=['POST'])
 def createClass(role, email, class_name):
     if role != 1:
         return "Only teacher can create an account"

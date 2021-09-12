@@ -21,10 +21,14 @@ export class Api {
   }
 
   getUserByToken(token) {
-      data = {'token': token};
+      var data = {'token': token};
       return new Promise((resolve, reject) => {
-        axios.get(`${this.url}/api/getCurrentUserToken`, data, this.config)
-            .then(x => resolve(x.data))
+        axios.post(`${this.url}/api/getCurrentUserToken`, data, this.config)
+            .then(x => {
+                console.log(x.data);
+                resolve(x.data)
+                }
+            )
             .catch(x => {
                 reject(x);
             })
