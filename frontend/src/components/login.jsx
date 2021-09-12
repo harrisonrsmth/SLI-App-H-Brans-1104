@@ -42,8 +42,8 @@ class Login extends React.Component {
         this.api.getCurrentUser().then(
             response => {
                 console.log(response.data["isLoggedIn"]);
-
-                this.setState({isLoggedIn: response.data["isLoggedIn"]});
+                localStorage.setItem("isLoggedIn", response.data["isLoggedIn"]);
+                //this.setState({isLoggedIn: response.data["isLoggedIn"]});
             })
             .catch(() => console.log("ok"))
     }

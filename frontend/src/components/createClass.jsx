@@ -15,6 +15,9 @@ class CreateClass extends React.Component {
         }
     }
 
+    createClass() {
+        this.api.createNewClass().then().catch()
+    }
 
 
     render() { 
