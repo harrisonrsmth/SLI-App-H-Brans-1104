@@ -82,9 +82,11 @@ def login():
             unciphered_text = cipher_suite.decrypt(encrypted_pwd)
             fetched = bytes(unciphered_text).decode("utf-8")
             """
-            #print(password, records[0][2])
-            get_password = records[0][2]
-            if password == get_password:
+            #print(password, str_pwd)
+            #get_password = records[0][2]
+            #if password == get_password:
+            str_pwd = bytes(records[0][2]).decode("utf-8")
+            if password == str_pwd:
                 token = generateToken(32)
                 userId = records[0][0]
                 setUserToken(userId, token)
