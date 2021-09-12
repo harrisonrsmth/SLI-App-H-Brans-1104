@@ -12,7 +12,11 @@ export class Api {
   login(form) {
      return new Promise((resolve, reject) => {
         axios.post(`${this.url}/api/authenticateLogin`, form, this.config)
-           .then(x => resolve(x.data))
+           .then(x => {
+                console.log(x.data["token"]);
+                localStorage.setItem("token", x.data["token"]);
+                resolve(x.data)
+           })
            .catch(x => {
               alert(x);
               reject(x);
@@ -25,7 +29,6 @@ export class Api {
       return new Promise((resolve, reject) => {
         axios.post(`${this.url}/api/getCurrentUserToken`, data, this.config)
             .then(x => {
-                localhostStorage.setItem("token", x.data["token"]);
                 resolve(x.data);
                 }
             )
