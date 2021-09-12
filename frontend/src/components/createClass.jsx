@@ -16,7 +16,15 @@ class CreateClass extends React.Component {
     }
 
     createClass() {
-        this.api.createNewClass().then().catch()
+        this.api.createNewClass(this.state).then(
+            data =>  {
+                if (data["code"] == 1) {
+                    console.log("create class success");
+                } else {
+                    alert(data.msg)
+                }
+            }
+        );
     }
 
 
