@@ -107,12 +107,16 @@ def getUserToken():
         # get user Id by token
         results = db.getUserToken(token)
 
-        if len(result) > 0:
+        if len(results) > 0:
             userId = results[0][0]
-            # get
-            #get_teachers = db.getTeacherInfo(userId)
-            #if get_teachers:
-            #   response["fname"] = get_teacher[0]
+            print(userId)
+            # get teacher information from ID
+            get_teachers = db.getTeacherInfo(userId)
+            print(get_teachers)
+            if get_teachers:
+                response["fname"] = get_teachers[0][0]
+            else:
+                response["fname"] = "Anonymous"
             response["isLoggedIn"] = True
         else:
             response["isLoggedIn"] = False
