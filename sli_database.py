@@ -39,6 +39,12 @@ class DB:
         self.cursor.execute(sql, get_email)
         return self.cursor.fetchall()
 
+    def getTeacherInfo(self, user_id):
+        sql = "SELECT fname FROM teacher WHERE id = %s"
+        get_teacher_info = (str(user_id), )
+        self.cursor.execute(sql, get_teacher_info)
+        return self.cursor.fetchall()
+
     def getUserToken(self, token):
         sql = "SELECT id, token FROM token WHERE token = %s"
         get_token = (str(token), )

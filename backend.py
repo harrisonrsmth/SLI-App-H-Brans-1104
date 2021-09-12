@@ -102,17 +102,21 @@ def login():
 def getUserToken():
     data = request.get_json(force=True)
     token = data["token"]
+    response = {}
     try:
-        # query (userId, token)
-        print(token)
-        result = db.getUserToken(token)
-        print(result)
-        if len(result) > 0:
-            userId = result[0][0]
-            return {"isLoggedIn": True}
-        else:
-            return {"isLoggedIn": False}
+        # get user Id by token
+        results = db.getUserToken(token)
 
+        if len(result) > 0:
+            userId = results[0][0]
+            # get
+            #get_teachers = db.getTeacherInfo(userId)
+            #if get_teachers:
+            #   response["fname"] = get_teacher[0]
+            response["isLoggedIn"] = True
+        else:
+            response["isLoggedIn"] = False
+        return response
     except Exception as ex:
         return ex
 
