@@ -26,10 +26,11 @@ export class NavBar extends React.Component {
 
     logOut() {
         localStorage.removeItem('token');
+        localStorage.removeItem('isLoggedIn')
     }
 
     render() {
-        if (this.state.redirect) {
+        if (!localStorage.getItem('isLoggedIn')) {
             return <Redirect to="/" />
         }
         return (
@@ -63,7 +64,7 @@ export class NavBar extends React.Component {
                             Hello {this.state.firstName}
                         </NavLink>
 
-                        <NavLink className="dropdown-item" to='/logout/'
+                        <NavLink className="dropdown-item" to='/'
                             onClick={() => this.logOut()}>
                         Logout
                         </NavLink>
