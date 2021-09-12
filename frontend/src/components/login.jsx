@@ -60,25 +60,25 @@ class Login extends React.Component {
                     <div class="form-group">
                         <label for="formGroupExampleInput2">Username</label>
                         <input type="text"
-                        class="form-control"
-                        id="formGroupExampleInput2"
-                        placeholder="Another input"
-                        onChange={e => this.setState({username: e.target.value})}/>
+                                class="form-control"
+                                id="formGroupExampleInput2"
+                                placeholder="Another input"
+                                onChange={e => this.setState({username: e.target.value})}/>
                         <small id="passwordHelpBlock" class="form-text text-muted">
-                        Teachers, username is your email used to create your account
+                            Teachers, username is your email used to create your account
                         </small>
-                        </div>
-                        <div class="form-group">
+                    </div>
+                    <div class="form-group">
                         <label for="formGroupExampleInput2">Password</label>
                         <input type="text"
-                        class="form-control"
-                        id="formGroupExampleInput2"
-                        placeholder="Another input"
-                        onChange={e => this.setState({password: e.target.value})}/>
-                        </div>
+                                class="form-control"
+                                id="formGroupExampleInput2"
+                                placeholder="Another input"
+                                onChange={e => this.setState({password: e.target.value})}/>
+                    </div>
                     <button type="submit"
-                    class="btn btn-primary"
-                    onClick={() => this.login()}>Submit</button>
+                            class="btn btn-primary"
+                            onClick={() => this.login()}>Submit</button>
                 </form>
             </div>
         );
