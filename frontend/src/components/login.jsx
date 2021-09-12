@@ -22,7 +22,7 @@ class Login extends React.Component {
         console.log("api called");
         this.api.login(this.state).then(
             data => {
-                console.log(data)
+                console.log(data);
                 if (data["code"] == 0) {
 
                     alert(data.msg);
@@ -31,6 +31,7 @@ class Login extends React.Component {
 
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
+                    localStorage.setItem('userID', data["userID"]);
                     console.log(this.state);
                     console.log("success");
                 }

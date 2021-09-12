@@ -57,3 +57,10 @@ class DB:
     def createNewClass(self, teacher_email, class_name):
         self.cursor.execute("INSERT INTO class VALUES (teacher_email='" + str(teacher_email) + "', name='" + str(class_name) + "')")
 
+    def deleteToken(self, id):
+        print("deleting...")
+        sql = "DELETE FROM token WHERE id = %s"
+        del_input = (str(id), )
+        self.cursor.execute(sql, del_input)
+        print("deleted!")
+

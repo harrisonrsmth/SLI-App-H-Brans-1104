@@ -44,4 +44,17 @@ export class Api {
         .then(data => user = data)
       return user;
     }
+
+  logOut(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/logout`, form, this.config)
+        .then(x => {
+          resolve(x.data);
+          }
+        )
+        .catch(x => {
+          reject(x);
+        })
+    })
+  }
 }

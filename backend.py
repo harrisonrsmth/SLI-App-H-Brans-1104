@@ -92,6 +92,7 @@ def login():
                 setUserToken(userId, token)
                 respone["code"] = 1
                 respone["token"] = token
+                respone["userID"] = userId
                 print(respone)
                 return respone # success
             else:
@@ -120,6 +121,7 @@ def getUserToken():
             else:
                 response["fname"] = "Anonymous"
             response["isLoggedIn"] = True
+            response["userID"] = userId
         else:
             response["isLoggedIn"] = False
         return response
@@ -172,6 +174,20 @@ def getTestLogin():
     if get_mail == username and get_password == password:
         return {"code": 1}
     return {"code": 0}
+
+@app.route("/api/logout", methods=['POST'])
+@cross_origin()
+def logout():
+    data = request.get_json(force=True)
+    id = data["userID"]
+    print(id)
+    try:
+        print("deleting token")
+        db.deleteToken(id)
+        return {"code": 1} #success
+    except Exception as ex:
+        print(ex)
+        return {"code": 0} #id not in database
 
 # this is temporary token generating algorithm
 # need to use library later
