@@ -14,7 +14,7 @@ class Login extends React.Component {
             isLoggedIn: false,
             username: "",
             password: "",
-            role: null
+            role: 0
         };
     }
 
@@ -28,7 +28,7 @@ class Login extends React.Component {
                     alert(data.msg);
                 } else {
 
-                    this.setState({isLoggedIn: true});
+
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
                     console.log(this.state);
@@ -40,12 +40,11 @@ class Login extends React.Component {
 
     componentDidMount() {
         this.api.getCurrentUser().then(
-                response => {
+            response => {
+                console.log(response.data["isLoggedIn"]);
 
-                    console.log(response.data["isLoggedIn"]);
-
-                    this.setState({isLoggedIn: response.data["isLoggedIn"]});
-                })
+                this.setState({isLoggedIn: response.data["isLoggedIn"]});
+            })
             .catch(() => console.log("ok"))
     }
 
@@ -55,32 +54,32 @@ class Login extends React.Component {
         }
         return (
             <div>
-            <form id="login">
-              <div>{this.state.redirect}</div>
+                <form id="login">
+                    <div>{this.state.redirect}</div>
 
-              <div class="form-group">
-                <label for="formGroupExampleInput2">Username</label>
-                <input type="text"
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">Username</label>
+                        <input type="text"
                         class="form-control"
                         id="formGroupExampleInput2"
                         placeholder="Another input"
                         onChange={e => this.setState({username: e.target.value})}/>
-                <small id="passwordHelpBlock" class="form-text text-muted">
-                  Teachers, username is your email used to create your account
-                </small>
-              </div>
-              <div class="form-group">
-                <label for="formGroupExampleInput2">Password</label>
-                <input type="text"
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                        Teachers, username is your email used to create your account
+                        </small>
+                        </div>
+                        <div class="form-group">
+                        <label for="formGroupExampleInput2">Password</label>
+                        <input type="text"
                         class="form-control"
                         id="formGroupExampleInput2"
                         placeholder="Another input"
                         onChange={e => this.setState({password: e.target.value})}/>
-              </div>
-              <button type="submit"
-                     class="btn btn-primary"
-                     onClick={() => this.login()}>Submit</button>
-            </form>
+                        </div>
+                    <button type="submit"
+                    class="btn btn-primary"
+                    onClick={() => this.login()}>Submit</button>
+                </form>
             </div>
         );
     }
