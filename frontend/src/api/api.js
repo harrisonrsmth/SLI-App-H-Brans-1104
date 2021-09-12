@@ -11,7 +11,7 @@ export class Api {
 
   login(form) {
      return new Promise((resolve, reject) => {
-        axios.post(`${this.url}/login`, form, this.config)
+        axios.post(`${this.url}/api/authenticateLogin`, form, this.config)
            .then(x => resolve(x.data))
            .catch(x => {
               alert(x);
@@ -19,4 +19,22 @@ export class Api {
            })
      })
   }
+
+  getUserByToken(token) {
+      data = {'token': token};
+      return new Promise((resolve, reject) => {
+        axios.get(`${this.url}/api/getCurrentUserToken`, data, this.config)
+            .then(x => resolve(x.data))
+            .catch(x => {
+                reject(x);
+            })
+      })
+    }
+
+    async getCurrentUser() {
+      let user = null;
+      await this.getUserByToken(localStorage.getItem('token'))
+        .then(data => user = data)
+      return user;
+    }
 }

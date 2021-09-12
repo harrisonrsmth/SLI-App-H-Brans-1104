@@ -5,6 +5,7 @@ import sli_database
 from flask import request
 import requests
 from flask_cors import CORS, cross_origin
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -49,13 +50,19 @@ def createUserTeacher(school_code, email, password, fname, lname,
 
 #createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
-@app.route("/authenticateLogin")
-def login(role, username, password):
+@app.route("/api/authenticateLogin", methods=['POST'])
+@cross_origin()
+def login():
+    data = request.get_json(force=True)
+    role = data["role"]
+    username = data["username"]
+    password = data["password"]
+    respone = {}
     if role == 1: # student
         records = db.getStudentLogin(username)
         if len(records) > 0:
             cipher_suite = Fernet(key)
-            encrypted_pwd = str.encode(records[0][1])
+            encrypted_pwd = str.encode(records[0][2])
             unciphered_text = cipher_suite.decrypt(encrypted_pwd)
             fetched = bytes(unciphered_text).decode("utf-8")
             if password == fetched:
@@ -67,16 +74,48 @@ def login(role, username, password):
     else: #teacher
         records = db.getTeacherLogin(username)
         if len(records) > 0:
+            #print(records)
+            # ignore encoding for testing
+            """
             cipher_suite = Fernet(key)
-            encrypted_pwd = str.encode(records[0][1])
+            encrypted_pwd = str.encode(records[0][2])
             unciphered_text = cipher_suite.decrypt(encrypted_pwd)
             fetched = bytes(unciphered_text).decode("utf-8")
-            if password == fetched:
-                return {"code": 1} # success
+            """
+            #print(password, records[0][2])
+            get_password = records[0][2]
+            if password == get_password:
+                token = generateToken(32)
+                userId = records[0][0]
+                setUserToken(userId, token)
+                respone["code"] = 1
+                respone["token"] = token
+                print(respone)
+                return respone # success
             else:
-                return {"code": 0} # failure- password incorrect
+                return {"status": "incorrect password"} # failure- password incorrect
         else:
-            return {"code": 0} # failure- email doesn't exist
+            return {"status": "No username"} # failure- email doesn't exist
+
+@app.route("/api/getCurrentUserToken", methods=['POST'])
+@cross_origin()
+def getUserToken():
+    data = request.get_json(force=True)
+    token = data["token"]
+    try:
+        # query (userId, token)
+        print(token)
+        result = db.getUserToken(token)
+        print(result)
+        if len(result) > 0:
+            userId = result[0][0]
+            return {"isLoggedIn": True}
+        else:
+            return {"isLoggedIn": False}
+
+    except Exception as ex:
+        return ex
+
 
 @app.route("/createAccount", methods=['POST'])
 def createAccount(role, username, password, email, fname, lname, schoolCode):
@@ -110,7 +149,7 @@ def getHello():
     print(records)
     return {"sucess": data}
 
-@app.route("/login", methods=['POST'])
+@app.route("/api/testLogin", methods=['POST'])
 @cross_origin()
 def getTestLogin():
     data = request.get_json(force=True)
@@ -123,6 +162,23 @@ def getTestLogin():
     if get_mail == username and get_password == password:
         return {"code": 1}
     return {"code": 0}
+
+# this is temporary token generating algorithm
+# need to use library later
+def generateToken(length):
+    allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    result = [allowed_chars[random.randint(0, len(allowed_chars) - 1)] for _ in range(length)]
+    return "".join(result)
+
+def setUserToken(userId, token):
+    try:
+        if userId and token:
+            record = db.insertToken(userId, token)
+    except Exception as ex:
+        return ex
+
+
+
 '''
 def main():
 	logged_in = False
