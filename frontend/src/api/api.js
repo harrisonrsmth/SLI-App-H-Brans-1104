@@ -25,7 +25,7 @@ export class Api {
       return new Promise((resolve, reject) => {
         axios.post(`${this.url}/api/getCurrentUserToken`, data, this.config)
             .then(x => {
-                localhostStorage.setItem(x.data["token"]);
+                localhostStorage.setItem("token", x.data["token"]);
                 resolve(x.data);
                 }
             )
