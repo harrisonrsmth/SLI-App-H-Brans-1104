@@ -58,7 +58,7 @@ def login():
     role = data["role"]
     username = data["username"]
     password = data["password"]
-    respone = {}
+    response = {}
     if role == 1: # student
         records = db.getStudentLogin(username)
         if len(records) > 0:
@@ -91,11 +91,11 @@ def login():
                 token = generateToken(32)
                 userId = records[0][0]
                 setUserToken(userId, token)
-                respone["code"] = 1
-                respone["token"] = token
-                respone["userID"] = userId
-                print(respone)
-                return respone # success
+                response["code"] = 1
+                response["token"] = token
+                response["userID"] = userId
+                print(response)
+                return response # success
             else:
                 return {"status": "incorrect password"} # failure- password incorrect
         else:
@@ -109,9 +109,11 @@ def getUserToken():
     response = {}
     try:
         # get user Id by token
+        print("getting results")
         results = db.getUserToken(token)
-
+        print("got results")
         if len(results) > 0:
+            print("condition met")
             userId = results[0][0]
             print(userId)
             # get teacher information from ID
@@ -127,7 +129,9 @@ def getUserToken():
             response["isLoggedIn"] = False
         return response
     except Exception as ex:
-        return ex
+        print(ex)
+        print("ERROR HAPPEN")
+        return (ex)
 
 
 @app.route("/api/createAccount", methods=['POST'])

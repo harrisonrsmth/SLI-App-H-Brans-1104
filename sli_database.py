@@ -38,8 +38,12 @@ class DB:
         return self.cursor.fetchall()
 
     def getUserToken(self, token):
+        print("entered sql")
         sql = "SELECT id, token FROM token WHERE token = %s"
+        print("wrote sql script")
         get_token = (str(token), )
+        print("got token")
+        #################################################
         self.cursor.execute(sql, get_token)
         print("here")
         return self.cursor.fetchall()
