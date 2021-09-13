@@ -64,3 +64,6 @@ class DB:
         self.cursor.execute(sql, del_input)
         print("deleted!")
 
+    def createTeacherAccount(self, email, password, fname, lname):
+        self.cursor.execute("INSERT INTO teacher VALUES (NULL, \"%s\", \"%s\", \"%s\", \"%s\")"%(email, password, fname, lname))
+

@@ -32,18 +32,19 @@ def createUserStudent(username, password,
 
 #createUserStudent(cursor, "user_test", "pass_test")
 
-def createUserTeacher(school_code, email, password, fname, lname,
+def createUserTeacher(email, password, fname, lname,
                       querynum=0,
                       updatenum=0,
                       connection_num=0):
+    '''
     cipher_suite = Fernet(key)
     password = str.encode(password)
     ciphered_password = cipher_suite.encrypt(password)
     ciphered_password = bytes(ciphered_password).decode("utf-8")
+    '''
 
-    cursor = db.cursor()
     try:
-        cursor.execute("INSERT INTO teacher VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"%(school_code, email, ciphered_password, fname, lname))
+        db.createTeacherAccount(email, password, fname, lname)
         print("Teacher account successfully created.")
     except Exception as Ex:
         print("Error creating Teacher account: %s"%(Ex))
@@ -129,16 +130,20 @@ def getUserToken():
         return ex
 
 
-@app.route("/createAccount", methods=['POST'])
-def createAccount(role, username, password, email, fname, lname, schoolCode):
-    try:
-        if role == "student":
-            createUserStudent(username, password)
-        else:
-            createUserTeacher(schoolCode, email, password, fname, lname)
-        return {"code": 200}
-    except Exception as ex:
-        return {"code": 100}
+@app.route("/api/createAccount", methods=['POST'])
+def createAccount():
+    data = request.get_json(force=True)
+    if data["password"] == data["conf_password"]:
+        try:
+            if data["role"] == "student":
+                createUserStudent(data["username"], data["password"])
+            else:
+                createUserTeacher(data["username"], data["password"], data["fname"], data["lname"])
+            return {"code": 1}
+        except:
+            return {"code": 2}
+    else:
+        return {"code": 0}
 
 @app.route("/api/createClass", methods=['POST'])
 def createClass(role, email, class_name):
