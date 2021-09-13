@@ -9,7 +9,8 @@ class CreateClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            teacherID: null,
+            role: 0,
+            teacherID: 1,
             className: "",
             classDescription: ""
         }
@@ -18,10 +19,11 @@ class CreateClass extends React.Component {
     createClass() {
         this.api.createNewClass(this.state).then(
             data =>  {
+                console.log(data);
                 if (data["code"] == 1) {
                     console.log("create class success");
                 } else {
-                    alert(data.msg)
+
                 }
             }
         );
@@ -41,6 +43,7 @@ class CreateClass extends React.Component {
                         id="formGroupExampleInput"
                         onChange={e => this.setState({className: e.target.value})}/>
                 </div>
+                {/* This doesn't work right now, might change later if needed
                 <div class="form-group">
                     <label for="formGroupExampleInput">Description for Class:</label>
                     <input type="text"
@@ -48,6 +51,7 @@ class CreateClass extends React.Component {
                         id="formGroupExampleInput"
                         onChange={e => this.setState({classDescription: e.target.value})}/>
                 </div>
+                */}
                 <button type="button"
                     className="mt-4 btn btn-primary btn-block"
                     onClick={() => this.createClass()}>

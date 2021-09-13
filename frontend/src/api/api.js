@@ -44,4 +44,17 @@ export class Api {
         .then(data => user = data)
       return user;
     }
+
+    createNewClass(form) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${this.url}/api/createNewClass`, form, this.config)
+                .then(x => {
+                    resolve(x.data);
+                })
+                .catch(x => {
+                    console.log("error");
+                    reject(x);
+                })
+        })
+    }
 }

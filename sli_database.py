@@ -41,7 +41,6 @@ class DB:
         sql = "SELECT id, token FROM token WHERE token = %s"
         get_token = (str(token), )
         self.cursor.execute(sql, get_token)
-        print("here")
         return self.cursor.fetchall()
 
     def insertToken(self, userId, token):
@@ -54,6 +53,11 @@ class DB:
         self.cursor.execute(sql, input)
         return "ok"
 
-    def createNewClass(self, teacher_email, class_name):
-        self.cursor.execute("INSERT INTO class VALUES (teacher_email='" + str(teacher_email) + "', name='" + str(class_name) + "')")
+    def createNewClass(self, teacher_id, class_name):
 
+        insert_sql = "INSERT INTO class VALUES (%s, %s)"
+
+        insert_input = (str(teacher_id), str(class_name))
+        self.cursor.execute(insert_sql, insert_input)
+        print("slslsls")
+        return "good enough"

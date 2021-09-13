@@ -83,10 +83,10 @@ def login():
             fetched = bytes(unciphered_text).decode("utf-8")
             """
             #print(password, str_pwd)
-            #get_password = records[0][2]
-            #if password == get_password:
-            str_pwd = bytes(records[0][2]).decode("utf-8")
-            if password == str_pwd:
+            get_password = records[0][2]
+            if password == get_password:
+            #str_pwd = bytes(records[0][2]).decode("utf-8")
+            #if password == str_pwd:
                 token = generateToken(32)
                 userId = records[0][0]
                 setUserToken(userId, token)
@@ -103,23 +103,29 @@ def login():
 @cross_origin()
 def getUserToken():
     data = request.get_json(force=True)
-    token = data["token"]
+    token = None
+    if "token" in data:
+        token = data["token"]
+    else:
+        return {"isLoggedIn": false}
     response = {}
     try:
         # get user Id by token
-        results = db.getUserToken(token)
-
-        if len(results) > 0:
-            userId = results[0][0]
-            print(userId)
-            # get teacher information from ID
-            get_teachers = db.getTeacherInfo(userId)
-            print(get_teachers)
-            if get_teachers:
-                response["fname"] = get_teachers[0][0]
-            else:
-                response["fname"] = "Anonymous"
-            response["isLoggedIn"] = True
+        results = None
+        if token:
+            results = db.getUserToken(token)
+            if len(results) > 0:
+                userId = results[0][0]
+                print(userId)
+                # get teacher information from ID
+                if userId:
+                    get_teachers = db.getTeacherInfo(userId)
+                print(get_teachers)
+                if get_teachers:
+                    response["fname"] = get_teachers[0][0]
+                else:
+                    response["fname"] = "Anonymous"
+                response["isLoggedIn"] = True
         else:
             response["isLoggedIn"] = False
         return response
@@ -138,15 +144,30 @@ def createAccount(role, username, password, email, fname, lname, schoolCode):
     except Exception as ex:
         return {"code": 100}
 
-@app.route("/api/createClass", methods=['POST'])
+@app.route("/api/createNewClass", methods=['POST'])
 @cross_origin()
-def createClass(role, email, class_name):
-    if role != 1:
-        return "Only teacher can create an account"
-    else:
-        if email and class_name:
-            records = db.createNewClass(email, class_name)
-    return
+def createClass():
+    try:
+
+        data = request.get_json(force=True)
+        response = {}
+        print(data)
+        role = data["role"]
+        user_id = data["teacherID"]
+        class_name = data["className"]
+        print(role, user_id, class_name)
+        # role 1 = student and 0 = teacher
+        if not role and user_id and class_name:
+            print("adsfdf")
+            records = db.createNewClass(user_id, class_name)
+
+            response["status"] = "success"
+            print("success create class")
+            response["code"] = 1
+        return response
+
+    except Exception as ex:
+        return {"code": 0}
 
 
 @app.route("/hello", methods=['POST'])
