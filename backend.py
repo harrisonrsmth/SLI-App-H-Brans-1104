@@ -133,7 +133,7 @@ def getUserToken():
 @app.route("/api/createAccount", methods=['POST'])
 def createAccount():
     data = request.get_json(force=True)
-    if data["password"] == data["conf_password"]:
+    if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
         try:
             if data["role"] == "student":
                 createUserStudent(data["username"], data["password"])

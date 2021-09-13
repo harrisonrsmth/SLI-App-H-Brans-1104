@@ -23,7 +23,7 @@ class CreateAccount extends React.Component {
       data => {
         console.log(data);
         if (data["code"] == 0) {
-          alert("Password confirmation does not match.");
+          alert("Password does not meet requirements");
         } else if (data["code"] == 2) {
           alert("User already exists");
         }
