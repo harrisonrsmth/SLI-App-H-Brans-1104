@@ -12,7 +12,8 @@ class CreateClass extends React.Component {
             role: 0,
             teacherID: 1,
             className: "",
-            classDescription: ""
+            classDescription: "",
+
         }
     }
 
@@ -22,8 +23,9 @@ class CreateClass extends React.Component {
                 console.log(data);
                 if (data["code"] == 1) {
                     console.log("create class success");
-                } else {
 
+                } else {
+                    alert("create class fail");
                 }
             }
         );
@@ -52,11 +54,13 @@ class CreateClass extends React.Component {
                         onChange={e => this.setState({classDescription: e.target.value})}/>
                 </div>
                 */}
-                <button type="button"
-                    className="mt-4 btn btn-primary btn-block"
-                    onClick={() => this.createClass()}>
-                            Submit
-                </button>
+                <Link to="/dashboard">
+                    <button type="button"
+                        className="mt-4 btn btn-primary btn-block"
+                        onClick={() => this.createClass()}>
+                                Submit
+                    </button>
+                </Link>
             </form>
         </div>
         );

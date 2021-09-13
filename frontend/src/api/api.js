@@ -45,6 +45,7 @@ export class Api {
       return user;
     }
 
+
     createNewClass(form) {
         return new Promise((resolve, reject) => {
             axios.post(`${this.url}/api/createNewClass`, form, this.config)
@@ -57,4 +58,29 @@ export class Api {
                 })
         })
     }
+
+  logOut(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/logout`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  createAccount(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/createAccount`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

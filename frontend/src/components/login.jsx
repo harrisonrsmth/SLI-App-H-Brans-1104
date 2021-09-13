@@ -22,7 +22,7 @@ class Login extends React.Component {
         console.log("api called");
         this.api.login(this.state).then(
             data => {
-                console.log(data)
+                console.log(data);
                 if (data["code"] == 0) {
 
                     alert(data.msg);
@@ -31,6 +31,7 @@ class Login extends React.Component {
 
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
+                    localStorage.setItem('userID', data["userID"]);
                     console.log(this.state);
                     console.log("success");
                 }
@@ -58,11 +59,11 @@ class Login extends React.Component {
                     <div>{this.state.redirect}</div>
 
                     <div class="form-group">
-                        <label for="formGroupExampleInput2">Username</label>
+                        <label for="formGroupExampleInput2">Username/Email</label>
                         <input type="text"
                                 class="form-control"
                                 id="formGroupExampleInput2"
-                                placeholder="Another input"
+                                placeholder="Input Username/Email"
                                 onChange={e => this.setState({username: e.target.value})}/>
                         <small id="passwordHelpBlock" class="form-text text-muted">
                             Teachers, username is your email used to create your account
@@ -70,10 +71,10 @@ class Login extends React.Component {
                     </div>
                     <div class="form-group">
                         <label for="formGroupExampleInput2">Password</label>
-                        <input type="text"
+                        <input type="password"
                                 class="form-control"
                                 id="formGroupExampleInput2"
-                                placeholder="Another input"
+                                placeholder="Input Password"
                                 onChange={e => this.setState({password: e.target.value})}/>
                     </div>
                     <button type="submit"

@@ -32,18 +32,19 @@ def createUserStudent(username, password,
 
 #createUserStudent(cursor, "user_test", "pass_test")
 
-def createUserTeacher(school_code, email, password, fname, lname,
+def createUserTeacher(email, password, fname, lname,
                       querynum=0,
                       updatenum=0,
                       connection_num=0):
+    '''
     cipher_suite = Fernet(key)
     password = str.encode(password)
     ciphered_password = cipher_suite.encrypt(password)
     ciphered_password = bytes(ciphered_password).decode("utf-8")
+    '''
 
-    cursor = db.cursor()
     try:
-        cursor.execute("INSERT INTO teacher VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"%(school_code, email, ciphered_password, fname, lname))
+        db.createTeacherAccount(email, password, fname, lname)
         print("Teacher account successfully created.")
     except Exception as Ex:
         print("Error creating Teacher account: %s"%(Ex))
@@ -57,7 +58,7 @@ def login():
     role = data["role"]
     username = data["username"]
     password = data["password"]
-    respone = {}
+    response = {}
     if role == 1: # student
         records = db.getStudentLogin(username)
         if len(records) > 0:
@@ -90,10 +91,11 @@ def login():
                 token = generateToken(32)
                 userId = records[0][0]
                 setUserToken(userId, token)
-                respone["code"] = 1
-                respone["token"] = token
-                print(respone)
-                return respone # success
+                response["code"] = 1
+                response["token"] = token
+                response["userID"] = userId
+                print(response)
+                return response # success
             else:
                 return {"status": "incorrect password"} # failure- password incorrect
         else:
@@ -111,6 +113,7 @@ def getUserToken():
     response = {}
     try:
         # get user Id by token
+
         results = None
         if token:
             results = db.getUserToken(token)
@@ -126,23 +129,30 @@ def getUserToken():
                 else:
                     response["fname"] = "Anonymous"
                 response["isLoggedIn"] = True
+
         else:
             response["isLoggedIn"] = False
         return response
     except Exception as ex:
-        return ex
+        print(ex)
+        print("ERROR HAPPEN")
+        return (ex)
 
 
-@app.route("/createAccount", methods=['POST'])
-def createAccount(role, username, password, email, fname, lname, schoolCode):
-    try:
-        if role == "student":
-            createUserStudent(username, password)
-        else:
-            createUserTeacher(schoolCode, email, password, fname, lname)
-        return {"code": 200}
-    except Exception as ex:
-        return {"code": 100}
+@app.route("/api/createAccount", methods=['POST'])
+def createAccount():
+    data = request.get_json(force=True)
+    if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
+        try:
+            if data["role"] == "student":
+                createUserStudent(data["username"], data["password"])
+            else:
+                createUserTeacher(data["username"], data["password"], data["fname"], data["lname"])
+            return {"code": 1}
+        except:
+            return {"code": 2}
+    else:
+        return {"code": 0}
 
 @app.route("/api/createNewClass", methods=['POST'])
 @cross_origin()
@@ -194,6 +204,20 @@ def getTestLogin():
     if get_mail == username and get_password == password:
         return {"code": 1}
     return {"code": 0}
+
+@app.route("/api/logout", methods=['POST'])
+@cross_origin()
+def logout():
+    data = request.get_json(force=True)
+    id = data["userID"]
+    print(id)
+    try:
+        print("deleting token")
+        db.deleteToken(id)
+        return {"code": 1} #success
+    except Exception as ex:
+        print(ex)
+        return {"code": 0} #id not in database
 
 # this is temporary token generating algorithm
 # need to use library later
