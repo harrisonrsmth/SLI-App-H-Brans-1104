@@ -83,4 +83,18 @@ export class Api {
     })
   }
 
+  getAllClass() {
+    var id = localStorage.getItem("userID");
+    var data = {"teacher_id": id}
+    return new Promise((resolve, reject) => {
+          axios.post(`${this.url}/api/getAllClass`, form, this.config)
+          .then(x => {
+            resolve(x.data);
+          })
+          .catch(x => {
+            reject(x);
+          })
+        });
+  }
+
 }

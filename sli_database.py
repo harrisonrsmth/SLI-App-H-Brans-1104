@@ -76,3 +76,9 @@ class DB:
     def createTeacherAccount(self, email, password, fname, lname):
         self.cursor.execute("INSERT INTO teacher VALUES (NULL, \"%s\", \"%s\", \"%s\", \"%s\")"%(email, password, fname, lname))
 
+
+    def getClasses(self, teacher_id):
+        sql = "SELECT className FROM class WHERE %s"
+        get_id = (str(teacher_id), )
+        self.cursor.execute(sql, get_id)
+        return self.cursor.fetchall()

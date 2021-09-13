@@ -35,6 +35,6 @@ token VARCHAR(50)
 );
 
 INSERT INTO teacher (email, password, fname, lname) VALUES ("hey", "whatsup", "anh", "ho");
-INSERT INTO class VALUES (1, "hi");
+INSERT INTO class VALUES (1, "Mrs. Watson's 4th Grade Class");
 
 

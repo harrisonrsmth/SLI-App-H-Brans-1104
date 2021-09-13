@@ -55,10 +55,10 @@ class Login extends React.Component {
         }
         return (
             <div>
-                <form id="login">
+                <form className="mt-5 w-50 mx-auto" id="login">
                     <div>{this.state.redirect}</div>
-
-                    <div class="form-group">
+                    <h1>Login</h1>
+                    <div className="form-group mt-2 mx-auto">
                         <label for="formGroupExampleInput2">Username/Email</label>
                         <input type="text"
                                 class="form-control"
@@ -69,7 +69,7 @@ class Login extends React.Component {
                             Teachers, username is your email used to create your account
                         </small>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group mt-2 mx-auto">
                         <label for="formGroupExampleInput2">Password</label>
                         <input type="password"
                                 class="form-control"
@@ -77,9 +77,12 @@ class Login extends React.Component {
                                 placeholder="Input Password"
                                 onChange={e => this.setState({password: e.target.value})}/>
                     </div>
-                    <button type="submit"
-                            class="btn btn-primary"
-                            onClick={() => this.login()}>Submit</button>
+                    <div className="mt-5 mx-auto">
+                        <button type="submit"
+                                class="btn btn-primary"
+                                onClick={() => this.login()}>Submit</button>
+
+                    </div>
                 </form>
             </div>
         );
