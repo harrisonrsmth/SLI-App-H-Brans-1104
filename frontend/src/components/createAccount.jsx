@@ -40,7 +40,7 @@ class CreateAccount extends React.Component {
               type="text" 
               class="form-control" 
               id="formGroupExampleInput" 
-              placeholder="First Name" 
+              placeholder="Input First Name" 
               onChange={e => this.setState({fname: e.target.value})}/>
           </div>
           <div class="form-group">
@@ -49,7 +49,7 @@ class CreateAccount extends React.Component {
               type="text" 
               class="form-control" 
               id="formGroupExampleInput2" 
-              placeholder="Last Name" 
+              placeholder="Input Last Name" 
               onChange={e => this.setState({lname: e.target.value})}/>
           </div>
           <div class="form-group">
@@ -58,16 +58,16 @@ class CreateAccount extends React.Component {
               type="text" 
               class="form-control" 
               id="formGroupExampleInput2" 
-              placeholder="Email" 
+              placeholder="Input Email" 
               onChange={e => this.setState({username: e.target.value})}/>
           </div>
           <div class="form-group">
             <label for="formGroupExampleInput2">Password</label>
             <input 
-              type="text" 
+              type="password" 
               class="form-control" 
               id="formGroupExampleInput2" 
-              placeholder="Password" 
+              placeholder="Input Password" 
               onChange={e => this.setState({password: e.target.value})}/>
             <small id="passwordHelpBlock" class="form-text text-muted">
               Your password must be 8-20 characters long
@@ -76,10 +76,10 @@ class CreateAccount extends React.Component {
           <div class="form-group">
             <label for="formGroupExampleInput2">Confirm Password</label>
             <input 
-              type="text" 
+              type="password" 
               class="form-control" 
               id="formGroupExampleInput2" 
-              placeholder="Confirm Password" 
+              placeholder="Input Confirm Password" 
               onChange={e => this.setState({conf_password: e.target.value})}/>
           </div>
           <Link to="/"><button 
