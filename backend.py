@@ -113,23 +113,20 @@ def getUserToken():
     response = {}
     try:
         # get user Id by token
-
         results = None
         if token:
             results = db.getUserToken(token)
             if len(results) > 0:
                 userId = results[0][0]
-                print(userId)
                 # get teacher information from ID
                 if userId:
                     get_teachers = db.getTeacherInfo(userId)
-                print(get_teachers)
                 if get_teachers:
                     response["fname"] = get_teachers[0][0]
                 else:
                     response["fname"] = "Anonymous"
                 response["isLoggedIn"] = True
-
+                response["userID"] = userId
         else:
             response["isLoggedIn"] = False
         return response
@@ -210,6 +207,7 @@ def getTestLogin():
 @cross_origin()
 def logout():
     data = request.get_json(force=True)
+    print(data)
     id = data["userID"]
     print(id)
     try:

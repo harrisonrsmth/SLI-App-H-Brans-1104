@@ -24,8 +24,6 @@ class CreateClass extends React.Component {
                 if (data["code"] == 1) {
                     console.log("create class success");
 
-                } else {
-                    alert("create class fail");
                 }
             }
         );
