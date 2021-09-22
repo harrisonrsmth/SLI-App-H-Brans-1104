@@ -22,26 +22,26 @@ class DB:
         self.cursor = self.db.cursor()
         self.cursor.close()
 
-    def getStudentLogin(self, username):
+    def getLogin(self, username):
         self.cursor = self.db.cursor()
-        self.cursor.execute("SELECT id, username, password FROM student WHERE username LIKE \"%" + str(username) + "\"")
+        self.cursor.execute("SELECT username, password, role FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
         result = self.cursor.fetchall()
         self.cursor.close()
         return result
 
-    def getTeacherLogin(self, email):
+    '''def getTeacherLogin(self, email):
         self.cursor = self.db.cursor()
         sql = "SELECT id, email, password FROM teacher WHERE email = %s"
         get_email = (str(email), )
         self.cursor.execute(sql, get_email)
         result = self.cursor.fetchall()
         self.cursor.close()
-        return result
+        return result'''
 
-    def getTeacherInfo(self, user_id):
+    def getUserInfo(self, username):
         self.cursor = self.db.cursor()
-        sql = "SELECT fname FROM teacher WHERE id = %s"
-        get_teacher_info = (str(user_id), )
+        sql = "SELECT fname FROM `User` WHERE username = %s"
+        get_teacher_info = (str(username), )
         self.cursor.execute(sql, get_teacher_info)
         result = self.cursor.fetchall()
         self.cursor.close()
@@ -51,7 +51,7 @@ class DB:
         self.cursor = self.db.cursor()
 
         print("entered sql")
-        sql = "SELECT id, token FROM token WHERE token = %s"
+        sql = "SELECT `user`, token_val FROM Token WHERE token_val = %s"
         print("wrote sql script")
         get_token = (str(token), )
         print("got token")
@@ -61,47 +61,49 @@ class DB:
         self.cursor.close()
         return result
 
-    def insertToken(self, userId, token):
+    def insertToken(self, username, token):
         self.cursor = self.db.cursor()
-        deleted_old_token = "DELETE FROM token WHERE id = %s"
-        del_input = (str(userId), )
+        deleted_old_token = "DELETE FROM Token WHERE username = %s"
+        del_input = (str(username), )
         self.cursor.execute(deleted_old_token, del_input)
 
-        sql = "INSERT INTO token VALUES (%s, %s)"
-        input = (str(userId), str(token))
+        sql = "INSERT INTO Token VALUES (%s, %s)"
+        input = (str(username), str(token))
         self.cursor.execute(sql, input)
         self.cursor.close()
         return "ok"
 
-    def createNewClass(self, teacher_id, class_name):
+    def createNewClass(self, teacher, class_name):
         self.cursor = self.db.cursor()
 
-        insert_sql = "INSERT INTO class VALUES (%s, %s)"
+        insert_sql = "INSERT INTO Class VALUES (%s, %s)"
 
-        insert_input = (str(teacher_id), str(class_name))
+        insert_input = (str(teacher), str(class_name))
         self.cursor.execute(insert_sql, insert_input)
         print("slslsls")
         self.cursor.close()
         return "good enough"
 
-    def deleteToken(self, id):
+    def deleteToken(self, username):
         self.cursor = self.db.cursor()
         print("deleting...")
-        sql = "DELETE FROM token WHERE id = %s"
-        del_input = (str(id), )
+        sql = "DELETE FROM Token WHERE username = %s"
+        del_input = (str(username), )
         self.cursor.execute(sql, del_input)
         print("deleted!")
         self.cursor.close()
 
-    def createTeacherAccount(self, email, password, fname, lname):
+    def createAccount(self, username, password, role, fname, lname):
         self.cursor = self.db.cursor()
-        self.cursor.execute("INSERT INTO teacher VALUES (NULL, \"%s\", \"%s\", \"%s\", \"%s\")"%(email, password, fname, lname))
+        sql = "INSERT INTO `User` VALUES (%s, %s, %s, %s, %s)"
+        inputs = (str(username), str(password), str(role), str(fname), str(lname))
+        self.cursor.execute(sql, inputs)
         self.cursor.close()
 
-    def getClasses(self, teacher_id):
+    def getClasses(self, teacher):
         self.cursor = self.db.cursor()
-        sql = "SELECT className FROM class WHERE %s"
-        get_id = (str(teacher_id), )
+        sql = "SELECT name FROM Class WHERE teacher = %s"
+        get_id = (str(teacher), )
         self.cursor.execute(sql, get_id)
         result = self.cursor.fetchall()
         self.cursor.close()

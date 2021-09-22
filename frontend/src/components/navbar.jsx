@@ -8,7 +8,7 @@ export class NavBar extends React.Component {
     state = {
         isLoggedIn: false,
         firstName: "",
-        userID: "",
+        username: "",
         menu: [],
     }
 
@@ -18,7 +18,7 @@ export class NavBar extends React.Component {
             .then(data => {
                 console.log("navbar loaded")
                 console.log(data)
-                this.setState({firstName: data["fname"], userID: data["userID"]})
+                this.setState({firstName: data["fname"], username: data["username"]})
             })
             .catch(err => this.setState({isLoggedIn: true}))
 
@@ -33,7 +33,8 @@ export class NavBar extends React.Component {
                 } else {
                     localStorage.removeItem('token');
                     localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userID');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('role');
                 }
             }
         )

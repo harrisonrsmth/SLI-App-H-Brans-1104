@@ -1,40 +1,55 @@
+DROP DATABASE IF EXISTS sli_database;
+CREATE DATABASE IF NOT EXISTS sli_database;
+USE sli_database;
 
-DROP TABLE IF EXISTS student;
-
-CREATE TABLE student (
-username VARCHAR(20) NOT NULL UNIQUE,
-password VARBINARY(100),
-fname VARCHAR(25),
-lname VARCHAR(25));
-
-DROP TABLE IF EXISTS class;
-DROP TABLE IF EXISTS teacher;
-
-
-CREATE TABLE teacher (
-id INT NOT NULL AUTO_INCREMENT,
-email VARCHAR(50) NOT NULL UNIQUE,
-password VARBINARY(100),
-fname VARCHAR(25),
-lname VARCHAR(25),
-PRIMARY KEY (id)
-);
-ALTER TABLE teacher AUTO_INCREMENT=1;
-
-CREATE TABLE class (
-id INT NOT NULL ,
-name VARCHAR(100),
-PRIMARY KEY (name),
-FOREIGN KEY (id) REFERENCES teacher(id)
+DROP TABLE IF EXISTS `User`;
+CREATE TABLE `User` (
+    username VARCHAR(40),
+    password VARBINARY(100),
+    role CHAR(1),
+    fname VARCHAR(25),
+    lname VARCHAR(25),
+    PRIMARY KEY (username)
 );
 
-DROP TABLE IF EXISTS token;
-CREATE TABLE token (
-id INT NOT NULL,
-token VARCHAR(50)
+DROP TABLE IF EXISTS Class;
+CREATE TABLE Class (
+    teacher VARCHAR(40),
+    name VARCHAR(100),
+    PRIMARY KEY (teacher, name),
+    FOREIGN KEY (teacher) REFERENCES `User`(username)
 );
 
-INSERT INTO teacher (email, password, fname, lname) VALUES ("hey", "whatsup", "anh", "ho");
-INSERT INTO class VALUES (1, "Mrs. Watson's 4th Grade Class");
+DROP TABLE IF EXISTS Token;
+CREATE TABLE Token (
+    `user` VARCHAR(40),
+    toekn_val VARCHAR(50),
+    PRIMARY KEY (`user`),
+    FOREIGN KEY (`user`) REFERENCES `User`(username)
+);
 
+DROP TABLE IF EXISTS InClass;
+CREATE TABLE InClass (
+    teacher VARCHAR(40),
+    class VARCHAR(100),
+    student VARCHAR(40),
+    PRIMARY KEY (teacher, class, student),
+    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name),
+    FOREIGN KEY (student) REFERENCES `User`(username)
+);
 
+DROP TABLE IF EXISTS `Work`;
+CREATE TABLE `Work` (
+    id INT AUTO_INCREMENT,
+    `user` VARCHAR(40),
+    project VARCHAR(50),
+    SDG VARCHAR(50),
+    `date` DATE,
+    hours INT,
+    `description` VARCHAR(200),
+    PRIMARY KEY (id),
+    FOREIGN KEY (`user`) REFERENCES `User`(username)
+);
+
+/*INSERT INTO teacher (email, password, fname, lname) VALUES ("hey", "whatsup", "anh", "ho");
+INSERT INTO class VALUES (1, "Mrs. Watson's 4th Grade Class");*/

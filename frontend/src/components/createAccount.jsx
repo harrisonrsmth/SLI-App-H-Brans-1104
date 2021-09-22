@@ -13,7 +13,7 @@ class CreateAccount extends React.Component {
         username: "",
         password: "",
         conf_password: "",
-        role: "teacher"
+        role: "T"
     };
   }
 

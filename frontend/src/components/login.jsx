@@ -14,7 +14,7 @@ class Login extends React.Component {
             isLoggedIn: false,
             username: "",
             password: "",
-            role: 0
+            role: "T"
         };
     }
 
@@ -31,7 +31,8 @@ class Login extends React.Component {
 
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
-                    localStorage.setItem('userID', data["userID"]);
+                    localStorage.setItem('username', data["username"]);
+                    localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
                 }
