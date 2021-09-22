@@ -32,7 +32,7 @@ class Login extends React.Component {
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
                     localStorage.setItem('username', data["username"]);
-                    localStorage.setItem('role', data["role"]);
+                    //localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
                 }

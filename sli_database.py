@@ -49,14 +49,19 @@ class DB:
 
     def getUserToken(self, token):
         self.cursor = self.db.cursor()
-
         print("entered sql")
-        sql = "SELECT `user`, token_val FROM Token WHERE token_val = %s"
+        sql = "SELECT `user`, token_val FROM Token WHERE token_val = '{}'".format(token)
         print("wrote sql script")
-        get_token = (str(token), )
+        #get_token = (str(token), )
         print("got token")
         #################################################
-        self.cursor.execute(sql, get_token)
+        try:
+            #self.cursor.execute(sql, get_token)
+            self.cursor.execute(sql)
+        except Exception as e:
+            print(e)
+            return e
+        print("printing")
         result = self.cursor.fetchall()
         self.cursor.close()
         return result

@@ -23,7 +23,7 @@ CREATE TABLE Class (
 DROP TABLE IF EXISTS Token;
 CREATE TABLE Token (
     `user` VARCHAR(40),
-    toekn_val VARCHAR(50),
+    token_val VARCHAR(50),
     PRIMARY KEY (`user`),
     FOREIGN KEY (`user`) REFERENCES `User`(username)
 );

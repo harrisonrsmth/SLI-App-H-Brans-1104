@@ -73,6 +73,8 @@ def login():
         #get_password = records[0][1]
         #if password == get_password:
         str_pwd = bytes(records[0][1]).decode("utf-8")
+        print(password)
+        print(str_pwd)
         if password == str_pwd and role == records[0][2]:
             token = generateToken(32)
             username = records[0][0]
