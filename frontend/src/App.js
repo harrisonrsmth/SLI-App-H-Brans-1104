@@ -6,6 +6,7 @@ import CreateAccount from './components/createAccount';
 import Login from './components/login';
 import Dashboard from './components/dashboard';
 import CreateClass from './components/createClass';
+import logWork from './components/logWork';
 import { Route, Link , Switch} from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/login" component={Login} />
       <Route path="/createClass" component={CreateClass} />
+      <Route path="/logWork" component={logWork} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>

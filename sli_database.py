@@ -1,6 +1,7 @@
 import mysql.connector as mysql
 from dotenv import load_dotenv
 import os
+import uuid
 
 load_dotenv()
 SQL_HOST = os.getenv("SQL_HOST")
@@ -106,3 +107,14 @@ class DB:
         result = self.cursor.fetchall()
         self.cursor.close()
         return result
+
+    def logWork(self, date, project, hours, description, SDG):
+        self.cursor = self.db.cursor()
+        id = uuid.uuid4()
+        insert_sql = "INSERT INTO work VALUES (%s, %s, %s, %s, %s, id)"
+        
+        insert_input = (str(date), str(project), float(hours), str(description), str(SDG), id)
+        self.cursor.execute(insert_sql, insert_input)
+        print("slslsls")
+        self.cursor.close()
+        return "good enough"
