@@ -28,19 +28,20 @@ class Login extends React.Component {
                     alert(data.msg);
                 } else {
 
-
+                    
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.setItem('token', data["token"]);
                     localStorage.setItem('username', data["username"]);
                     //localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
+                    alert(data.msg);
                 }
             }
         );
     }
 
-    componentDidMount() {
+    /*componentDidMount() {
         this.api.getCurrentUser().then(
             response => {
                 console.log(response.data["isLoggedIn"]);
@@ -48,7 +49,7 @@ class Login extends React.Component {
                 //this.setState({isLoggedIn: response.data["isLoggedIn"]});
             })
             .catch(() => console.log("ok"))
-    }
+    }*/
 
     render() {
         if (localStorage.getItem("isLoggedIn")) {
