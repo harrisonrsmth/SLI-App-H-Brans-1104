@@ -59,6 +59,19 @@ export class Api {
         })
     }
 
+    logNewWork(form) {
+      return new Promise((resolve, reject) => {
+          axios.post(`${this.url}/api/logNewWork`, form, this.config)
+              .then(x => {
+                  resolve(x.data);
+              })
+              .catch(x => {
+                  console.log("error");
+                  reject(x);
+              })
+      })
+  }
+
   logOut(form) {
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/logout`, form, this.config)
@@ -83,7 +96,7 @@ export class Api {
     })
   }
 
-  getAllClass() {
+  getAllClass(form) {
     var id = localStorage.getItem("userID");
     var data = {"teacher_id": id}
     return new Promise((resolve, reject) => {
