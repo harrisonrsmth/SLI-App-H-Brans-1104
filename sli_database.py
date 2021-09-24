@@ -68,7 +68,7 @@ class DB:
 
     def insertToken(self, username, token):
         self.cursor = self.db.cursor()
-        deleted_old_token = "DELETE FROM Token WHERE username = %s"
+        deleted_old_token = "DELETE FROM Token WHERE user = %s"
         del_input = (str(username), )
         self.cursor.execute(deleted_old_token, del_input)
 
