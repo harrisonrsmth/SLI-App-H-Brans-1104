@@ -55,6 +55,7 @@ def createUser(username, password, role, fname, lname,
 @cross_origin()
 def login():
     data = request.get_json(force=True)
+    print(str(data) + " ,,,,,")
     role = data["role"]
     username = data["username"]
     password = data["password"]
@@ -93,6 +94,7 @@ def login():
 @cross_origin()
 def getUserToken():
     data = request.get_json(force=True)
+    print(data)
     token = None
     if "token" in data:
         token = data["token"]
@@ -101,6 +103,7 @@ def getUserToken():
     response = {}
     try:
         # get username by token
+        print("get token from frontend")
         results = None
         if token:
             results = db.getUserToken(token)
