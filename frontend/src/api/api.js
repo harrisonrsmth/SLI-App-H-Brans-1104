@@ -83,7 +83,7 @@ export class Api {
     })
   }
 
-  getAllClass() {
+  getAllClass(form) {
     var id = localStorage.getItem("userID");
     var data = {"teacher_id": id}
     return new Promise((resolve, reject) => {
