@@ -1,6 +1,9 @@
-import mysql.connector as mysql
+# import mysql.connector as mysql
 from dotenv import load_dotenv
 import os
+from flaskext.mysql import MySQL
+import pymysql
+
 
 load_dotenv()
 SQL_HOST = os.getenv("SQL_HOST")
@@ -9,15 +12,18 @@ SQL_PASSWORD = os.getenv('SQL_PASSWORD')
 
 class DB:
 
-    def __init__(self):
+    def __init__(self, app):
+        # app.config['MYSQL-HOST'] = SQL_HOST
+        # app.config['MYSQL_USER'] = SQL_USER
+        # app.config['MYSQL_PASSWORD'] = SQL_PASSWORD
+        # app.config['MYSQL_DB'] = "sli_database"
+        # app.config['MYSQL_AUTOCOMMIT'] = True
+        # app.config['MYSQL_AUTH_PLUGIN'] = "mysql_native_password"
 
-        self.db = mysql.connect(
-            host = SQL_HOST,
-            user = SQL_USER,
-            passwd = SQL_PASSWORD,
-            database = "sli_database",
-            autocommit = True
-        )
+        self.mysql = MySQL(app, host = SQL_HOST, user = SQL_USER, password = SQL_PASSWORD, db = "sli_database", autocommit = True)
+        # self.mysql.init_app(app)
+        self.db = self.mysql.connect()
+
 
         self.cursor = self.db.cursor()
         self.cursor.close()
@@ -49,13 +55,13 @@ class DB:
 
     def getUserToken(self, token):
         self.db.close()
-        self.db = mysql.connect(
-            host = SQL_HOST,
-            user = SQL_USER,
-            passwd = SQL_PASSWORD,
-            database = "sli_database",
-            autocommit = True
-        )
+        # self.db = mysql.connect(
+        #     host = SQL_HOST,
+        #     user = SQL_USER,
+        #     passwd = SQL_PASSWORD,
+        #     database = "sli_database",
+        #     autocommit = True
+        # )
         self.cursor = self.db.cursor()
         print("entered sql")
         sql = "SELECT `user`, token_val FROM Token WHERE token_val = '{}'".format(token)
