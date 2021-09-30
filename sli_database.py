@@ -100,7 +100,7 @@ class DB:
     def deleteToken(self, username):
         self.cursor = self.db.cursor()
         print("deleting...")
-        sql = "DELETE FROM Token WHERE username = %s"
+        sql = "DELETE FROM Token WHERE `user`` = %s"
         del_input = (str(username), )
         self.cursor.execute(sql, del_input)
         print("deleted!")
