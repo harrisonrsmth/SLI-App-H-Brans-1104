@@ -7,6 +7,7 @@ import Login from './components/login';
 import Dashboard from './components/dashboard';
 import CreateClass from './components/createClass';
 import { Route, Link , Switch} from "react-router-dom";
+import Card from 'react-bootstrap/Card'
 
 function App() {
   return (

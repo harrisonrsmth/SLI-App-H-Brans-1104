@@ -46,7 +46,7 @@ export class NavBar extends React.Component {
             return <Redirect to="/" />
         }
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark bg-info navbar-fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-light bg-dark" >
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-items" aria-controls="navbar-items" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
                 </button>
