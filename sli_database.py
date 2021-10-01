@@ -48,6 +48,14 @@ class DB:
         return result
 
     def getUserToken(self, token):
+        self.db.close()
+        self.db = mysql.connect(
+            host = SQL_HOST,
+            user = SQL_USER,
+            passwd = SQL_PASSWORD,
+            database = "sli_database",
+            autocommit = True
+        )
         self.cursor = self.db.cursor()
         print("entered sql")
         sql = "SELECT `user`, token_val FROM Token WHERE token_val = '{}'".format(token)
@@ -68,7 +76,8 @@ class DB:
 
     def insertToken(self, username, token):
         self.cursor = self.db.cursor()
-        deleted_old_token = "DELETE FROM Token WHERE user = %s"
+        deleted_old_token = "DELETE FROM Token WHERE `user` = %s"
+
         del_input = (str(username), )
         self.cursor.execute(deleted_old_token, del_input)
 
