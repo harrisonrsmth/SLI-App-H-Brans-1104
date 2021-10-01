@@ -20,9 +20,11 @@ class Login extends React.Component {
 
     login() {
         console.log("api called");
+
         this.api.login(this.state).then(
             data => {
                 console.log(data);
+                alert(data);
                 if (data["code"] == 0) {
 
                     alert(data.msg);

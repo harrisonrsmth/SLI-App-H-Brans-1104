@@ -94,13 +94,14 @@ def login():
         #print(password, str_pwd)
         #get_password = records[0][1]
         #if password == get_password:
-        #str_pwd = bytes(records[0][1]).decode("utf-8")
-        str_pwd = records[0][1]
+        str_pwd = bytes(records[0]['password']).decode("utf-8")
+        #str_pwd = records[0][1]
         print(password)
         print(str_pwd)
-        if password == str_pwd and role == records[0][2]:
+        if password == str_pwd and role == records[0]['role']:
             token = generateToken(32)
-            username = records[0][0]
+            username = records[0]['username']
+            print(username, token, "test TOken")
             setUserToken(username, token)
             response["code"] = 1
             response["token"] = token
@@ -129,13 +130,14 @@ def getUserToken():
         results = None
         if token:
             results = db.getUserToken(token)
-            if len(results) > 0:
-                username = results[0][0]
+            print(results + "we are")
+            if results and len(results) > 0:
+                username = results[0]["username"]
                 # get teacher information from ID
                 if username:
                     get_user = db.getUserInfo(username)
                 if len(get_user) > 0:
-                    response["fname"] = get_user[0][0]
+                    response["fname"] = get_user[0]["fnam"]
                 else:
                     response["fname"] = "Anonymous"
                 response["isLoggedIn"] = True
@@ -238,6 +240,7 @@ def setUserToken(username, token):
     try:
         if username and token:
             record = db.insertToken(username, token)
+            print("insert token sucessful")
     except Exception as ex:
         return ex
 

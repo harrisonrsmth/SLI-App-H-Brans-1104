@@ -28,11 +28,23 @@ class DB:
         self.cursor = self.db.cursor()
         self.cursor.close()
 
+    def create_connection(self):
+        return pymysql.connect(
+            host=SQL_HOST,
+            db='sli_database',
+            user=SQL_USER,
+            password=SQL_PASSWORD,
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+
     def getLogin(self, username):
-        self.cursor = self.db.cursor()
-        self.cursor.execute("SELECT username, password, role FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
-        result = self.cursor.fetchall()
-        self.cursor.close()
+        connection = self.create_connection()
+        cursor = connection.cursor()
+        print(username)
+        cursor.execute("SELECT username, password, role FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
+        result = cursor.fetchall()
+        connection.close()
         return result
 
     '''def getTeacherLogin(self, email):
@@ -45,24 +57,18 @@ class DB:
         return result'''
 
     def getUserInfo(self, username):
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
         sql = "SELECT fname FROM `User` WHERE username = %s"
         get_teacher_info = (str(username), )
-        self.cursor.execute(sql, get_teacher_info)
-        result = self.cursor.fetchall()
-        self.cursor.close()
+        cursor.execute(sql, get_teacher_info)
+        result = cursor.fetchall()
+        connection.close()
         return result
 
     def getUserToken(self, token):
-        self.db.close()
-        # self.db = mysql.connect(
-        #     host = SQL_HOST,
-        #     user = SQL_USER,
-        #     passwd = SQL_PASSWORD,
-        #     database = "sli_database",
-        #     autocommit = True
-        # )
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
         print("entered sql")
         sql = "SELECT `user`, token_val FROM Token WHERE token_val = '{}'".format(token)
         print("wrote sql script")
@@ -71,60 +77,71 @@ class DB:
         #################################################
         try:
             #self.cursor.execute(sql, get_token)
-            self.cursor.execute(sql)
+            cursor.execute(sql)
         except Exception as e:
             print(e)
             return e
         print("printing")
-        result = self.cursor.fetchall()
-        self.cursor.close()
+        result = cursor.fetchall()
+        print(result)
+        connection.close()
         return result
 
     def insertToken(self, username, token):
-        self.cursor = self.db.cursor()
-        deleted_old_token = "DELETE FROM Token WHERE `user` = %s"
+        print("ADB")
+        connection = self.create_connection()
+        cursor = connection.cursor()
+        deleted_old_token = "DELETE FROM Token WHERE `user` = s"
 
         del_input = (str(username), )
-        self.cursor.execute(deleted_old_token, del_input)
+        cursor.execute(deleted_old_token, del_input)
+        connection.close()
 
-        sql = "INSERT INTO Token VALUES (%s, %s)"
+        connection = self.create_connection()
+        cursor = connection.cursor()
+        sql = "INSERT INTO Token VALUES (s, s)"
         input = (str(username), str(token))
-        self.cursor.execute(sql, input)
-        self.cursor.close()
+        cursor.execute(sql, input)
+
+        connection.close()
         return "ok"
 
     def createNewClass(self, teacher, class_name):
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
 
         insert_sql = "INSERT INTO Class VALUES (%s, %s)"
 
         insert_input = (str(teacher), str(class_name))
-        self.cursor.execute(insert_sql, insert_input)
+        cursor.execute(insert_sql, insert_input)
         print("slslsls")
-        self.cursor.close()
+        connection.close()
         return "good enough"
 
     def deleteToken(self, username):
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
         print("deleting...")
         sql = "DELETE FROM Token WHERE `user`` = %s"
         del_input = (str(username), )
-        self.cursor.execute(sql, del_input)
+        cursor.execute(sql, del_input)
         print("deleted!")
-        self.cursor.close()
+        connection.close()
 
     def createAccount(self, username, password, role, fname, lname):
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
         sql = "INSERT INTO `User` VALUES (%s, %s, %s, %s, %s)"
         inputs = (str(username), str(password), str(role), str(fname), str(lname))
-        self.cursor.execute(sql, inputs)
-        self.cursor.close()
+        cursor.execute(sql, inputs)
+        connection.close()
 
     def getClasses(self, teacher):
-        self.cursor = self.db.cursor()
+        connection = self.create_connection()
+        cursor = connection.cursor()
         sql = "SELECT name FROM Class WHERE teacher = %s"
         get_id = (str(teacher), )
-        self.cursor.execute(sql, get_id)
+        cursor.execute(sql, get_id)
         result = self.cursor.fetchall()
-        self.cursor.close()
+        connection.close()
         return result
