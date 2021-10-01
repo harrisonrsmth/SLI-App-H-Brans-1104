@@ -1,18 +1,36 @@
 from cryptography.fernet import Fernet
 from flask import Flask
-import mysql.connector as mysql
 import sli_database
 from flask import request
 import requests
 from flask_cors import CORS, cross_origin
 import random
+from dotenv import load_dotenv
+import os
+from flaskext.mysql import MySQL
+import pymysql
 
 app = Flask(__name__)
 CORS(app)
 
+# load_dotenv()
+# SQL_HOST = os.getenv("SQL_HOST")
+# SQL_USER = os.getenv('SQL_USER')
+# SQL_PASSWORD = os.getenv('SQL_PASSWORD')
+
+# app.config['MYSQL-HOST'] = SQL_HOST
+# app.config['MYSQL_USER'] = SQL_USER
+# app.config['MYSQL_PASSWORD'] = SQL_PASSWORD
+# app.config['MYSQL_DB'] = "sli_database"
+# app.config['MYSQL_AUTOCOMMIT'] = True
+
+# mysql = MySQL()
+# mysql = MySQL(app, host = SQL_HOST, user = SQL_USER, password = SQL_PASSWORD, db = "sli_database", autocommit = True, cursorclass = pymysql.cursors.DictCursor)
+# mysql.init_app(app)
+
 key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 
-db = sli_database.DB()
+db = sli_database.DB(app)
 
 '''def createUserStudent(username, password,
                       querynum=0,
@@ -31,6 +49,9 @@ db = sli_database.DB()
         print("Error creating Student account: %s"%(Ex))'''
 
 #createUserStudent(cursor, "user_test", "pass_test")
+
+def getDB():
+    return mysql
 
 def createUser(username, password, role, fname, lname,
                       querynum=0,
@@ -55,6 +76,7 @@ def createUser(username, password, role, fname, lname,
 @cross_origin()
 def login():
     data = request.get_json(force=True)
+    print(str(data) + " ,,,,,")
     role = data["role"]
     username = data["username"]
     password = data["password"]
@@ -94,6 +116,7 @@ def login():
 @cross_origin()
 def getUserToken():
     data = request.get_json(force=True)
+    print(data)
     token = None
     if "token" in data:
         token = data["token"]
@@ -102,6 +125,7 @@ def getUserToken():
     response = {}
     try:
         # get username by token
+        print("get token from frontend")
         results = None
         if token:
             results = db.getUserToken(token)
