@@ -94,18 +94,20 @@ def login():
         #print(password, str_pwd)
         #get_password = records[0][1]
         #if password == get_password:
-        str_pwd = bytes(records[0]['password']).decode("utf-8")
+        str_pwd = bytes(records[0][1]).decode("utf-8")
         #str_pwd = records[0][1]
         print(password)
         print(str_pwd)
-        if password == str_pwd and role == records[0]['role']:
+        if password == str_pwd and role == records[0][2]:
             token = generateToken(32)
-            username = records[0]['username']
+            username = records[0][0]
             print(username, token, "test TOken")
             setUserToken(username, token)
             response["code"] = 1
             response["token"] = token
             response["username"] = username
+            response["isLoggedIn"] = True
+            response["role"] = role
             print(response)
             return response # success
         else:
@@ -117,38 +119,35 @@ def login():
 @cross_origin()
 def getUserToken():
     data = request.get_json(force=True)
-    print(data)
-    token = None
-    if "token" in data:
-        token = data["token"]
-    else:
-        return {"isLoggedIn": False}
     response = {}
+    token = data["token"] if "token" in data else None
+    curr_user, user_info = None, None
     try:
-        # get username by token
-        print("get token from frontend")
-        results = None
+        # query user from token
         if token:
-            results = db.getUserToken(token)
-            print(results + "we are")
-            if results and len(results) > 0:
-                username = results[0]["username"]
-                # get teacher information from ID
-                if username:
-                    get_user = db.getUserInfo(username)
-                if len(get_user) > 0:
-                    response["fname"] = get_user[0]["fnam"]
-                else:
-                    response["fname"] = "Anonymous"
-                response["isLoggedIn"] = True
-                response["username"] = username
+            curr_user = db.getUserToken(token)
+
+        # query information of user from user
+        if curr_user and len(curr_user) > 0:
+            user_name = curr_user[0][0]
+            user_info = db.getUserInfo(user_name)
+
+            # user already logged in with token
+            response["isLoggedIn"] = True
+            response["username"] = user_name
         else:
             response["isLoggedIn"] = False
+
+        # generate the response
+        if user_info and len(user_info) > 0:
+            response["fname"] = user_info[0][0]
+
         return response
+
     except Exception as ex:
         print(ex)
-        print("ERROR HAPPEN")
-        return (ex)
+
+
 
 
 @app.route("/api/createAccount", methods=['POST'])

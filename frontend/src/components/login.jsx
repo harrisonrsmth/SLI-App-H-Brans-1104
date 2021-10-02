@@ -24,20 +24,16 @@ class Login extends React.Component {
         this.api.login(this.state).then(
             data => {
                 console.log(data);
-                alert(data);
-                if (data["code"] == 0) {
 
+                if (data["code"] == 0) {
                     alert(data.msg);
                 } else {
-
-                    
                     localStorage.setItem('isLoggedIn', data["isLoggedIn"]);
                     localStorage.setItem('token', data["token"]);
                     localStorage.setItem('username', data["username"]);
-                    //localStorage.setItem('role', data["role"]);
+                    localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
-                    alert(data.msg);
                 }
             }
         );
