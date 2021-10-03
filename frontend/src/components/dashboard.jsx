@@ -77,7 +77,7 @@ class Dashboard extends React.Component {
                 </div>
               </div>
 
-              <Link to="/createClass"><button type="submit" class="btn btn-primary">Create a Class</button></Link>
+              <Link to="/myClasses"><button type="submit" class="btn btn-primary">Create a Class</button></Link>
             </React.Fragment>
             </div>
         );
