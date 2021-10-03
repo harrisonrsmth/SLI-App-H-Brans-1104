@@ -34,6 +34,7 @@ class Login extends React.Component {
                     localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
+
                 }
             }
         );
