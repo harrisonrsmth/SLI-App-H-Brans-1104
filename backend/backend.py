@@ -10,6 +10,11 @@ import os
 from flaskext.mysql import MySQL
 import pymysql
 
+
+# import endpoint
+from ClassesAdministrator.manage_students_account import manage_stud_accounts
+from Authentication.authenticate import authenticate_endpoint
+
 app = Flask(__name__)
 CORS(app)
 
@@ -27,6 +32,10 @@ CORS(app)
 # mysql = MySQL()
 # mysql = MySQL(app, host = SQL_HOST, user = SQL_USER, password = SQL_PASSWORD, db = "sli_database", autocommit = True, cursorclass = pymysql.cursors.DictCursor)
 # mysql.init_app(app)
+
+app.register_blueprint(manage_stud_accounts)
+app.register_blueprint(authenticate_endpoint)
+
 
 key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 
@@ -49,6 +58,7 @@ db = sli_database.DB(app)
         print("Error creating Student account: %s"%(Ex))'''
 
 #createUserStudent(cursor, "user_test", "pass_test")
+
 
 def getDB():
     return mysql
