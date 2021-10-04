@@ -238,6 +238,18 @@ def logout():
         print(ex)
         return {"code": 0} #id not in database
 
+@app.route("/api/logWork", methods=['POST'])
+@cross_origin()
+def logWork():
+    data = request.get_json(force=True)
+    print(data)
+    try:
+        db.logWork(data)
+        return {"code": 1} #success
+    except Exception as ex:
+        print(ex)
+        return {"code": 0} #id not in database
+
 # this is temporary token generating algorithm
 # need to use library later
 def generateToken(length):
