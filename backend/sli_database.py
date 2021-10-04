@@ -150,3 +150,14 @@ class DB:
         result = self.cursor.fetchall()
         connection.close()
         return result
+    """"
+    def addStudentToClass(self, teacher, class_name, student):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "INSERT INTO inClass VALUES (%s, %s, %s)"
+        value = (str(teacher), str(class_name), str(student))
+        cursor.execute(sql, value)
+        result = self.cursor.fetchall()
+        connection.close()
+        return result
+    """
