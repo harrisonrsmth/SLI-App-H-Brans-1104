@@ -114,9 +114,7 @@ class DB:
     def createNewClass(self, teacher, class_name):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-
         insert_sql = "INSERT INTO Class VALUES (%s, %s)"
-
         insert_input = (str(teacher), str(class_name))
         cursor.execute(insert_sql, insert_input)
         print("created new class successful")
@@ -140,6 +138,7 @@ class DB:
         inputs = (str(username), str(password), str(role), str(fname), str(lname))
         cursor.execute(sql, inputs)
         connection.close()
+        return "success"
 
     def getClasses(self, teacher):
         connection = self.mysql.connect()
@@ -150,14 +149,28 @@ class DB:
         result = self.cursor.fetchall()
         connection.close()
         return result
-    """"
+
+    def getStudentsOfClass(self, teacher, class_name):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        print("here")
+        sql = "SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s"
+        input_sql = (str(teacher), str(class_name))
+        print("good")
+        cursor.execute(sql, input_sql)
+        print("haha")
+        result = cursor.fetchall()
+        print(result)
+        connection.close()
+        return result
+
+
+
     def addStudentToClass(self, teacher, class_name, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "INSERT INTO inClass VALUES (%s, %s, %s)"
+        sql = "INSERT INTO InClass VALUES (%s, %s, %s)"
         value = (str(teacher), str(class_name), str(student))
         cursor.execute(sql, value)
-        result = self.cursor.fetchall()
         connection.close()
-        return result
-    """
+

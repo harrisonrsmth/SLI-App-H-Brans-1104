@@ -63,22 +63,6 @@ db = sli_database.DB(app)
 def getDB():
     return mysql
 
-def createUser(username, password, role, fname, lname,
-                      querynum=0,
-                      updatenum=0,
-                      connection_num=0):
-    '''
-    cipher_suite = Fernet(key)
-    password = str.encode(password)
-    ciphered_password = cipher_suite.encrypt(password)
-    ciphered_password = bytes(ciphered_password).decode("utf-8")
-    '''
-
-    try:
-        db.createAccount(username, password, role, fname, lname)
-        print("Account successfully created.")
-    except Exception as Ex:
-        print("Error creating account: %s"%(Ex))
 
 #createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
@@ -159,19 +143,80 @@ def getUserToken():
 
 
 
+@app.route("/api/getClassesList", methods=['POST'])
+@cross_origin()
+def getClassesList():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        teacher = data["teacher"]
+        result = db.getClasses(teacher)
+        if result and len(result) > 0:
+            response["classes"] = result
+    except Exception as ex:
+        print(ex)
+
+@app.route("/api/getStudentsFromClass", methods=['POST'])
+@cross_origin()
+def getStudentsFromClass():
+    data = request.get_json(force=True)
+    print(data)
+    response = {}
+    try:
+        if data and "className" in data and "teacher" in data:
+            class_name = data["className"]
+            teacher = data["teacher"]
+            results = db.getStudentsOfClass(teacher, class_name)
+            if results:
+                print(results)
+                response["studentList"] = [student[0] for student in results]
+            print(response)
+            return response
+        return {"invalid class or teacher"}
+    except Exception as ex:
+        print(ex)
+
 
 @app.route("/api/createAccount", methods=['POST'])
+@cross_origin()
 def createAccount():
     data = request.get_json(force=True)
     print(data)
     if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
         try:
-            createUser(data["username"], data["password"], data["role"], data["fname"], data["lname"])
+            create_result = createUser(data["username"], data["password"], data["role"], data["fname"], data["lname"])
+            if data["role"] == "S" and create_result == "success" and "teacher" in data and "className" in data:
+                db.addStudentToClass(data["teacher"], data["className"], data["username"])
             return {"code": 1}
         except:
             return {"code": 2}
     else:
         return {"code": 0}
+
+
+def createUser(username, password, role, fname, lname,
+               querynum=0,
+               updatenum=0,
+               connection_num=0):
+    '''
+    cipher_suite = Fernet(key)
+    password = str.encode(password)
+    ciphered_password = cipher_suite.encrypt(password)
+    ciphered_password = bytes(ciphered_password).decode("utf-8")
+    '''
+
+    try:
+        result = db.createAccount(username, password, role, fname, lname)
+
+        print("Account successfully created.")
+        return result
+    except Exception as Ex:
+        print("Error creating account: %s"%(Ex))
+
+
+
+
+
 
 @app.route("/api/createNewClass", methods=['POST'])
 @cross_origin()
@@ -189,7 +234,6 @@ def createClass():
             print("adsfdf")
             records = db.createNewClass(username, class_name)
             response["status"] = "success"
-            print("success create class")
             response["code"] = 1
         return response
 
