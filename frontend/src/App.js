@@ -7,6 +7,8 @@ import Login from './components/login';
 import Dashboard from './components/dashboard';
 import CreateClass from './components/createClass';
 import logWork from './components/logWork';
+import MyClasses from './components/myClasses';
+import ForgotPassword from './components/forgotPassword';
 import { Route, Link , Switch} from "react-router-dom";
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
       <Route path="/login" component={Login} />
       <Route path="/createClass" component={CreateClass} />
       <Route path="/logWork" component={logWork} />
+      <Route path="/myClasses" component={MyClasses} />
+      <Route path="/forgotPassword" component={ForgotPassword} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>
