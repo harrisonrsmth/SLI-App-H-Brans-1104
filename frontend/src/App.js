@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard';
 import CreateClass from './components/createClass';
 import MyClasses from './components/myClasses';
 import ForgotPassword from './components/forgotPassword';
+import LogWork from './components/logWork';
 import { Route, Link , Switch} from "react-router-dom";
 //import Card from 'react-bootstrap/Card'
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/createClass" component={CreateClass} />
       <Route path="/myClasses" component={MyClasses} />
       <Route path="/forgotPassword" component={ForgotPassword} />
+      <Route path="/logWork" component={LogWork} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>
