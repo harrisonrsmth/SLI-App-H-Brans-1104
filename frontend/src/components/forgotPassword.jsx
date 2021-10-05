@@ -1,0 +1,51 @@
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Api } from '../api';
+import { useHistory } from 'react-router-dom';
+
+
+class ForgotPassword extends React.Component {
+    api = new Api();
+
+    constructor() {
+        super();
+        this.state = {
+            email: ""
+        };
+    }
+
+    retrievePassword() {
+        //do the thing
+    }
+
+    render() {
+        return (
+            <div>
+                <form className="mt-5 w-50 mx-auto" id="forgotPassword">
+                    <div>{this.state.redirect}</div>
+                    <h1>Forgot Password</h1>
+                    <div className="form-group mt-2 mx-auto">
+                        <label for="formGroupExampleInput2">Email</label>
+                        <input type="text"
+                                class="form-control"
+                                id="formGroupExampleInput2"
+                                placeholder="Input Email"
+                                onChange={e => this.setState({email: e.target.value})}/>
+                        <small id="emailHelpBlock" class="form-text text-muted">
+                            Enter your email here to be sent a password reset link!
+                        </small>
+                    </div>
+                    <div className="mt-4 mx-auto">
+                    <Link to="/"><button
+                        type="submit"
+                        class="btn btn-primary"
+                        onClick={() => this.retrievePassword()}>Submit</button></Link>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+}
+ 
+export default ForgotPassword;
