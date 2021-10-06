@@ -1,4 +1,5 @@
 # import mysql.connector as mysql
+from types import resolve_bases
 from dotenv import load_dotenv
 import os
 from flaskext.mysql import MySQL
@@ -42,10 +43,11 @@ class DB:
         connection = self.mysql.connect()
         cursor = connection.cursor()
         print(username)
-        cursor.execute("SELECT username, password, role FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
+        cursor.execute("SELECT username, password, role, fname FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
+        result = cursor.fetchall()
         connection.close()
         print("get login done")
-        return cursor.fetchall()
+        return result
 
     '''def getTeacherLogin(self, email):
         self.cursor = self.db.cursor()
@@ -114,9 +116,7 @@ class DB:
     def createNewClass(self, teacher, class_name):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-
         insert_sql = "INSERT INTO Class VALUES (%s, %s)"
-
         insert_input = (str(teacher), str(class_name))
         cursor.execute(insert_sql, insert_input)
         print("created new class successful")
@@ -140,6 +140,7 @@ class DB:
         inputs = (str(username), str(password), str(role), str(fname), str(lname))
         cursor.execute(sql, inputs)
         connection.close()
+        return "success"
 
     def getClasses(self, teacher):
         connection = self.mysql.connect()
@@ -150,3 +151,28 @@ class DB:
         result = self.cursor.fetchall()
         connection.close()
         return result
+
+    def getStudentsOfClass(self, teacher, class_name):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        print("here")
+        sql = "SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s"
+        input_sql = (str(teacher), str(class_name))
+        print("good")
+        cursor.execute(sql, input_sql)
+        print("haha")
+        result = cursor.fetchall()
+        print(result)
+        connection.close()
+        return result
+
+
+
+    def addStudentToClass(self, teacher, class_name, student):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "INSERT INTO InClass VALUES (%s, %s, %s)"
+        value = (str(teacher), str(class_name), str(student))
+        cursor.execute(sql, value)
+        connection.close()
+

@@ -82,8 +82,11 @@ class Login extends React.Component {
                         <button type="submit"
                                 class="btn btn-primary"
                                 onClick={() => this.login()}>Submit</button>
-
                     </div>
+                    <Link to="/forgotPassword">
+                        <button className="mt-2 mx-auto btn btn-primary">Forgot Password</button>
+                    </Link>
+
                 </form>
             </div>
         );

@@ -97,4 +97,29 @@ export class Api {
         });
   }
 
+  getStudentList(form) {
+      return new Promise((resolve, reject) => {
+            axios.post(`${this.url}/api/getStudentsFromClass`, form, this.config)
+            .then(x => {
+              resolve(x.data);
+            })
+            .catch(x => {
+              reject(x);
+            })
+          });
+    }
+
+
+  retrievePassword(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/sendPasswordEmail`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }
