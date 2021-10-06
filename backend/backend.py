@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 import os
 from flaskext.mysql import MySQL
 import pymysql
+import ssl
+import smtplib
 
 
 # import endpoint
@@ -18,7 +20,9 @@ from Authentication.authenticate import authenticate_endpoint
 app = Flask(__name__)
 CORS(app)
 
-# load_dotenv()
+load_dotenv()
+EMAIL = os.getenv("EMAIL")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 # SQL_HOST = os.getenv("SQL_HOST")
 # SQL_USER = os.getenv('SQL_USER')
 # SQL_PASSWORD = os.getenv('SQL_PASSWORD')
@@ -239,6 +243,33 @@ def createClass():
 
     except Exception as ex:
         return {"code": 0}
+
+@app.route("/api/sendPasswordEmail", methods=['POST'])
+def sendPasswordEmail():
+    data = request.get_json(force=True)
+    # print(data)
+    try:
+        port = 465  # For SSL
+        smtp_server = "smtp.gmail.com"
+        sender_email = EMAIL  # Enter your address
+        receiver_email = data["email"]  # Enter receiver address
+        password = EMAIL_PASSWORD
+        results = db.getLogin(data["email"])
+        str_pwd = bytes(results[0][1]).decode("utf-8")
+        name = results[0][3]
+        # print(str_pwd)
+        subject = "S.L.I. App Password Retrieval"
+        text = "Hi {},\n\nYour Seed & Lead Impact App password is: {}\n\n-The Team at Seed & Lead Impact".format(name, str_pwd)
+        message = "Subject: {}\n\n{}".format(subject, text)
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message)
+        response = {"code": 200}
+    except Exception as e:
+        print(e)
+        response = {"code": 500}
+    return response
 
 
 

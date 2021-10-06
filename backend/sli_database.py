@@ -1,4 +1,5 @@
 # import mysql.connector as mysql
+from types import resolve_bases
 from dotenv import load_dotenv
 import os
 from flaskext.mysql import MySQL
@@ -42,10 +43,11 @@ class DB:
         connection = self.mysql.connect()
         cursor = connection.cursor()
         print(username)
-        cursor.execute("SELECT username, password, role FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
+        cursor.execute("SELECT username, password, role, fname FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
+        result = cursor.fetchall()
         connection.close()
         print("get login done")
-        return cursor.fetchall()
+        return result
 
     '''def getTeacherLogin(self, email):
         self.cursor = self.db.cursor()

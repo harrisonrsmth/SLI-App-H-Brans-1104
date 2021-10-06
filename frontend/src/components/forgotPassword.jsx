@@ -16,7 +16,19 @@ class ForgotPassword extends React.Component {
     }
 
     retrievePassword() {
-        //do the thing
+        console.log("api called");
+
+        this.api.retrievePassword(this.state).then(
+            data => {
+                console.log(data);
+
+                if (data["code"] != 200) {
+                    alert(data.msg);
+                } else {
+                    console.log("success");
+                }
+            }
+        );
     }
 
     render() {
