@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { NavBar } from './navbar'
+import { NavBar } from './navbar';
 import { Api } from '../api';
 import leaf from '../leaf.png';
 import badge from '../award.png';

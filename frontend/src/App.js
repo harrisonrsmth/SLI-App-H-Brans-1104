@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 import Home from './components/home';
@@ -8,7 +7,6 @@ import Dashboard from './components/dashboard';
 import CreateClass from './components/createClass';
 import MyClasses from './components/myClasses';
 import { Route, Link , Switch} from "react-router-dom";
-//import Card from 'react-bootstrap/Card'
 
 function App() {
   return (
