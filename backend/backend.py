@@ -211,7 +211,7 @@ def createUser(username, password, role, fname, lname,
 
     try:
         result = db.createAccount(username, password, role, fname, lname)
-
+        print(result)
         print("Account successfully created.")
         return result
     except Exception as Ex:
