@@ -45,7 +45,8 @@ class ForgotPassword extends React.Component {
                                 placeholder="Input Email"
                                 onChange={e => this.setState({email: e.target.value})}/>
                         <small id="emailHelpBlock" class="form-text text-muted">
-                            Enter your email here to be sent your password! Be sure to check your spam folder.
+                            Teachers, enter your email here to be sent your password! Be sure to check your spam folder.
+                            Students, go to your teacher to retrieve your password.
                         </small>
                     </div>
                     <div className="mt-4 mx-auto">

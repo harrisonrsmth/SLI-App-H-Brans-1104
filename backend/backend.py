@@ -11,7 +11,7 @@ from flaskext.mysql import MySQL
 import pymysql
 import ssl
 import smtplib
-
+import datetime
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -247,7 +247,7 @@ def createClass():
 @app.route("/api/sendPasswordEmail", methods=['POST'])
 def sendPasswordEmail():
     data = request.get_json(force=True)
-    # print(data)
+    print(data)
     try:
         port = 465  # For SSL
         smtp_server = "smtp.gmail.com"
@@ -256,6 +256,7 @@ def sendPasswordEmail():
         password = EMAIL_PASSWORD
         results = db.getLogin(data["email"])
         str_pwd = bytes(results[0][1]).decode("utf-8")
+
         name = results[0][3]
         # print(str_pwd)
         subject = "S.L.I. App Password Retrieval"
@@ -263,7 +264,9 @@ def sendPasswordEmail():
         message = "Subject: {}\n\n{}".format(subject, text)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            print("check forgot password")
             server.login(sender_email, password)
+            print("check here")
             server.sendmail(sender_email, receiver_email, message)
         response = {"code": 200}
     except Exception as e:
@@ -297,6 +300,19 @@ def getTestLogin():
     if get_mail == username and get_password == password:
         return {"code": 1}
     return {"code": 0}
+
+@app.route("/api/logWork", methods=['POST'])
+@cross_origin()
+def logWork():
+    data = request.get_json(force=True)
+    #data["date"] = datetime.strptime(data["date"],'%Y%m%d')
+    print(data)
+    try:
+        db.logWork(data)
+        return {"code": 1} #success
+    except Exception as ex:
+        print(ex)
+        return {"code": 0} #id not in database
 
 @app.route("/api/logout", methods=['POST'])
 @cross_origin()

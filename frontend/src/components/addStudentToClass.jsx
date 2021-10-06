@@ -59,12 +59,12 @@ class AddStudentToClass extends React.Component {
                             onChange={e => this.setState({ lname: e.target.value })} />
                     </div>
                     <div class="form-group">
-                        <label for="formGroupExampleInput2">Email Address</label>
+                        <label for="formGroupExampleInput2">Username</label>
                         <input
                             type="text"
                             class="form-control"
                             id="formGroupExampleInput2"
-                            placeholder="Input Email"
+                            placeholder="Input Username"
                             onChange={e => this.setState({ username: e.target.value })} />
                     </div>
                     <div class="form-group">

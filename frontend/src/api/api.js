@@ -122,4 +122,16 @@ export class Api {
     })
   }
 
+  logWork(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/logWork`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

@@ -176,3 +176,11 @@ class DB:
         cursor.execute(sql, value)
         connection.close()
 
+    def logWork(self, data):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "INSERT INTO `Work` (user, project, SDG, date, hours, description) VALUES (%s, %s, %s, %s, %s, %s)"
+        inputs = (str(data["user"]), str(data["project"]), str(data["SDG"]), str(data["date"]), int(data["hours"]), str(data["description"]))
+        print(inputs)
+        cursor.execute(sql, inputs)
+        connection.close()

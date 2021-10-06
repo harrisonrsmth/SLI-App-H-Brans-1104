@@ -82,7 +82,7 @@ class LogWork extends React.Component {
                 placeholder="Input SDG"
                 onChange={e => this.setState({ SDG: e.target.value })} />
             </div>
-            <Link to="/"><button
+            <Link to="/dashboard"><button
               type="submit"
               class="btn btn-primary"
               onClick={() => this.logWork()}>Submit</button></Link>
