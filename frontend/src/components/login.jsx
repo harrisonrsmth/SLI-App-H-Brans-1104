@@ -14,7 +14,7 @@ class Login extends React.Component {
             isLoggedIn: false,
             username: "",
             password: "",
-            role: "S"
+            role: "T"
         };
     }
 

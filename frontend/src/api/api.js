@@ -10,7 +10,7 @@ export class Api {
   }
 
   login(form) {
-     return new Promise((resolve, reject) => {
+     var tk = new Promise((resolve, reject) => {
         axios.post(`${this.url}/api/authenticateLogin`, form, this.config)
            .then(x => {
                 console.log(x.data["token"]);
@@ -22,6 +22,14 @@ export class Api {
               reject(x);
            })
      })
+     var delayInMilliseconds = 10000; //1 second
+
+     setTimeout(function() {
+       //your code to be executed after 1 second
+     }, delayInMilliseconds);
+     console.log(tk);
+     alert("SLKFJSLKF");
+     return tk;
   }
 
   getUserByToken(token) {
