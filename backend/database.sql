@@ -51,5 +51,25 @@ CREATE TABLE `Work` (
     FOREIGN KEY (`user`) REFERENCES `User`(username)
 );
 
+DROP TABLE IF EXISTS Campaign;
+CREATE TABLE Campaign (
+    teacher VARCHAR(40),
+    class VARCHAR(100),
+    name VARCHAR(50),
+    total_hours INT,
+    due_date DATE,
+    PRIMARY KEY (teacher, class, name),
+    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name)
+);
+
+DROP TABLE IF EXISTS Goal;
+CREATE TABLE Goal (
+    `user` VARCHAR(40),
+    total_hours INT,
+    target_date DATE,
+    PRIMARY KEY (`user`),
+    FOREIGN KEY (`user`) REFERENCES `User`(username)
+);
+
 /*INSERT INTO teacher (email, password, fname, lname) VALUES ("hey", "whatsup", "anh", "ho");
 INSERT INTO class VALUES (1, "Mrs. Watson's 4th Grade Class");*/
