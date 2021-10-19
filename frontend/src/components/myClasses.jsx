@@ -18,7 +18,7 @@ class MyClasses extends React.Component {
             ]
         }
         this.headers = [
-            'First Name', 'Edit', 'Delete'
+            'Username', 'Edit', 'Delete'
         ];
     }
 
@@ -41,7 +41,7 @@ class MyClasses extends React.Component {
                 <div className="m-2 ml-4 mr-4">
                     <h3 className="d-inline">My Classes</h3>
                     <Link to="/addStudent"><button className="btn btn-primary float-right">Add Student</button></Link>
-
+                    <Link to="/myClasses"><button type="submit" class="btn btn-primary">Add Class</button></Link>
                     <hr />
                     <table className="table table-striped table-bordered">
                         <thead>
