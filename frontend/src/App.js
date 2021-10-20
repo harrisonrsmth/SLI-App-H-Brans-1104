@@ -10,12 +10,14 @@ import ForgotPassword from './components/forgotPassword';
 import LogWork from './components/logWork';
 import { Route, Link , Switch} from "react-router-dom";
 import AddStudentToClass from './components/addStudentToClass';
+import ResetPassword from './components/resetPassword';
 //import Card from 'react-bootstrap/Card'
 
 function App() {
   return (
     <div className="App">
       <Switch>
+      <Route path="/resetPassword" component={ResetPassword} />
       <Route path="/createAccount" component={CreateAccount} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/login" component={Login} />

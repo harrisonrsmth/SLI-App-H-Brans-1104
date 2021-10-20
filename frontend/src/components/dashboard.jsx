@@ -6,7 +6,7 @@ import leaf from '../leaf.png';
 import badge from '../award.png';
 import Card from 'react-bootstrap/Card';
 
-function Upcoming(props) {
+function Campaign(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
         <Card border="success" style={{ width: '18rem'}}>
@@ -22,7 +22,7 @@ function Upcoming(props) {
     );
   }
 
-  function Recent(props) {
+  function Goal(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
         <Card border="warning" style={{ width: '18rem'}}>
@@ -47,7 +47,15 @@ class Dashboard extends React.Component {
         }
     }
 
-
+    // api call
+    // getCurrentUser();
+    // data = {body: {goals: []}}
+    // const data = whatever is returned from api call
+    // {condition && <div> react component}
+    // {body.campaign && <div>{body.campaign.title}</div>}
+    // {body.goal && <div>{body.campaign.title}</div>}
+    // body.goals is an array
+    // body.goals.map(goal => <Goal title={goal.title}>)
     render() { 
         return (
             <div>
@@ -56,8 +64,8 @@ class Dashboard extends React.Component {
               <h1>Dashboard</h1>
               <div class="row align-items-start">
                 <div class="col-4">
-                  Upcoming
-                  <Upcoming date={'10/2/2021'} camp={'River Cleanup'} hours={5}/>
+                  Campaigns
+                  <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/>
                 </div>
                 <div class="col-4">
                   Class Impact
@@ -72,11 +80,13 @@ class Dashboard extends React.Component {
                   </div>
                 </div>
                 <div class="col-4">
-                  Recent Work
-                  <Recent date={"September 15, 2021"} camp={"Recycling"} description={"Helped by recycling goods at my school"}/>
+                  Goals
+                  <Goal date={"September 15, 2021"} camp={"Recycling"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
 
+              {/* {role == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {role == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>} */}
               <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
               <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>
             </React.Fragment>

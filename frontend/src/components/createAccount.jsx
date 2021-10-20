@@ -37,6 +37,7 @@ class CreateAccount extends React.Component {
         return (
         <>
         <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>
+        <h1>Create Account</h1>
             {/* <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off" />
             <label class="btn btn-outline-primary" for="teacher-select">Teacher</label>
 
