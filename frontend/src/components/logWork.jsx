@@ -76,6 +76,7 @@ class LogWork extends React.Component {
             <div class="form-group">
               <label for="exampleFormControlSelect1">Which SDG?</label>
               <select class="form-select" id="exampleFormControlSelect1">
+                <option>-- Select an SDG --</option>
                 <option>No Poverty</option>
                 <option>Zero Hunger</option>
                 <option>Good Health and Well-Being</option>
