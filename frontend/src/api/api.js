@@ -142,4 +142,32 @@ export class Api {
     })
   }
 
+  getCampaigns() {
+    var username = localStorage.getItem("username")
+    var data = {"username": username}
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/getCampaigns`, data, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  getGoal() {
+    var username = localStorage.getItem("username")
+    var data = {"username": username}
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/getGoal`, data, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

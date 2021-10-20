@@ -184,3 +184,23 @@ class DB:
         print(inputs)
         cursor.execute(sql, inputs)
         connection.close()
+
+    def getCampaigns(self, student):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT class, name, total_hours, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        inputs = (str(student), )
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    def getGoal(self, student):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT total_hours, target_date FROM Goal WHERE user like %s"
+        inputs = (str(student), )
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results

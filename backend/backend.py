@@ -344,7 +344,32 @@ def setUserToken(username, token):
     except Exception as ex:
         return ex
 
+# "campaignList" is a list of campgaigns in the form [class name, campaign name, total_hours, due_date] in ascending order
+@app.route("/api/getCampaigns", methods = ['POST'])
+@cross_origin()
+def getCampaigns():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        campaigns = db.getCampaigns(data["username"])
+        print(campaigns)
+        response["campaignList"] = campaigns
+        response["code"] = 1
+    except:
+        response["code"] = 0
+    return response
 
-
-
-
+# "goal" is the goal for the student in the form [total_hours, target_date] 
+@app.route("/api/getGoal", methods = ['POST'])
+@cross_origin()
+def getGoal():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        goal = db.getGoal(data["username"])
+        print(goal)
+        response["goal"] = goal
+        response["code"] = 1
+    except:
+        response["code"] = 0
+    return response
