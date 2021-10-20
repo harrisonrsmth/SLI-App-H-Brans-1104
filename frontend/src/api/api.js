@@ -170,4 +170,28 @@ export class Api {
     })
   }
 
+  createCampaign(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/createCampaign`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  createGoal(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/createGoal`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

@@ -204,3 +204,22 @@ class DB:
         results = cursor.fetchall()
         connection.close()
         return results
+
+    def createCampaign(self, teacher, class_name, name, total_hours, due_date):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "INSERT INTO Campaign VALUES (%s, %s, %s, %s, %s)"
+        inputs = (str(teacher), str(class_name), str(name), str(total_hours), str(due_date))
+        cursor.execute(sql, inputs)
+        connection.close()
+
+    def createGoal(self, student, total_hours, target_date):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "DELETE FROM Goal WHERE user LIKE %s"
+        inputs = (str(student), )
+        cursor.execute(sql, inputs)
+        sql = "INSERT INTO Goal VALUES (%s, %s, %s)"
+        inputs = (str(student), str(total_hours), str(target_date))
+        cursor.execute(sql, inputs)
+        connection.close()

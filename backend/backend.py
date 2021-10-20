@@ -345,6 +345,7 @@ def setUserToken(username, token):
         return ex
 
 # "campaignList" is a list of campgaigns in the form [class name, campaign name, total_hours, due_date] in ascending order
+# no input data from frontend input necessary (gets username from localStorage)
 @app.route("/api/getCampaigns", methods = ['POST'])
 @cross_origin()
 def getCampaigns():
@@ -359,7 +360,8 @@ def getCampaigns():
         response["code"] = 0
     return response
 
-# "goal" is the goal for the student in the form [total_hours, target_date] 
+# "goal" is the goal for the student in the form [total_hours, target_date]
+# no input data from frontend input necessary (gets username from localStorage)
 @app.route("/api/getGoal", methods = ['POST'])
 @cross_origin()
 def getGoal():
@@ -369,6 +371,41 @@ def getGoal():
         goal = db.getGoal(data["username"])
         print(goal)
         response["goal"] = goal
+        response["code"] = 1
+    except:
+        response["code"] = 0
+    return response
+
+# needed from frontend state: "username" can come from localStorage, "class" which is the class name,
+# "name" of campaign, "total_hours", and "due_date"
+@app.route("/api/createCampaign", methods = ['POST'])
+@cross_origin()
+def createCampaign():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        teacher = data["username"]
+        class_name = data["class"]
+        name = data["name"]
+        total_hours = data["total_hours"]
+        due_date = data["due_date"]
+        db.createCampaign(teacher, class_name, name, total_hours, due_date)
+        response["code"] = 1
+    except:
+        response["code"] = 0
+    return response
+
+# needed from frontend state: "username" can come from localStorage, "total_hours", and "target_date"
+@app.route("/api/createGoal", methods = ['POST'])
+@cross_origin()
+def createGoal():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        student = data["username"]
+        total_hours = data["total_hours"]
+        target_date = data["target_date"]
+        db.createGoal(student, total_hours, target_date)
         response["code"] = 1
     except:
         response["code"] = 0
