@@ -35,12 +35,14 @@ class CreateAccount extends React.Component {
 
     render() { 
         return (
-        <><form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>
-            <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off" />
+        <>
+        <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>
+        <h1>Create Account</h1>
+            {/* <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off" />
             <label class="btn btn-outline-primary" for="teacher-select">Teacher</label>
 
             <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off" />
-            <label class="btn btn-outline-success" for="student-select">Student</label>
+            <label class="btn btn-outline-success" for="student-select">Student</label> */}
             <div class="form-group">
               <label for="formGroupExampleInput">First Name</label>
               <input

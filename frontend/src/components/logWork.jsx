@@ -74,13 +74,27 @@ class LogWork extends React.Component {
               </small>
             </div>
             <div class="form-group">
-              <label for="formGroupExampleInput2">Which SDG?</label>
-              <input
-                type="text"
-                class="form-control"
-                id="formGroupExampleInput2"
-                placeholder="Input SDG"
-                onChange={e => this.setState({ SDG: e.target.value })} />
+              <label for="exampleFormControlSelect1">Which SDG?</label>
+              <select class="form-select" id="exampleFormControlSelect1">
+                <option>-- Select an SDG --</option>
+                <option>No Poverty</option>
+                <option>Zero Hunger</option>
+                <option>Good Health and Well-Being</option>
+                <option>Quality Education</option>
+                <option>Gender Equality</option>
+                <option>Clean Water and Sanitation</option>
+                <option>Affordable and Clean Energy</option>
+                <option>Decent Work and Economic Growth</option>
+                <option>Industry, Innovation, and Infrastructure</option>
+                <option>Reduced Inequalities</option>
+                <option>Sustainable Cities and Communities</option>
+                <option>Responsible Consumption and Production</option>
+                <option>Climate Action</option>
+                <option>Life Below Water</option>
+                <option>Life On Land</option>
+                <option>Peace, Justice and Strong Institutions</option>
+                <option>Partnerships for the Goals</option>
+              </select>
             </div>
             <Link to="/dashboard"><button
               type="submit"
