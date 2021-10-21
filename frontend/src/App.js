@@ -11,6 +11,8 @@ import LogWork from './components/logWork';
 import { Route, Link , Switch} from "react-router-dom";
 import AddStudentToClass from './components/addStudentToClass';
 import ResetPassword from './components/resetPassword';
+import CreateCampaign from './components/createCampaign';
+import CreateGoal from './components/createGoal';
 //import Card from 'react-bootstrap/Card'
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
       <Route path="/addStudent" component={AddStudentToClass} />
       <Route path="/forgotPassword" component={ForgotPassword} />
       <Route path="/logWork" component={LogWork} />
+      <Route path="/createCampaign" component={CreateCampaign} />
+      <Route path="/createGoal" component={CreateGoal} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>
