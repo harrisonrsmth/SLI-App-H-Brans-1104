@@ -64,6 +64,7 @@ class Dashboard extends React.Component {
               <h1>Dashboard</h1>
               <div class="row align-items-start">
                 <div class="col-4">
+                {localStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
                   <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/>
                 </div>
@@ -85,10 +86,10 @@ class Dashboard extends React.Component {
                 </div>
               </div>
 
-              {/* {role == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-              {role == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>} */}
-              <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
-              <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>
+              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
+              {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
+              <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link> */}
             </React.Fragment>
             </div>
         );
