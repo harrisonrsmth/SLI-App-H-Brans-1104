@@ -11,10 +11,10 @@ class MyClasses extends React.Component {
         super(props);
         this.state = {
             "role": "T",
-            "className": "thisclass",
+            "className": "this class",
             "teacher": localStorage.getItem("username"),
             users: [
-
+                "Please add student to class"
             ]
         }
         this.headers = [
@@ -27,6 +27,7 @@ class MyClasses extends React.Component {
             response => {
                 console.log(response);
                 console.log(this.state.teacher);
+                console.log(response);
                 this.setState({users: response["studentList"]});
             })
             .catch(() => console.log("ok"))

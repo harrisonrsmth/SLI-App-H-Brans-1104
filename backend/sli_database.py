@@ -156,13 +156,17 @@ class DB:
         connection = self.mysql.connect()
         cursor = connection.cursor()
         print("here")
+        print(teacher, class_name)
         sql = "SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s"
-        input_sql = (str(teacher), str(class_name))
+
+        input_sql = (teacher, class_name)
+
         print("good")
         cursor.execute(sql, input_sql)
         print("haha")
         result = cursor.fetchall()
-        print(result)
+        print(type(result))
+
         connection.close()
         return result
 
