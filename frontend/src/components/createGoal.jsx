@@ -52,7 +52,7 @@ class CreateGoal extends React.Component {
                 placeholder="Input Date"
                 onChange={e => this.setState({ date: e.target.value })} />
                 <small id="dateHelpBlock" class="form-text text-muted">
-                This should in format YYYY-MM-DD! For example, January 2, 2021 is 2021-01-02!
+                This should be in format YYYY-MM-DD! For example, January 2, 2021 is 2021-01-02!
               </small>
             </div>
             <Link to="/dashboard"><button
