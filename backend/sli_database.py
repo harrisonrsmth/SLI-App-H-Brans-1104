@@ -223,3 +223,35 @@ class DB:
         inputs = (str(student), str(total_hours), str(target_date))
         cursor.execute(sql, inputs)
         connection.close()
+
+    def createPasswordLink(self, email, link):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "DELETE FROM ResetLink WHERE user LIKE %s"
+        inputs = (str(email), )
+        cursor.execute(sql, inputs)
+        sql = "INSERT INTO ResetLink VALUES (%s, %s)"
+        inputs = (str(email), link)
+        cursor.execute(sql, inputs)
+        connection.close()
+
+    def getPasswordLink(self, link):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT user, link FROM ResetLink WHERE link LIKE %s"
+        inputs = (link, )
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    def resetPassword(self, username, password):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "UPDATE User SET password = %s WHERE username LIKE %s"
+        inputs = (str(password), str(username))
+        cursor.execute(sql, inputs)
+        sql = "DELETE FROM ResetLink WHERE user LIKE %s"
+        inputs = (str(username), )
+        cursor.execute(sql, inputs)
+        connection.close()

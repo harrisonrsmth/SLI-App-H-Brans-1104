@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS Token;
 CREATE TABLE Token (
     `user` VARCHAR(40),
     token_val VARCHAR(50),
-    PRIMARY KEY (`user`),
+    PRIMARY KEY (`user`, token_val),
     FOREIGN KEY (`user`) REFERENCES `User`(username)
 );
 
@@ -68,6 +68,14 @@ CREATE TABLE Goal (
     total_hours INT,
     target_date DATE,
     PRIMARY KEY (`user`),
+    FOREIGN KEY (`user`) REFERENCES `User`(username)
+);
+
+DROP TABLE IF EXISTS ResetLink;
+CREATE TABLE ResetLink (
+    `user` VARCHAR(40),
+    link VARBINARY(140),
+    PRIMARY KEY (`user`, link),
     FOREIGN KEY (`user`) REFERENCES `User`(username)
 );
 

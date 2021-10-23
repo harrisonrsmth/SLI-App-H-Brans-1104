@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
-      <Route path="/resetPassword" component={ResetPassword} />
+      <Route path="/resetPassword/*" component={ResetPassword} />
       <Route path="/createAccount" component={CreateAccount} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/login" component={Login} />
