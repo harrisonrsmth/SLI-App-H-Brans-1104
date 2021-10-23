@@ -248,19 +248,35 @@ def createClass():
 def sendPasswordEmail():
     data = request.get_json(force=True)
     print(data)
+    creatingLink = True
+
+    # creating unique link extension for user to be added to database
+    while creatingLink:
+        try:
+            allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            result = [allowed_chars[random.randint(0, len(allowed_chars) - 1)] for _ in range(32)]
+            link = "".join(result)
+            cipher_suite = Fernet(key)
+            enc_link = str.encode(link)
+            ciphered_link = cipher_suite.encrypt(enc_link)
+            ciphered_link = bytes(ciphered_link).decode("utf-8")
+            print(ciphered_link)
+            db.createPasswordLink(data["email"], link)
+            creatingLink = False
+        except Exception as e:
+            print(e)
+            return
     try:
         port = 465  # For SSL
         smtp_server = "smtp.gmail.com"
         sender_email = EMAIL  # Enter your address
         receiver_email = data["email"]  # Enter receiver address
         password = EMAIL_PASSWORD
-        results = db.getLogin(data["email"])
-        str_pwd = bytes(results[0][1]).decode("utf-8")
-
-        name = results[0][3]
+        
         # print(str_pwd)
+        full_link = "http://127.0.0.1:3000/resetPassword/" + ciphered_link
         subject = "S.L.I. App Password Retrieval"
-        text = "Hi {},\n\nYour Seed & Lead Impact App password is: {}\n\n-The Team at Seed & Lead Impact".format(name, str_pwd)
+        text = "Hello!\n\nUse this link to reset your Seed & Lead Impact App password:\n{}\n\n-The Team at Seed & Lead Impact".format(full_link)
         message = "Subject: {}\n\n{}".format(subject, text)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
@@ -274,7 +290,38 @@ def sendPasswordEmail():
         response = {"code": 500}
     return response
 
-
+# given a link extension from the url, checks to see if it matches an extension in DB and if so, returns "username"
+@app.route("/api/getResetLinkUser", methods=['POST'])
+@cross_origin()
+def getResetLinkUser():
+    print("woo")
+    data = request.get_json(force=True)
+    print(data)
+    response = {}
+    link = data["link"]
+    print(link)
+    try:
+        cipher_suite = Fernet(key)
+        print("1")
+        # decoded_link = bytes(link).decode("utf-8")
+        print("2")
+        encrypted_link = str.encode(link)
+        print("3")
+        unciphered_link = cipher_suite.decrypt(encrypted_link)
+        print("3")
+        unciphered_link = bytes(unciphered_link).decode("utf-8")
+        print("4")
+        print(unciphered_link)
+        results = db.getPasswordLink(unciphered_link)
+        if len(results) > 0:
+            response["username"] = results[0][0]
+            response["code"] = 1
+        else:
+            response["code"] = 0
+    except:
+        response["code"] = 0
+    print(response)
+    return response
 
 @app.route("/hello", methods=['POST'])
 def getHello():
@@ -407,6 +454,33 @@ def createGoal():
         target_date = data["target_date"]
         db.createGoal(student, total_hours, target_date)
         response["code"] = 1
+    except:
+        response["code"] = 0
+    return response
+
+@app.route("/api/setNewPassword", methods=['POST'])
+@cross_origin()
+def setNewPassword():
+    print("1")
+    data = request.get_json(force=True)
+    print("2")
+    response = {}
+    print("3")
+    try:
+        username = data["username"]
+        print("4")
+        password = data["newPassword"]
+        print("5")
+        conf_password = data["conf_newPassword"]
+        print("6")
+        print(username)
+        print(password)
+        print(conf_password)
+        if len(password) >= 8 and password == conf_password:
+            db.resetPassword(username, password)
+            response["code"] = 1
+        else:
+            response["code"] = 0
     except:
         response["code"] = 0
     return response

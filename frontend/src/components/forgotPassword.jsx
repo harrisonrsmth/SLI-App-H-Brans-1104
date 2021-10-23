@@ -15,10 +15,10 @@ class ForgotPassword extends React.Component {
         };
     }
 
-    retrievePassword() {
+    sendPasswordEmail() {
         console.log("api called");
 
-        this.api.retrievePassword(this.state).then(
+        this.api.sendPasswordEmail(this.state).then(
             data => {
                 console.log(data);
 
@@ -53,7 +53,7 @@ class ForgotPassword extends React.Component {
                     <Link to="/"><button
                         type="submit"
                         class="btn btn-primary"
-                        onClick={() => this.retrievePassword()}>Submit</button></Link>
+                        onClick={() => this.sendPasswordEmail()}>Submit</button></Link>
                     </div>
                 </form>
             </div>

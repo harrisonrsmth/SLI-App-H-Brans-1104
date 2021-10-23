@@ -118,9 +118,21 @@ export class Api {
     }
 
 
-  retrievePassword(form) {
+  sendPasswordEmail(form) {
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/sendPasswordEmail`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  getResetLinkUser(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/getResetLinkUser`, form, this.config)
       .then(x => {
         resolve(x.data);
       })
@@ -185,6 +197,18 @@ export class Api {
   createGoal(form) {
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/createGoal`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  resetPassword(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/setNewPassword`, form, this.config)
       .then(x => {
         resolve(x.data);
       })
