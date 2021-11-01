@@ -21,8 +21,11 @@ app = Flask(__name__)
 CORS(app)
 
 load_dotenv()
+
+# info from .env for SLI email
 EMAIL = os.getenv("EMAIL")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
 # SQL_HOST = os.getenv("SQL_HOST")
 # SQL_USER = os.getenv('SQL_USER')
 # SQL_PASSWORD = os.getenv('SQL_PASSWORD')
@@ -40,9 +43,10 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 app.register_blueprint(manage_stud_accounts)
 app.register_blueprint(authenticate_endpoint)
 
-
+# key value for encryption
 key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
 
+# create database instance
 db = sli_database.DB(app)
 
 '''def createUserStudent(username, password,
@@ -63,13 +67,25 @@ db = sli_database.DB(app)
 
 #createUserStudent(cursor, "user_test", "pass_test")
 
-
-def getDB():
-    return mysql
-
-
 #createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
+# Authenticates login with username and password input from login screen. 
+# This fetches the login information for the given username passed in and then
+# verifies that the input password matches the decrypted password and the input
+# role matches the fetched role. If login is authenticated, then the a token is
+# generated for that user and it is passed back to the front end.
+#
+# JSON data format: 
+#   "username": username entered on login screen
+#   "password": password entered on login screen
+#   "role": role entered on login screen
+#
+# response data format:
+#   "code: 1 for success, 0 for failure
+#   "token": token generated after login authenticated
+#   "username": user that has been logged in
+#   "isLoggedIn": set to true for frontend localStorage
+#   "role": role of user logged in
 @app.route("/api/authenticateLogin", methods=['POST'])
 @cross_origin()
 def login():
@@ -113,6 +129,17 @@ def login():
     else:
         return {"code": 0} # failure- email doesn't exist
 
+# Gets user information based on token. Used for displaying name
+# on dashboard and maintaining session after login. Also used to
+# verify if a user is already logged in.
+#
+# JSON data format: 
+#   "token": session token for a specific user
+#
+# response data format:
+#   "username": user that is logged in
+#   "isLoggedIn": set to true for frontend localStorage if already logged in, false otherwise
+#   "fname": first name of user to display on dashboard
 @app.route("/api/getCurrentUserToken", methods=['POST'])
 @cross_origin()
 def getUserToken():
