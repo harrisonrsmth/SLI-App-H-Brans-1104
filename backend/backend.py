@@ -75,13 +75,13 @@ db = sli_database.DB(app)
 # role matches the fetched role. If login is authenticated, then the a token is
 # generated for that user and it is passed back to the front end.
 #
-# JSON data format: 
+# input data format: 
 #   "username": username entered on login screen
 #   "password": password entered on login screen
 #   "role": role entered on login screen
 #
 # response data format:
-#   "code: 1 for success, 0 for failure
+#   "code": 1 for success, 0 for failure
 #   "token": token generated after login authenticated
 #   "username": user that has been logged in
 #   "isLoggedIn": set to true for frontend localStorage
@@ -133,7 +133,7 @@ def login():
 # on dashboard and maintaining session after login. Also used to
 # verify if a user is already logged in.
 #
-# JSON data format: 
+# input data format: 
 #   "token": session token for a specific user
 #
 # response data format:
@@ -420,13 +420,29 @@ def setUserToken(username, token):
 
 # "campaignList" is a list of campgaigns in the form [class name, campaign name, total_hours, due_date] in ascending order
 # no input data from frontend input necessary (gets username from localStorage)
-@app.route("/api/getCampaigns", methods = ['POST'])
+# Retrieves the campaigns either for a specific student or a specific teacher depending on the role.
+# If the user is a student, this will get the student's personal instance of each campaign for the class
+# they are in. If the user is a teacher, this will get the overall instance of each campaign in all classes
+# owned by the teacher.
+#
+# input data format:
+#   "username": username of user who's campagins should be retrieved (from localStorage)
+#   "role": role of the user, either "T" or "S" (from localStorage)
+#
+# response data format:
+#   "code": 1 for success, 0 for failure
+#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, due_date]
+
+@app.route("/api/getCampaigns", methods = ['GET'])
 @cross_origin()
 def getCampaigns():
     data = request.get_json(force=True)
     response = {}
     try:
-        campaigns = db.getCampaigns(data["username"])
+        if data["role"] == "T":
+            campaigns = db.teacherGetCampaigns(data["username"])
+        else:
+            campaigns = db.getCampaigns(data["username"])
         print(campaigns)
         response["campaignList"] = campaigns
         response["code"] = 1

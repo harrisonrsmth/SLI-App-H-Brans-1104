@@ -259,3 +259,19 @@ class DB:
         inputs = (str(username), )
         cursor.execute(sql, inputs)
         connection.close()
+
+    # Gets all campaigns for all classes that a teacher owns to be displayed on the teacher's dashboard.
+    #
+    # Parameters:
+    #   username: teacher's username
+    # Returns:
+    #   results: list of entries retrieved from database in the form [campaign name, total_hours, due_date]
+    def teacherGetCampaigns(self, username):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT name, total_hours, due_date FROM Campaign WHERE teacher LIKE %s"
+        inputs = (str(username),)
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
