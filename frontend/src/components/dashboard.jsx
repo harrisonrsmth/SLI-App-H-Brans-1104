@@ -43,10 +43,22 @@ class Dashboard extends React.Component {
     constructor() {
         super();
         this.state = {
-            classes: []
+            classes: [],
+            campaigns: []
         }
     }
 
+    componentDidMount() {
+      this.api.getCampaigns().then(data => {
+        console.log(data.campaignList)
+        this.setState({...this.state, campaigns: data.campaignList.map(campaign => {
+          return <Campaign date={campaign.date} camp={campaign.camp} hours = {campaign.hours}/>
+        })} 
+        )})
+      console.log(this.state.campaigns)
+    }
+    
+    
     // api call
     // getCurrentUser();
     // data = {body: {goals: []}}
@@ -66,7 +78,8 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                 {localStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
-                  <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/>
+                  {/* {this.campaigns} */}
+                  {/* <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/> */}
                 </div>
                 <div class="col-4">
                   Class Impact

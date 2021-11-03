@@ -22,7 +22,7 @@ export class Api {
               reject(x);
            })
      })
-     var delayInMilliseconds = 10000; //1 second
+     var delayInMilliseconds = 15000; //1 second
 
      setTimeout(function() {
        //your code to be executed after 1 second
