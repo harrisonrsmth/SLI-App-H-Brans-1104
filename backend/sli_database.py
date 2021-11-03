@@ -38,7 +38,12 @@ class DB:
             cursorclass=pymysql.cursors.DictCursor
         )
     """
-
+    # Gets login information to verify password based on username input if username is present in database.
+    #
+    # Parameters:
+    #   username: user's username
+    # Returns:
+    #   results: list of singular entry retrieved from database in the form [username, password, role]
     def getLogin(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
@@ -58,6 +63,12 @@ class DB:
         self.cursor.close()
         return result'''
 
+    # Gets user's first name to display in welcome message on dashboard.
+    #
+    # Parameters:
+    #   username: user's username
+    # Returns:
+    #   results: list of singular entry retrieved from database in the form [fname]
     def getUserInfo(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
