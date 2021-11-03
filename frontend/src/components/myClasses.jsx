@@ -28,7 +28,9 @@ class MyClasses extends React.Component {
                 console.log(response);
                 console.log(this.state.teacher);
                 console.log(response);
-                this.setState({users: response["studentList"]});
+                if (response["studentList"].length > 0) {
+                    this.setState({users: response["studentList"]});
+                }
             })
             .catch(() => console.log("ok"))
     }
