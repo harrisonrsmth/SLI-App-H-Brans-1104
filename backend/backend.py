@@ -437,7 +437,7 @@ def setUserToken(username, token):
 #
 # response data format:
 #   "code": 1 for success, 0 for failure
-#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, due_date]
+#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, start_date, due_date]
 
 @app.route("/api/getCampaigns", methods = ['GET'])
 @cross_origin()
@@ -473,7 +473,7 @@ def getGoal():
     return response
 
 # needed from frontend state: "username" can come from localStorage, "class" which is the class name,
-# "name" of campaign, "total_hours", and "due_date"
+# "name" of campaign, "total_hours", "start_date", and "due_date"
 @app.route("/api/createCampaign", methods = ['POST'])
 @cross_origin()
 def createCampaign():
@@ -484,8 +484,9 @@ def createCampaign():
         class_name = data["class"]
         name = data["name"]
         total_hours = data["total_hours"]
+        start_date = data["start_date"]
         due_date = data["due_date"]
-        db.createCampaign(teacher, class_name, name, total_hours, due_date)
+        db.createCampaign(teacher, class_name, name, total_hours, start_date, due_date)
         response["code"] = 1
     except:
         response["code"] = 0

@@ -181,8 +181,6 @@ class DB:
         connection.close()
         return result
 
-
-
     def addStudentToClass(self, teacher, class_name, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
@@ -203,7 +201,7 @@ class DB:
     def studentGetCampaigns(self, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT class, name, total_hours, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        sql = "SELECT class, name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
         inputs = (str(student), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -220,11 +218,11 @@ class DB:
         connection.close()
         return results
 
-    def createCampaign(self, teacher, class_name, name, total_hours, due_date):
+    def createCampaign(self, teacher, class_name, name, total_hours, start_date, due_date):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "INSERT INTO Campaign VALUES (%s, %s, %s, %s, %s)"
-        inputs = (str(teacher), str(class_name), str(name), str(total_hours), str(due_date))
+        sql = "INSERT INTO Campaign VALUES (%s, %s, %s, %s, %s, %s)"
+        inputs = (str(teacher), str(class_name), str(name), str(total_hours), str(start_date), str(due_date))
         cursor.execute(sql, inputs)
         connection.close()
 
@@ -276,11 +274,11 @@ class DB:
     # Parameters:
     #   username: teacher's username
     # Returns:
-    #   results: list of entries retrieved from database in the form [campaign name, total_hours, due_date]
+    #   results: list of entries retrieved from database in the form [campaign name, total_hours, start_date, due_date]
     def teacherGetCampaigns(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, due_date FROM Campaign WHERE teacher LIKE %s"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s"
         inputs = (str(username),)
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
