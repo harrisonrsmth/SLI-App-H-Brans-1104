@@ -227,4 +227,18 @@ export class Api {
     })
   }
 
+  getClasses() {
+    var username = localStorage.getItem("username")
+    var data = {"username": username}
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.url}/api/getClassesList`, data, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

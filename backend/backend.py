@@ -174,7 +174,7 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['POST'])
+@app.route("/api/getClassesList", methods=['GET'])
 @cross_origin()
 def getClassesList():
     data = request.get_json(force=True)
@@ -183,9 +183,15 @@ def getClassesList():
         teacher = data["teacher"]
         result = db.getClasses(teacher)
         if result and len(result) > 0:
+            response["code"] = 1
             response["classes"] = result
+        else:
+            response["code"] = 0
+        return response
     except Exception as ex:
         print(ex)
+        response["code"] = 0
+        return response
 
 @app.route("/api/getStudentsFromClass", methods=['POST'])
 @cross_origin()
@@ -442,7 +448,7 @@ def getCampaigns():
         if data["role"] == "T":
             campaigns = db.teacherGetCampaigns(data["username"])
         else:
-            campaigns = db.getCampaigns(data["username"])
+            campaigns = db.studentGetCampaigns(data["username"])
         print(campaigns)
         response["campaignList"] = campaigns
         response["code"] = 1

@@ -35,7 +35,18 @@ class MyClasses extends React.Component {
             .catch(() => console.log("ok"))
     }
 
-
+    getClasses() {
+        this.api.getClasses().then(
+            response => {
+                if (response["code"] === 1) {
+                    return response["classes"]
+                } else {
+                    return []
+                }
+            }
+        )
+        .catch(() => console.log("ok"))
+    }
 
     render() {
         return (
