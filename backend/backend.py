@@ -556,7 +556,7 @@ def setNewPassword():
 #       [
 #           [
 #               [
-#                   "campaign",
+#                   "campaign1",
 #                   5,
 #                   "Tue, 02 Nov 2021 00:00:00 GMT",
 #                   "Sat, 06 Nov 2021 00:00:00 GMT"
@@ -573,6 +573,26 @@ def setNewPassword():
 #                       "60%"
 #                   ]
 #               ]
+#           ],
+#           [
+#               [
+#                   "campaign2",
+#                   10,
+#                   "Wed, 03 Nov 2021 00:00:00 GMT",
+#                   "Sun, 07 Nov 2021 00:00:00 GMT"
+#               ],
+#               [
+#                   [
+#                       "student1",
+#                       3,
+#                       "30%"
+#                   ],
+#                   [
+#                       "student2",
+#                       3,
+#                       "30%"
+#                   ]
+#               ]
 #           ]
 #       ]
 @app.route("/api/getProgress", methods=['GET'])
@@ -583,41 +603,36 @@ def getProgress():
     try:
         total_progress = []
         if data["role"] == "T":
-            students = list(db.getStudentsOfClass(data["username"], data["class"]))
-            campaigns = list(db.teacherGetCampaigns(data["username"]))
-            for campaign in campaigns:
-                campaign_progress = [campaign, []]
-                for student in students:
-                    progress = db.getStudentProgress(campaign[2], campaign[3], student[0])
-                    if len(progress) > 0:
-                        user, total = progress[0]
-                        percentage = round(total / campaign[1] * 100, 0)
-                        if percentage > 100:
-                            percentage = 100
-                        percentage = str(percentage) + "%"
-                    else:
-                        user = student[0]
-                        total = 0
-                        percentage = "0%"
-                    progress = (user, int(total), percentage)
+            # teacher is viewing progress
+            try:
+                # teacher views progress of specific student
+                student = data["student_filter"]
+                campaigns = list(db.studentGetCampaigns(student))
+                print(campaigns)
+                for campaign in campaigns:
+                    campaign_progress = [campaign, []]
+                    progress = db.getStudentProgress(campaign[2], campaign[3], student)
+                    progress = calculateProgress(progress, student, campaign[2])
                     campaign_progress[1].append(progress)
-                total_progress.append(campaign_progress)
+                    total_progress.append(campaign_progress)
+            except:
+                # teacher views progress of entire class
+                students = list(db.getStudentsOfClass(data["username"], data["class"]))
+                campaigns = list(db.teacherGetCampaigns(data["username"]))
+                for campaign in campaigns:
+                    campaign_progress = [campaign, []]
+                    for student in students:
+                        progress = db.getStudentProgress(campaign[2], campaign[3], student[0])
+                        progress = calculateProgress(progress, student[0], campaign[1])
+                        campaign_progress[1].append(progress)
+                    total_progress.append(campaign_progress)
         else:
+            # student is viewing progress
             campaigns = list(db.studentGetCampaigns(data["username"]))
             for campaign in campaigns:
                 campaign_progress = [campaign, []]
                 progress = db.getStudentProgress(campaign[2], campaign[3], data["username"])
-                if len(progress) > 0:
-                    user, total = progress[0]
-                    percentage = round(total / campaign[2] * 100, 0)
-                    if percentage > 100:
-                        percentage = 100
-                    percentage = str(percentage) + "%"
-                else:
-                    user = data["username"]
-                    total = 0
-                    percentage = "0%"
-                progress = (user, int(total), percentage)
+                progress = calculateProgress(progress, data["username"], campaign[2])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
         response["progress"] = total_progress
@@ -627,3 +642,27 @@ def getProgress():
         print(20)
         response["code"] = 0
         return response
+
+# Helper function for /api/getProgress that calculates percentage of completion of a specific campaign
+# for a given student. Also handles that case where the student has not logged any work for the campaign.
+#
+# Parameters:
+#   progress: result of getStudentProgress database query in the form (user, total_hours)
+#   username: username of student in case student is not found in query
+#   goal_hours: total hours of campaign
+#
+# Returns:
+#   progress: complete progress report in the form (user, total_hours, percentage_complete)
+def calculateProgress(progress, username, goal_hours):
+    if len(progress) > 0:
+        user, total = progress[0]
+        percentage = round(total / goal_hours * 100, 0)
+        if percentage > 100:
+            percentage = 100
+        percentage = str(percentage) + "%"
+    else:
+        user = username
+        total = 0
+        percentage = "0%"
+    progress = (user, int(total), percentage)
+    return progress
