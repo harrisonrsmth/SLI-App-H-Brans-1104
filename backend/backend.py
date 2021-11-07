@@ -424,8 +424,6 @@ def setUserToken(username, token):
     except Exception as ex:
         return ex
 
-# "campaignList" is a list of campgaigns in the form [class name, campaign name, total_hours, due_date] in ascending order
-# no input data from frontend input necessary (gets username from localStorage)
 # Retrieves the campaigns either for a specific student or a specific teacher depending on the role.
 # If the user is a student, this will get the student's personal instance of each campaign for the class
 # they are in. If the user is a teacher, this will get the overall instance of each campaign in all classes
@@ -437,7 +435,7 @@ def setUserToken(username, token):
 #
 # response data format:
 #   "code": 1 for success, 0 for failure
-#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, start_date, due_date]
+#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
 
 @app.route("/api/getCampaigns", methods = ['GET'])
 @cross_origin()
@@ -534,3 +532,98 @@ def setNewPassword():
     except:
         response["code"] = 0
     return response
+
+# Gets current progress for either a specific student or all students in a specific class, depending on 
+# user role. Queries database for each student for each campaign and calculates the percentage of completion
+# of that student for the given campaign.
+#
+# input data format: 
+#   "role": role of user, either "T" or "S" (from localStorage)
+#   "username": username of student whose progress we want or of teacher whose class we want
+#   "class": present if role is "T", name of class we want to see progress of
+#
+# output data format:
+#   "code": 1 for success, 0 for failure
+#   "progress": list of all student progress for all campaigns of class in the form of
+#       [[campaign1, progress1], [campaign2, progess2], ...]
+#       with campaign# in the form of
+#           [class_name, campaign_name, total_hours, start_date, due_date]
+#       and progress# in the form of
+#           [[student1], [student2], ...]
+#           with student# in the form of
+#               [username, hours_complete, percentage_complete]
+#       example:
+#       [
+#           [
+#               [
+#                   "campaign",
+#                   5,
+#                   "Tue, 02 Nov 2021 00:00:00 GMT",
+#                   "Sat, 06 Nov 2021 00:00:00 GMT"
+#               ],
+#               [
+#                   [
+#                       "student1",
+#                       3,
+#                       "60%"
+#                   ],
+#                   [
+#                       "student2",
+#                       3,
+#                       "60%"
+#                   ]
+#               ]
+#           ]
+#       ]
+@app.route("/api/getProgress", methods=['GET'])
+@cross_origin()
+def getProgress():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        total_progress = []
+        if data["role"] == "T":
+            students = list(db.getStudentsOfClass(data["username"], data["class"]))
+            campaigns = list(db.teacherGetCampaigns(data["username"]))
+            for campaign in campaigns:
+                campaign_progress = [campaign, []]
+                for student in students:
+                    progress = db.getStudentProgress(campaign[2], campaign[3], student[0])
+                    if len(progress) > 0:
+                        user, total = progress[0]
+                        percentage = round(total / campaign[1] * 100, 0)
+                        if percentage > 100:
+                            percentage = 100
+                        percentage = str(percentage) + "%"
+                    else:
+                        user = student[0]
+                        total = 0
+                        percentage = "0%"
+                    progress = (user, int(total), percentage)
+                    campaign_progress[1].append(progress)
+                total_progress.append(campaign_progress)
+        else:
+            campaigns = list(db.studentGetCampaigns(data["username"]))
+            for campaign in campaigns:
+                campaign_progress = [campaign, []]
+                progress = db.getStudentProgress(campaign[2], campaign[3], data["username"])
+                if len(progress) > 0:
+                    user, total = progress[0]
+                    percentage = round(total / campaign[2] * 100, 0)
+                    if percentage > 100:
+                        percentage = 100
+                    percentage = str(percentage) + "%"
+                else:
+                    user = data["username"]
+                    total = 0
+                    percentage = "0%"
+                progress = (user, int(total), percentage)
+                campaign_progress[1].append(progress)
+                total_progress.append(campaign_progress)
+        response["progress"] = total_progress
+        response["code"] = 1
+        return response
+    except:
+        print(20)
+        response["code"] = 0
+        return response

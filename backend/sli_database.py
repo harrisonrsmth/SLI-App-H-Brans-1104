@@ -67,8 +67,9 @@ class DB:
     #
     # Parameters:
     #   username: user's username
+    #
     # Returns:
-    #   results: list of singular entry retrieved from database in the form [fname]
+    #   results: list of singular tuple entry retrieved from database in the form (fname)
     def getUserInfo(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
@@ -166,17 +167,17 @@ class DB:
     def getStudentsOfClass(self, teacher, class_name):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        print("here")
-        print(teacher, class_name)
-        sql = "SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s"
+        # print("here")
+        # print(teacher, class_name)
+        sql = "SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s ORDER BY student ASC"
 
-        input_sql = (teacher, class_name)
+        input_sql = (str(teacher), str(class_name))
 
-        print("good")
+        # print("good")
         cursor.execute(sql, input_sql)
-        print("haha")
+        # print("haha")
         result = cursor.fetchall()
-        print(type(result))
+        # print(type(result))
 
         connection.close()
         return result
@@ -273,13 +274,34 @@ class DB:
     #
     # Parameters:
     #   username: teacher's username
+    #
     # Returns:
-    #   results: list of entries retrieved from database in the form [campaign name, total_hours, start_date, due_date]
+    #   results: list of tuple entries retrieved from database in the form (campaign name, total_hours, start_date, due_date)
     def teacherGetCampaigns(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s"
         inputs = (str(username),)
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    # Gets total hours of logged work between the given start and due dates for a specific user.
+    #
+    # Parameters:
+    #   start_date: earliest date threshold
+    #   due_date: latest date threshold
+    #   username: user whose total hours we want to retrieve
+    #
+    # Returns:
+    #   results: list of tuple entries retrieved from database in the form (user, total_hours)
+
+    def getStudentProgress(self, start_date, due_date, username):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT user, sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user LIKE %s GROUP BY user;"
+        inputs = (str(start_date), str(due_date), str(username))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()
