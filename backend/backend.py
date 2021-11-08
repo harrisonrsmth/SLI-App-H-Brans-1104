@@ -174,7 +174,7 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['GET'])
+@app.route("/api/getClassesList", methods=['POST'])
 @cross_origin()
 def getClassesList():
     data = request.get_json(force=True)
@@ -437,7 +437,7 @@ def setUserToken(username, token):
 #   "code": 1 for success, 0 for failure
 #   "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
 
-@app.route("/api/getCampaigns", methods = ['GET'])
+@app.route("/api/getCampaigns", methods = ['POST'])
 @cross_origin()
 def getCampaigns():
     data = request.get_json(force=True)
@@ -596,7 +596,7 @@ def setNewPassword():
 #               ]
 #           ]
 #       ]
-@app.route("/api/getProgress", methods=['GET'])
+@app.route("/api/getProgress", methods=['POST'])
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
@@ -683,7 +683,7 @@ Output data format:
     "code": 1 for success, 0 for failure
     "total_hours": total hours logged for student or class
 '''
-@app.route("/api/getTotalHours", methods=['GET'])
+@app.route("/api/getTotalHours", methods=['POST'])
 @cross_origin()
 def getTotalHours():
     data = request.get_json(force=True)
