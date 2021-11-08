@@ -57,6 +57,7 @@ CREATE TABLE Campaign (
     class VARCHAR(100),
     name VARCHAR(50),
     total_hours INT,
+    start_date DATE,
     due_date DATE,
     PRIMARY KEY (teacher, class, name),
     FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name)
