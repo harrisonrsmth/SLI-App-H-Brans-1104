@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from flaskext.mysql import MySQL
 import pymysql
+from datetime import date
 
 
 load_dotenv()
@@ -296,12 +297,29 @@ class DB:
     #
     # Returns:
     #   results: list of tuple entries retrieved from database in the form (user, total_hours)
-
-    def getStudentProgress(self, start_date, due_date, username):
+    def getStudentProgress(self, username, start_date, due_date):
+        if not start_date:
+            start_date = "1900-01-01"
+        if not due_date:
+            due_date = str(date.today())
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "SELECT user, sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user LIKE %s GROUP BY user;"
         inputs = (str(start_date), str(due_date), str(username))
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    def getClassTotalHours(self, username, class_name, start_date, end_date):
+        if not start_date:
+            start_date = "1900-01-01"
+        if not end_date:
+            end_date = str(date.today())
+        connection = self.mysql.connect()
+        cursor = connection.connect()
+        sql = "SELECT sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user IN (SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s);"
+        inputs = (str(start_date), str(end_date), str(username), str(class_name))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()
