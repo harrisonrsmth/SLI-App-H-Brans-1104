@@ -14,6 +14,7 @@ class CreateCampaign extends React.Component {
         className: "",
         name: "",
         hours: "",
+        start_date: "",
         due_date: ""
     };
   }
@@ -64,13 +65,25 @@ class CreateCampaign extends React.Component {
               </small>
             </div>
             <div class="form-group">
+              <label for="formGroupExampleInput2">Start Date</label>
+              <input
+                type="number"
+                class="form-control"
+                id="formGroupExampleInput2"
+                placeholder="Input Start Date"
+                onChange={e => this.setState({ start_date: e.target.value })} />
+              <small id="dateHelpBlock" class="form-text text-muted">
+                This should be in format YYYY-MM-DD! For example, January 2, 2021 is 2021-01-02!
+              </small>
+            </div>
+            <div class="form-group">
               <label for="formGroupExampleInput2">Due Date</label>
               <input
                 type="number"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Due Date"
-                onChange={e => this.setState({ date: e.target.value })} />
+                onChange={e => this.setState({ due_date: e.target.value })} />
               <small id="dateHelpBlock" class="form-text text-muted">
                 This should be in format YYYY-MM-DD! For example, January 2, 2021 is 2021-01-02!
               </small>
