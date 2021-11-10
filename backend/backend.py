@@ -706,6 +706,9 @@ def getTotalHours():
         response["code"] = 0
         return response
 
+'''
+
+'''
 @app.route("/api/getRecentWork", methods=['POST'])
 @cross_origin()
 def getRecentWork():
@@ -715,21 +718,39 @@ def getRecentWork():
     end_date = str(date.today())
     try:
         if data["role"] == "T":
-            recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
-            if len(recent_work == 0):
-                response["message"] = "There has not been any work logged in the last 14 days for this class."
-                response["code"] = 2
+            if data["all_work"]:
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"])
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
             else:
-                response["recent_work"] = recent_work
-                response["code"] = 1
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged in the last 14 days for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
         else:
-            recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
-            if len(recent_work == 0):
-                response["message"] = "You have not logged any work in the last 14 days."
-                response["code"] = 2
+            if data["all_work"]:
+                recent_work = db.studentGetRecentWork(data["username"])
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
             else:
-                response["recent_work"] = recent_work
-                response["code"] = 1
+                recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work in the last 14 days."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
         return response
     except:
         response["code"] = 0
