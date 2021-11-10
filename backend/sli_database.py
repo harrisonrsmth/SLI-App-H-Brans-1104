@@ -326,7 +326,7 @@ class DB:
         connection.close()
         return results
     
-    def teacherGetRecentWork(self, username, class_name, start_date, end_date):
+    def teacherGetRecentWork(self, username, class_name, start_date = "1900-01-01", end_date = date.today()):
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s;"
@@ -336,7 +336,7 @@ class DB:
         connection.close()
         return results
 
-    def studentGetRecentWork(self, username, start_date, end_date):
+    def studentGetRecentWork(self, username, start_date = "1900-01-01", end_date = date.today()):
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "SELECT project, SDG, date, hours, description FROM Work WHERE user like %s AND date BETWEEN %s and %s;"
