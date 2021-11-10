@@ -278,10 +278,11 @@ class DB:
     #
     # Returns:
     #   results: list of tuple entries retrieved from database in the form (campaign name, total_hours, start_date, due_date)
+    #       in ascending order of due date
     def teacherGetCampaigns(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s ORDER BY due_date ASC"
         inputs = (str(username),)
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -320,6 +321,26 @@ class DB:
         cursor = connection.connect()
         sql = "SELECT sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user IN (SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s);"
         inputs = (str(start_date), str(end_date), str(username), str(class_name))
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+    
+    def teacherGetRecentWork(self, username, class_name, start_date, end_date):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s;"
+        inputs = (str(username), str(class_name), str(start_date), str(end_date))
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    def studentGetRecentWork(self, username, start_date, end_date):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "SELECT project, SDG, date, hours, description FROM Work WHERE user like %s AND date BETWEEN %s and %s;"
+        inputs = (str(username), str(start_date), str(end_date))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()

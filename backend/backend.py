@@ -11,7 +11,7 @@ from flaskext.mysql import MySQL
 import pymysql
 import ssl
 import smtplib
-import datetime
+from datetime import date, timedelta
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -701,6 +701,35 @@ def getTotalHours():
             total = int(db.getStudentProgress(data["username"], start_date, end_date)[0][1])
         response["total_hours"] = total
         response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+@app.route("/api/getRecentWork", methods=['POST'])
+@cross_origin()
+def getRecentWork():
+    data = request.get_json(force=True)
+    response = {}
+    start_date = str(date.today() - timedelta(14))
+    end_date = str(date.today())
+    try:
+        if data["role"] == "T":
+            recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
+            if len(recent_work == 0):
+                response["message"] = "There has not been any work logged in the last 14 days for this class."
+                response["code"] = 2
+            else:
+                response["recent_work"] = recent_work
+                response["code"] = 1
+        else:
+            recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
+            if len(recent_work == 0):
+                response["message"] = "You have not logged any work in the last 14 days."
+                response["code"] = 2
+            else:
+                response["recent_work"] = recent_work
+                response["code"] = 1
         return response
     except:
         response["code"] = 0
