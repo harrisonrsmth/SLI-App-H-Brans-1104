@@ -108,8 +108,10 @@ class Dashboard extends React.Component {
                 </div>
               </div>
 
-              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button style={{position: 'absolute', bottom: '10%', left: '45%'}} type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {localStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
               {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
+              {localStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
               <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link> */}
             </React.Fragment>

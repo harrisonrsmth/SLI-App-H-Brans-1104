@@ -11,7 +11,7 @@ from flaskext.mysql import MySQL
 import pymysql
 import ssl
 import smtplib
-import datetime
+from datetime import date, timedelta
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -174,7 +174,7 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['GET'])
+@app.route("/api/getClassesList", methods=['POST'])
 @cross_origin()
 def getClassesList():
     data = request.get_json(force=True)
@@ -437,7 +437,7 @@ def setUserToken(username, token):
 #   "code": 1 for success, 0 for failure
 #   "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
 
-@app.route("/api/getCampaigns", methods = ['GET'])
+@app.route("/api/getCampaigns", methods = ['POST'])
 @cross_origin()
 def getCampaigns():
     data = request.get_json(force=True)
@@ -541,6 +541,7 @@ def setNewPassword():
 #   "role": role of user, either "T" or "S" (from localStorage)
 #   "username": username of student whose progress we want or of teacher whose class we want
 #   "class": present if role is "T", name of class we want to see progress of
+#   "student_filter": 
 #
 # output data format:
 #   "code": 1 for success, 0 for failure
@@ -595,7 +596,7 @@ def setNewPassword():
 #               ]
 #           ]
 #       ]
-@app.route("/api/getProgress", methods=['GET'])
+@app.route("/api/getProgress", methods=['POST'])
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
@@ -604,25 +605,25 @@ def getProgress():
         total_progress = []
         if data["role"] == "T":
             # teacher is viewing progress
-            try:
+            student_filter = data["student_filter"]
+            if student_filter:
                 # teacher views progress of specific student
-                student = data["student_filter"]
-                campaigns = list(db.studentGetCampaigns(student))
+                campaigns = list(db.studentGetCampaigns(student_filter))
                 print(campaigns)
                 for campaign in campaigns:
                     campaign_progress = [campaign, []]
-                    progress = db.getStudentProgress(campaign[2], campaign[3], student)
-                    progress = calculateProgress(progress, student, campaign[2])
+                    progress = db.getStudentProgress(student_filter, campaign[2], campaign[3])
+                    progress = calculateProgress(progress, student_filter, campaign[2])
                     campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
-            except:
+            else:
                 # teacher views progress of entire class
                 students = list(db.getStudentsOfClass(data["username"], data["class"]))
                 campaigns = list(db.teacherGetCampaigns(data["username"]))
                 for campaign in campaigns:
                     campaign_progress = [campaign, []]
                     for student in students:
-                        progress = db.getStudentProgress(campaign[2], campaign[3], student[0])
+                        progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
                         progress = calculateProgress(progress, student[0], campaign[1])
                         campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
@@ -631,7 +632,7 @@ def getProgress():
             campaigns = list(db.studentGetCampaigns(data["username"]))
             for campaign in campaigns:
                 campaign_progress = [campaign, []]
-                progress = db.getStudentProgress(campaign[2], campaign[3], data["username"])
+                progress = db.getStudentProgress(data["username"], campaign[2], campaign[3])
                 progress = calculateProgress(progress, data["username"], campaign[2])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
@@ -639,7 +640,6 @@ def getProgress():
         response["code"] = 1
         return response
     except:
-        print(20)
         response["code"] = 0
         return response
 
@@ -666,3 +666,71 @@ def calculateProgress(progress, username, goal_hours):
         percentage = "0%"
     progress = (user, int(total), percentage)
     return progress
+'''
+Gets total hours of logged work in specific class or for a specific student depending on role
+Query has the option to be filtered by start date, end date, and teachers can request to see
+a specific student's hours.
+
+Input data format:
+    "role": role of user, either "T" or "S"
+    "username": username of user whose hours or class's hours we want
+    "class": class name of class whose hours we want
+    "start_date": optional filter, "" if not used
+    "end_date": optional filter, "" if not used
+    "student_filter": optional filter for teachers to see specific student's hours, "" if not used
+
+Output data format:
+    "code": 1 for success, 0 for failure
+    "total_hours": total hours logged for student or class
+'''
+@app.route("/api/getTotalHours", methods=['POST'])
+@cross_origin()
+def getTotalHours():
+    data = request.get_json(force=True)
+    response = {}
+    try:
+        start_date = data["start_date"]
+        end_date = data["end_date"]
+        if data["role"] == "T":
+            student_filter = data["student_filter"]
+            if student_filter:
+                total = int(db.getStudentProgress(student_filter, start_date, end_date)[0][1])
+            else:
+                total = int(db.getClassTotalHours(data["username"], data["class"], start_date, end_date)[0][0])
+        else:
+            total = int(db.getStudentProgress(data["username"], start_date, end_date)[0][1])
+        response["total_hours"] = total
+        response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+@app.route("/api/getRecentWork", methods=['POST'])
+@cross_origin()
+def getRecentWork():
+    data = request.get_json(force=True)
+    response = {}
+    start_date = str(date.today() - timedelta(14))
+    end_date = str(date.today())
+    try:
+        if data["role"] == "T":
+            recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
+            if len(recent_work == 0):
+                response["message"] = "There has not been any work logged in the last 14 days for this class."
+                response["code"] = 2
+            else:
+                response["recent_work"] = recent_work
+                response["code"] = 1
+        else:
+            recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
+            if len(recent_work == 0):
+                response["message"] = "You have not logged any work in the last 14 days."
+                response["code"] = 2
+            else:
+                response["recent_work"] = recent_work
+                response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
