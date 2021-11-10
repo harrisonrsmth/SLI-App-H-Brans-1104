@@ -10,7 +10,7 @@ function Campaign(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
         <Card border="success" style={{ width: '18rem'}}>
-        <Card.Header>{props.date}</Card.Header>
+        <Card.Header>Due: {props.date}</Card.Header>
         <Card.Body>
           <Card.Title>{props.camp}</Card.Title>
           <Card.Text>
@@ -28,7 +28,7 @@ function Campaign(props) {
         <Card border="warning" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
-          <Card.Title>{props.camp}</Card.Title>
+          <Card.Title>Goal</Card.Title>
           <Card.Text>
             {props.description}
           </Card.Text>
@@ -44,18 +44,21 @@ class Dashboard extends React.Component {
         super();
         this.state = {
             classes: [],
-            campaigns: []
+            campaigns: [],
+            goals: []
         }
     }
 
     componentDidMount() {
       this.api.getCampaigns().then(data => {
         console.log(data.campaignList)
-        this.setState({...this.state, campaigns: data.campaignList.map(campaign => {
-          return <Campaign date={campaign.date} camp={campaign.camp} hours = {campaign.hours}/>
-        })} 
-        )})
+        this.setState({campaigns: data.campaignList});
+      })
       console.log(this.state.campaigns)
+
+      // this.api.getGoal().then(data => {
+      //   this.setState({goals: data.})
+      // })
     }
     
     
@@ -78,28 +81,34 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                 {localStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
-                  {/* {this.campaigns} */}
+                  {localStorage.getItem("role") == 'T' &&
+                    this.state.campaigns.map(campaign => {
+                      console.log(campaign[0])
+                      var date = new Date(campaign[3])
+                      return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                    })
+                  }
                   {/* <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/> */}
                 </div>
                 <div class="col-4">
                   Class Impact
                   <div class="row justify-content-between">
-                    <div class="col-4" style={{position: 'relative', left: '-10%'}}>
+                    <div class="col-4" style={{position: 'fixed', left: '22%'}}>
                       <img src={leaf} width="210" height="300" />
                     </div>
-                    <div class="col-4" style={{position: 'relative', left: '-15%'}}>
+                    <div class="col-4" style={{position: 'fixed', left: '45%'}}>
                       <img src={badge} width="200" height="250" />
                       
                     </div>
                   </div>
                 </div>
-                <div class="col-4">
+                <div style={{position: 'fixed', left: '68%'}} class="col-4">
                   Goals
-                  <Goal date={"September 15, 2021"} camp={"Recycling"} description={"Helped by recycling goods at my school"}/>
+                  <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
 
-              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button style={{position: 'absolute', bottom: '10%', left: '45%'}} type="submit" class="btn btn-primary">Manage Classes</button></Link>}
               {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
               <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link> */}
