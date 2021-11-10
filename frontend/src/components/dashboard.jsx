@@ -91,18 +91,25 @@ class Dashboard extends React.Component {
                   {/* <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/> */}
                 </div>
                 <div class="col-4">
-                  Class Impact
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Select a Class</label>
+                      <select class="form-select" id="exampleFormControlSelect1">
+                        <option>Hannah's Class</option>
+                        <option>Brent's Class</option>
+                        <option>Anh's Class</option>
+                      </select>
+                </div>
                   <div class="row justify-content-between">
-                    <div class="col-4" style={{position: 'fixed', left: '22%'}}>
+                    <div class="col-4" style={{position: 'relative'}}>
                       <img src={leaf} width="210" height="300" />
                     </div>
-                    <div class="col-4" style={{position: 'fixed', left: '45%'}}>
+                    <div class="col-4" style={{position: 'relative'}}>
                       <img src={badge} width="200" height="250" />
                       
                     </div>
                   </div>
                 </div>
-                <div style={{position: 'fixed', left: '68%'}} class="col-4">
+                <div style={{position: 'relative'}} class="col-4">
                   Goals
                   <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
