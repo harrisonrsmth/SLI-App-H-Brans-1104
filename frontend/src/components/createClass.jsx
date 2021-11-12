@@ -9,8 +9,7 @@ class CreateClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            role: localStorage.getItem("role"),
-            username: localStorage.getItem("username"),
+            username: sessionStorage.getItem("username"),
             className: "",
             classDescription: "",
 

@@ -31,10 +31,10 @@ export class NavBar extends React.Component {
                 if (data["code"] == 0){
                     alert(data.msg);
                 } else {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('role');
+                    sessionStorage.removeItem('token');
+                    sessionStorage.removeItem('isLoggedIn');
+                    sessionStorage.removeItem('username');
+                    sessionStorage.removeItem('role');
                 }
             }
         )
@@ -43,7 +43,7 @@ export class NavBar extends React.Component {
     }
 
     render() {
-        if (!localStorage.getItem('isLoggedIn')) {
+        if (!sessionStorage.getItem('isLoggedIn')) {
             return <Redirect to="/" />
         }
         return (

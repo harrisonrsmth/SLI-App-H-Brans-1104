@@ -19,22 +19,19 @@ class Login extends React.Component {
     }
 
     login() {
-        console.log("api called");
-
         this.api.login(this.state).then(
             data => {
-                console.log(data);
-
                 if (data["code"] == 0) {
                     alert(data.msg);
+                    window.location.reload();
                 } else {
-                    localStorage.setItem('isLoggedIn', data["isLoggedIn"]);
-                    localStorage.setItem('token', data["token"]);
-                    localStorage.setItem('username', data["username"]);
-                    localStorage.setItem('role', data["role"]);
+                    sessionStorage.setItem('isLoggedIn', data["isLoggedIn"]);
+                    sessionStorage.setItem('token', data["token"]);
+                    sessionStorage.setItem('username', data["username"]);
+                    sessionStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
-
+                    window.location.reload();
                 }
             }
         );
@@ -44,14 +41,22 @@ class Login extends React.Component {
         this.api.getCurrentUser().then(
             response => {
                 console.log(response.data["isLoggedIn"]);
-                localStorage.setItem("isLoggedIn", response.data["isLoggedIn"]);
+                sessionStorage.setItem("isLoggedIn", response.data["isLoggedIn"]);
                 //this.setState({isLoggedIn: response.data["isLoggedIn"]});
             })
             .catch(() => console.log("ok"))
     }
 
+    handleSelectedRole(role) {
+        if (role == "T") {
+            this.state.role = "T";
+        } else {
+            this.state.role = "S";
+        }
+    }
+
     render() {
-        if (localStorage.getItem("isLoggedIn")) {
+        if (sessionStorage.getItem("isLoggedIn")) {
             return <Redirect push to="/dashboard" />
         }
         return (
@@ -59,10 +64,14 @@ class Login extends React.Component {
                 <form className="mt-5 w-50 mx-auto" id="login">
                     <div>{this.state.redirect}</div>
                     <h1>Login</h1>
-                    <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off" />
+                    <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off"
+                        onChange={this.handleSelectedRole("T")}
+                        />
                         <label class="btn btn-outline-primary" for="teacher-select">Teacher</label>
 
-                    <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off" />
+                    <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off"
+                        onChange={this.handleSelectedRole("S")}
+                        />
                         <label class="btn btn-outline-success" for="student-select">Student</label>
                     <div className="form-group mt-2 mx-auto">
                         <label for="formGroupExampleInput2">Username/Email</label>
@@ -86,7 +95,7 @@ class Login extends React.Component {
                     <div className="mt-5 mx-auto">
                         <button type="submit"
                                 class="btn btn-primary"
-                                onClick={() => this.login()}>Submit</button>
+                                onClick={(event) => {event.preventDefault(); this.login();}}>Submit</button>
                     </div>
                     <Link to="/forgotPassword">
                         <button className="mt-2 mx-auto btn btn-primary">Forgot Password</button>

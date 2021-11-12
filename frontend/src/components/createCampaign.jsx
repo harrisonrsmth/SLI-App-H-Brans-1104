@@ -10,7 +10,7 @@ class CreateCampaign extends React.Component {
   constructor() {
     super();
     this.state = {
-        teacher: localStorage.getItem("username"),
+        teacher: sessionStorage.getItem("username"),
         className: "",
         name: "",
         hours: "",

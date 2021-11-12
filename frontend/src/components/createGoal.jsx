@@ -10,7 +10,7 @@ class CreateGoal extends React.Component {
   constructor() {
     super();
     this.state = {
-        user: localStorage.getItem("username"),
+        user: sessionStorage.getItem("username"),
         hours: "",
         date: ""
     };

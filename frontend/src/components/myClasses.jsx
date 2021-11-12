@@ -60,7 +60,10 @@ class MyClasses extends React.Component {
                 <div className="m-2 ml-4 mr-4">
                     <h3>My Classes</h3>
                     <Link to="/addStudent"><button className="btn btn-primary float-right">Add Student</button></Link>
-                    <Link to="/myClasses"><button type="submit" class="btn btn-primary">Add Class</button></Link>
+
+                    <Link to="/createClass"><button type="submit" class="btn btn-primary">Add Class</button></Link>
+                    <hr />
+
                     <div class="form-group">
                         <label>Select a Class</label>
                         <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
@@ -73,6 +76,7 @@ class MyClasses extends React.Component {
                         }
                         </select>
                     </div>
+
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
