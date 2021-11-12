@@ -45,7 +45,7 @@ class Dashboard extends React.Component {
         this.state = {
             classes: [],
             campaigns: [],
-            goals: []
+            goal: []
         }
     }
 
@@ -54,11 +54,17 @@ class Dashboard extends React.Component {
         console.log(data.campaignList)
         this.setState({campaigns: data.campaignList});
       })
-      console.log(this.state.campaigns)
 
-      // this.api.getGoal().then(data => {
-      //   this.setState({goals: data.})
-      // })
+      this.api.getGoal().then(data => {
+        this.setState({goal: data.goal})
+      })
+      console.log(this.state.goal)
+
+      this.api.getClasses().then(data => {
+        this.setState({classes: data.classes})
+        console.log(data.classes)
+      })
+      console.log(this.state.classes)
     }
     
     

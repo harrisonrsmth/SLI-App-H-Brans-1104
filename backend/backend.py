@@ -478,10 +478,10 @@ def createCampaign():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["username"]
-        class_name = data["class"]
+        teacher = data["teacher"]
+        class_name = data["className"]
         name = data["name"]
-        total_hours = data["total_hours"]
+        total_hours = data["hours"]
         start_date = data["start_date"]
         due_date = data["due_date"]
         db.createCampaign(teacher, class_name, name, total_hours, start_date, due_date)
