@@ -11,7 +11,7 @@ from flaskext.mysql import MySQL
 import pymysql
 import ssl
 import smtplib
-import datetime
+from datetime import date, timedelta
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -174,7 +174,7 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['GET'])
+@app.route("/api/getClassesList", methods=['POST'])
 @cross_origin()
 def getClassesList():
     data = request.get_json(force=True)
@@ -437,7 +437,7 @@ def setUserToken(username, token):
 #   "code": 1 for success, 0 for failure
 #   "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
 
-@app.route("/api/getCampaigns", methods = ['GET'])
+@app.route("/api/getCampaigns", methods = ['POST'])
 @cross_origin()
 def getCampaigns():
     data = request.get_json(force=True)
@@ -596,7 +596,7 @@ def setNewPassword():
 #               ]
 #           ]
 #       ]
-@app.route("/api/getProgress", methods=['GET'])
+@app.route("/api/getProgress", methods=['POST'])
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
@@ -683,7 +683,7 @@ Output data format:
     "code": 1 for success, 0 for failure
     "total_hours": total hours logged for student or class
 '''
-@app.route("/api/getTotalHours", methods=['GET'])
+@app.route("/api/getTotalHours", methods=['POST'])
 @cross_origin()
 def getTotalHours():
     data = request.get_json(force=True)
@@ -701,6 +701,56 @@ def getTotalHours():
             total = int(db.getStudentProgress(data["username"], start_date, end_date)[0][1])
         response["total_hours"] = total
         response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+'''
+
+'''
+@app.route("/api/getRecentWork", methods=['POST'])
+@cross_origin()
+def getRecentWork():
+    data = request.get_json(force=True)
+    response = {}
+    start_date = str(date.today() - timedelta(14))
+    end_date = str(date.today())
+    try:
+        if data["role"] == "T":
+            if data["all_work"]:
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"])
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+            else:
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged in the last 14 days for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+        else:
+            if data["all_work"]:
+                recent_work = db.studentGetRecentWork(data["username"])
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+            else:
+                recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work in the last 14 days."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
         return response
     except:
         response["code"] = 0

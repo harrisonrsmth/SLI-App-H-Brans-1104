@@ -167,7 +167,7 @@ export class Api {
     var role = localStorage.getItem("role")
     var data = {"username": username, "role": role}
     return new Promise((resolve, reject) => {
-      axios.get(`${this.url}/api/getCampaigns`, data, this.config)
+      axios.post(`${this.url}/api/getCampaigns`, data, this.config)
       .then(x => {
         resolve(x.data);
       })
@@ -231,7 +231,7 @@ export class Api {
     var username = localStorage.getItem("username")
     var data = {"username": username}
     return new Promise((resolve, reject) => {
-      axios.get(`${this.url}/api/getClassesList`, data, this.config)
+      axios.post(`${this.url}/api/getClassesList`, data, this.config)
       .then(x => {
         resolve(x.data);
       })
