@@ -53,10 +53,17 @@ class MyClasses extends React.Component {
             <>
                 <NavBar/>
                 <div className="m-2 ml-4 mr-4">
-                    <h3 className="d-inline">My Classes</h3>
+                    <h3>My Classes</h3>
                     <Link to="/addStudent"><button className="btn btn-primary float-right">Add Student</button></Link>
                     <Link to="/myClasses"><button type="submit" class="btn btn-primary">Add Class</button></Link>
-                    <hr />
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Select a Class</label>
+                        <select class="form-select" id="exampleFormControlSelect1">
+                            <option>Hannah's Class</option>
+                            <option>Brent's Class</option>
+                            <option>Anh's Class</option>
+                        </select>
+                    </div>
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>

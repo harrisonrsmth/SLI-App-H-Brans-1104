@@ -10,7 +10,7 @@ function Campaign(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
         <Card border="success" style={{ width: '18rem'}}>
-        <Card.Header>{props.date}</Card.Header>
+        <Card.Header>Due: {props.date}</Card.Header>
         <Card.Body>
           <Card.Title>{props.camp}</Card.Title>
           <Card.Text>
@@ -28,7 +28,7 @@ function Campaign(props) {
         <Card border="warning" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
-          <Card.Title>{props.camp}</Card.Title>
+          <Card.Title>Goal</Card.Title>
           <Card.Text>
             {props.description}
           </Card.Text>
@@ -43,10 +43,31 @@ class Dashboard extends React.Component {
     constructor() {
         super();
         this.state = {
-            classes: []
+            classes: [],
+            campaigns: [],
+            goal: []
         }
     }
 
+    componentDidMount() {
+      this.api.getCampaigns().then(data => {
+        console.log(data.campaignList)
+        this.setState({campaigns: data.campaignList});
+      })
+
+      this.api.getGoal().then(data => {
+        this.setState({goal: data.goal})
+      })
+      console.log(this.state.goal)
+
+      this.api.getClasses().then(data => {
+        this.setState({classes: data.classes})
+        console.log(data.classes)
+      })
+      console.log(this.state.classes)
+    }
+    
+    
     // api call
     // getCurrentUser();
     // data = {body: {goals: []}}
@@ -66,23 +87,37 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                 {localStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
-                  <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/>
+                  {localStorage.getItem("role") == 'T' &&
+                    this.state.campaigns.map(campaign => {
+                      console.log(campaign[0])
+                      var date = new Date(campaign[3])
+                      return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                    })
+                  }
+                  {/* <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/> */}
                 </div>
                 <div class="col-4">
-                  Class Impact
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Select a Class</label>
+                      <select class="form-select" id="exampleFormControlSelect1">
+                        <option>Hannah's Class</option>
+                        <option>Brent's Class</option>
+                        <option>Anh's Class</option>
+                      </select>
+                </div>
                   <div class="row justify-content-between">
-                    <div class="col-4" style={{position: 'relative', left: '-10%'}}>
+                    <div class="col-4" style={{position: 'relative'}}>
                       <img src={leaf} width="210" height="300" />
                     </div>
-                    <div class="col-4" style={{position: 'relative', left: '-15%'}}>
+                    <div class="col-4" style={{position: 'relative'}}>
                       <img src={badge} width="200" height="250" />
                       
                     </div>
                   </div>
                 </div>
-                <div class="col-4">
+                <div style={{position: 'relative'}} class="col-4">
                   Goals
-                  <Goal date={"September 15, 2021"} camp={"Recycling"} description={"Helped by recycling goods at my school"}/>
+                  <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
 

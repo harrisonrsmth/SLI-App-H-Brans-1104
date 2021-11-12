@@ -180,8 +180,12 @@ def getClassesList():
     # data = request.get_json(force=True)
     response = {}
     try:
+<<<<<<< HEAD
         # teacher = data["teacher"]
         teacher = request.args.get("teacher")
+=======
+        teacher = data["username"]
+>>>>>>> fb2f93a4f17b468f93dd5a18beea0ac4735a90d3
         result = db.getClasses(teacher)
         if result and len(result) > 0:
             response["code"] = 1
@@ -479,10 +483,10 @@ def createCampaign():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["username"]
-        class_name = data["class"]
+        teacher = data["teacher"]
+        class_name = data["className"]
         name = data["name"]
-        total_hours = data["total_hours"]
+        total_hours = data["hours"]
         start_date = data["start_date"]
         due_date = data["due_date"]
         db.createCampaign(teacher, class_name, name, total_hours, start_date, due_date)
