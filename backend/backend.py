@@ -174,13 +174,14 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['POST'])
+@app.route("/api/getClassesList", methods=['GET'])
 @cross_origin()
 def getClassesList():
-    data = request.get_json(force=True)
+    # data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["teacher"]
+        # teacher = data["teacher"]
+        teacher = request.args.get("teacher")
         result = db.getClasses(teacher)
         if result and len(result) > 0:
             response["code"] = 1
