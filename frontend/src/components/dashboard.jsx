@@ -2,8 +2,29 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { NavBar } from './navbar';
 import { Api } from '../api';
-import leaf from '../leaf.png';
-import badge from '../award.png';
+import leaf00 from '../leaf00.png';
+import leaf05 from '../leaf05.png';
+import leaf10 from '../leaf10.png';
+import leaf15 from '../leaf15.png';
+import leaf20 from '../leaf20.png';
+import leaf25 from '../leaf25.png';
+import leaf30 from '../leaf30.png';
+import leaf35 from '../leaf35.png';
+import leaf40 from '../leaf40.png';
+import leaf45 from '../leaf45.png';
+import leaf50 from '../leaf50.png';
+import leaf55 from '../leaf55.png';
+import leaf60 from '../leaf60.png';
+import leaf65 from '../leaf65.png';
+import leaf70 from '../leaf70.png';
+import leaf75 from '../leaf75.png';
+import leaf80 from '../leaf80.png';
+import leaf85 from '../leaf85.png';
+import leaf90 from '../leaf90.png';
+import leaf95 from '../leaf95.png';
+import leaf100 from '../leaf100.png';
+import badge from '../SLbadge.png';
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import Card from 'react-bootstrap/Card';
 
 function Campaign(props) {
@@ -16,6 +37,7 @@ function Campaign(props) {
           <Card.Text>
             You have a total of {props.hours} hours to complete.
           </Card.Text>
+          <ProgressBar variant="success" animated now={50}/>
         </Card.Body>
         </Card><br />
       </div>
@@ -32,6 +54,7 @@ function Campaign(props) {
           <Card.Text>
             {props.description}
           </Card.Text>
+          <ProgressBar variant="success" animated now={30}/>
         </Card.Body>
         </Card><br />
       </div>
@@ -72,10 +95,10 @@ class Dashboard extends React.Component {
                   Class Impact
                   <div class="row justify-content-between">
                     <div class="col-4" style={{position: 'relative', left: '-10%'}}>
-                      <img src={leaf} width="210" height="300" />
+                      <img src={leaf100} width="200" height="250"/>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="200" height="250" />
+                      <img src={badge} width="250" height="250" />
                       
                     </div>
                   </div>
