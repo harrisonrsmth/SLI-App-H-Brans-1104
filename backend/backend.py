@@ -180,7 +180,7 @@ def getClassesList():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["teacher"]
+        teacher = data["username"]
         result = db.getClasses(teacher)
         if result and len(result) > 0:
             response["code"] = 1
