@@ -47,6 +47,7 @@ class AddStudentToClass extends React.Component {
                 <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>                    <div class="form-group">
                         <label>Select a Class</label>
                             <select class="form-select" onChange={e => this.setState({ className: e.target.value })}>
+                            <option>--Select a Class--</option>
                             {
                                 this.state.classes.map((myClass, id) => {
                                 console.log(myClass[0]);
