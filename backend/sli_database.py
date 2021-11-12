@@ -161,7 +161,7 @@ class DB:
         sql = "SELECT name FROM Class WHERE teacher = %s"
         get_id = (str(teacher), )
         cursor.execute(sql, get_id)
-        result = self.cursor.fetchall()
+        result = cursor.fetchall()
         connection.close()
         return result
 

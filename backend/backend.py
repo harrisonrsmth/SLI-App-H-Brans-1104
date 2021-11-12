@@ -707,7 +707,7 @@ def getTotalHours():
         return response
 
 '''
-
+Gets a list of recent work logged by students in a class or by a specific student. 
 '''
 @app.route("/api/getRecentWork", methods=['POST'])
 @cross_origin()
