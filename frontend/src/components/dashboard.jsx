@@ -85,9 +85,9 @@ class Dashboard extends React.Component {
               <h1>Dashboard</h1>
               <div class="row align-items-start">
                 <div class="col-4">
-                {localStorage.getItem("role") == 'T' && <h1>Classes</h1>}
+                {sessionStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
-                  {localStorage.getItem("role") == 'T' &&
+                  {sessionStorage.getItem("role") == 'T' &&
                     this.state.campaigns.map(campaign => {
                       console.log(campaign[0])
                       var date = new Date(campaign[3])
@@ -121,10 +121,10 @@ class Dashboard extends React.Component {
                 </div>
               </div>
 
-              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-              {localStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
-              {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
-              {localStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
+              {sessionStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+              {sessionStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
+              {sessionStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
+              {sessionStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
               <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link> */}
             </React.Fragment>

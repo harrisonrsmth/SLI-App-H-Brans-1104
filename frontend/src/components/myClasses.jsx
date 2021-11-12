@@ -12,7 +12,7 @@ class MyClasses extends React.Component {
         this.state = {
             "role": "T",
             "className": "this class",
-            "teacher": localStorage.getItem("username"),
+            "teacher": sessionStorage.getItem("username"),
             users: [
                 "Please add student to class"
             ]

@@ -15,7 +15,7 @@ class AddStudentToClass extends React.Component {
             password: "",
             conf_password: "",
             role: "S",
-            teacher: localStorage.getItem("username"),
+            teacher: sessionStorage.getItem("username"),
             className: "thisclass"
         }
 

@@ -14,7 +14,7 @@ export class Api {
         axios.post(`${this.url}/api/authenticateLogin`, form, this.config)
            .then(x => {
                 console.log(x.data["token"]);
-                localStorage.setItem("token", x.data["token"]);
+                sessionStorage.setItem("token", x.data["token"]);
                 resolve(x.data)
            })
            .catch(x => {
@@ -40,7 +40,7 @@ export class Api {
 
     async getCurrentUser() {
       let user = null;
-      await this.getUserByToken(localStorage.getItem('token'))
+      await this.getUserByToken(sessionStorage.getItem('token'))
         .then(data => user = data)
       return user;
     }
@@ -84,7 +84,7 @@ export class Api {
   }
 
   getAllClass(form) {
-    var id = localStorage.getItem("userID");
+    var id = sessionStorage.getItem("userID");
     var data = {"teacher_id": id}
     return new Promise((resolve, reject) => {
           axios.post(`${this.url}/api/getAllClass`, form, this.config)
@@ -147,7 +147,7 @@ export class Api {
   }
 
   /**
-   * Retrieves username and role of user from localStorage to create JSON data and sends GET request
+   * Retrieves username and role of user from sessionStorage to create JSON data and sends GET request
    * to backend to retrieve the campaigns assigned to or owned by the given user
    * 
    * @returns Promise containing response data from GET request with the following items:
@@ -155,8 +155,8 @@ export class Api {
    *    "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, due_date]
    */
   getCampaigns() {
-    var username = localStorage.getItem("username")
-    var role = localStorage.getItem("role")
+    var username = sessionStorage.getItem("username")
+    var role = sessionStorage.getItem("role")
     var data = {"username": username, "role": role}
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/getCampaigns`, data, this.config)
@@ -170,7 +170,7 @@ export class Api {
   }
 
   getGoal() {
-    var username = localStorage.getItem("username")
+    var username = sessionStorage.getItem("username")
     var data = {"username": username}
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/getGoal`, data, this.config)
@@ -220,7 +220,7 @@ export class Api {
   }
 
   getClasses() {
-    var username = localStorage.getItem("username")
+    var username = sessionStorage.getItem("username")
     var data = {"username": username}
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/getClassesList`, data, this.config)
