@@ -19,14 +19,11 @@ class Login extends React.Component {
     }
 
     login() {
-        console.log("api called");
-
         this.api.login(this.state).then(
             data => {
-                console.log(data);
-
                 if (data["code"] == 0) {
                     alert(data.msg);
+                    window.location.reload();
                 } else {
                     localStorage.setItem('isLoggedIn', data["isLoggedIn"]);
                     localStorage.setItem('token', data["token"]);
@@ -34,7 +31,7 @@ class Login extends React.Component {
                     localStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
-
+                    window.location.reload();
                 }
             }
         );
@@ -98,7 +95,7 @@ class Login extends React.Component {
                     <div className="mt-5 mx-auto">
                         <button type="submit"
                                 class="btn btn-primary"
-                                onClick={() => this.login()}>Submit</button>
+                                onClick={(event) => {event.preventDefault(); this.login();}}>Submit</button>
                     </div>
                     <Link to="/forgotPassword">
                         <button className="mt-2 mx-auto btn btn-primary">Forgot Password</button>
