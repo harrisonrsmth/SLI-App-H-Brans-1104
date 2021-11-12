@@ -11,7 +11,7 @@ from flaskext.mysql import MySQL
 import pymysql
 import ssl
 import smtplib
-import datetime
+from datetime import date, timedelta
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -174,14 +174,15 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['POST'])
+@app.route("/api/getClassesList", methods=['GET'])
 @cross_origin()
 def getClassesList():
-    data = request.get_json(force=True)
+    # data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["teacher"]
-        result = db.getClasses(teacher)
+        # teacher = data["username"]
+        username = request.args.get("username")
+        result = db.getClasses(username)
         if result and len(result) > 0:
             response["code"] = 1
             response["classes"] = result
@@ -262,15 +263,13 @@ def createClass():
         data = request.get_json(force=True)
         response = {}
         print(data)
-        role = data["role"]
         username = data["username"]
         class_name = data["className"]
-        print(role, username, class_name)
+        print(username, class_name)
         # role "S" = student and "T" = teacher
-        if role == "T" and username and class_name:
+        if username and class_name:
             print("adsfdf")
-            records = db.createNewClass(username, class_name)
-            response["status"] = "success"
+            db.createNewClass(username, class_name)
             response["code"] = 1
         return response
 
@@ -327,7 +326,6 @@ def sendPasswordEmail():
 @app.route("/api/getResetLinkUser", methods=['POST'])
 @cross_origin()
 def getResetLinkUser():
-    print("woo")
     data = request.get_json(force=True)
     print(data)
     response = {}
@@ -335,15 +333,10 @@ def getResetLinkUser():
     print(link)
     try:
         cipher_suite = Fernet(key)
-        print("1")
         # decoded_link = bytes(link).decode("utf-8")
-        print("2")
         encrypted_link = str.encode(link)
-        print("3")
         unciphered_link = cipher_suite.decrypt(encrypted_link)
-        print("3")
         unciphered_link = bytes(unciphered_link).decode("utf-8")
-        print("4")
         print(unciphered_link)
         results = db.getPasswordLink(unciphered_link)
         if len(results) > 0:
@@ -478,10 +471,10 @@ def createCampaign():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["username"]
-        class_name = data["class"]
+        teacher = data["teacher"]
+        class_name = data["className"]
         name = data["name"]
-        total_hours = data["total_hours"]
+        total_hours = data["hours"]
         start_date = data["start_date"]
         due_date = data["due_date"]
         db.createCampaign(teacher, class_name, name, total_hours, start_date, due_date)
@@ -701,6 +694,56 @@ def getTotalHours():
             total = int(db.getStudentProgress(data["username"], start_date, end_date)[0][1])
         response["total_hours"] = total
         response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+'''
+Gets a list of recent work logged by students in a class or by a specific student. 
+'''
+@app.route("/api/getRecentWork", methods=['POST'])
+@cross_origin()
+def getRecentWork():
+    data = request.get_json(force=True)
+    response = {}
+    start_date = str(date.today() - timedelta(14))
+    end_date = str(date.today())
+    try:
+        if data["role"] == "T":
+            if data["all_work"]:
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"])
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+            else:
+                recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "There has not been any work logged in the last 14 days for this class."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+        else:
+            if data["all_work"]:
+                recent_work = db.studentGetRecentWork(data["username"])
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
+            else:
+                recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
+                if len(recent_work == 0):
+                    response["message"] = "You have not logged any work in the last 14 days."
+                    response["code"] = 2
+                else:
+                    response["recent_work"] = recent_work
+                    response["code"] = 1
         return response
     except:
         response["code"] = 0
