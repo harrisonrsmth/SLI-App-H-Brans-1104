@@ -67,7 +67,7 @@ class CreateCampaign extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Start Date</label>
               <input
-                type="number"
+                type="date"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Start Date"
@@ -79,7 +79,7 @@ class CreateCampaign extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Due Date</label>
               <input
-                type="number"
+                type="date"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Due Date"

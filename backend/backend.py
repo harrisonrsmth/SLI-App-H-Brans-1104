@@ -180,7 +180,7 @@ def getClassesList():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["teacher"]
+        teacher = data["username"]
         result = db.getClasses(teacher)
         if result and len(result) > 0:
             response["code"] = 1
@@ -478,10 +478,10 @@ def createCampaign():
     data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["username"]
-        class_name = data["class"]
+        teacher = data["teacher"]
+        class_name = data["className"]
         name = data["name"]
-        total_hours = data["total_hours"]
+        total_hours = data["hours"]
         start_date = data["start_date"]
         due_date = data["due_date"]
         db.createCampaign(teacher, class_name, name, total_hours, start_date, due_date)
@@ -707,7 +707,7 @@ def getTotalHours():
         return response
 
 '''
-
+Gets a list of recent work logged by students in a class or by a specific student. 
 '''
 @app.route("/api/getRecentWork", methods=['POST'])
 @cross_origin()
