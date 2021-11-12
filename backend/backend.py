@@ -476,6 +476,7 @@ def getGoal():
 @cross_origin()
 def createCampaign():
     data = request.get_json(force=True)
+    print(data)
     response = {}
     try:
         teacher = data["teacher"]

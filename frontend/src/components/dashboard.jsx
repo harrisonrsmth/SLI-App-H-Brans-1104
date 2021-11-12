@@ -45,26 +45,23 @@ class Dashboard extends React.Component {
         this.state = {
             classes: [],
             campaigns: [],
-            goal: []
+            goal: [],
+            currentClass: ""
         }
     }
 
     componentDidMount() {
       this.api.getCampaigns().then(data => {
-        console.log(data.campaignList)
         this.setState({campaigns: data.campaignList});
       })
 
       this.api.getGoal().then(data => {
         this.setState({goal: data.goal})
       })
-      console.log(this.state.goal)
 
       this.api.getClasses().then(data => {
         this.setState({classes: data.classes})
-        console.log(data.classes)
       })
-      console.log(this.state.classes)
     }
     
     
@@ -94,17 +91,23 @@ class Dashboard extends React.Component {
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
-                  {/* <Campaign date={'10/2/2021'} camp={'River Cleanup'} hours={5}/> */}
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="exampleFormControlSelect1">Select a Class</label>
-                      <select class="form-select" id="exampleFormControlSelect1">
-                        <option>Hannah's Class</option>
-                        <option>Brent's Class</option>
-                        <option>Anh's Class</option>
+                    <label>Select a Class</label>
+                      <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                        {
+                          this.state.classes.map((myClass, id) => {
+                            console.log(myClass[0]);
+                            return <option key={id} value={myClass[0]}>{myClass[0]}</option>
+                          })
+                        }
                       </select>
                 </div>
+                {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
+                {localStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
+                {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
+                {localStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
                   <div class="row justify-content-between">
                     <div class="col-4" style={{position: 'relative'}}>
                       <img src={leaf} width="210" height="300" />
@@ -120,11 +123,6 @@ class Dashboard extends React.Component {
                   <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
-
-              {localStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-              {localStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
-              {localStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
-              {localStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
               <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link> */}
             </React.Fragment>
