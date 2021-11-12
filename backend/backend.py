@@ -175,14 +175,15 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['GET'])
+@app.route("/api/getClassesList", methods=['POST'])
 @cross_origin()
 def getClassesList():
-    # data = request.get_json(force=True)
+    data = request.get_json(force=True)
     response = {}
     try:
         # teacher = data["username"]
-        username = request.args.get("username")
+        # username = request.args.get("username")
+        username = data["username"]
         result = db.getClasses(username)
         if result and len(result) > 0:
             response["code"] = 1
@@ -193,7 +194,7 @@ def getClassesList():
     except Exception as ex:
         print(ex)
         response["code"] = 0
-        return json.dummps(response)
+        return json.dumps(response)
 
 @app.route("/api/getStudentsFromClass", methods=['POST'])
 @cross_origin()
@@ -446,7 +447,7 @@ def getCampaigns():
         response["code"] = 1
     except:
         response["code"] = 0
-    return json.dumps(response)
+    return response
 
 # "goal" is the goal for the student in the form [total_hours, target_date]
 # no input data from frontend input necessary (gets username from sessionStorage)

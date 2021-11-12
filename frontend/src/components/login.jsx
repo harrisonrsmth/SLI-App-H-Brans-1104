@@ -65,12 +65,12 @@ class Login extends React.Component {
                     <div>{this.state.redirect}</div>
                     <h1>Login</h1>
                     <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off"
-                        onChange={this.handleSelectedRole("T")}
+                        // onChange={this.handleSelectedRole("T")}
                         />
                         <label class="btn btn-outline-primary" for="teacher-select">Teacher</label>
 
                     <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off"
-                        onChange={this.handleSelectedRole("S")}
+                        // onChange={this.handleSelectedRole("S")}
                         />
                         <label class="btn btn-outline-success" for="student-select">Student</label>
                     <div className="form-group mt-2 mx-auto">
