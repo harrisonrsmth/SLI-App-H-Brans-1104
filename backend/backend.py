@@ -246,7 +246,7 @@ def createUser(username, password, role, fname, lname,
     '''
 
     try:
-        result = db.createAccount(username, password, role, fname, lname)
+        result = db.createAccount(username, password, role, fname=None, lname=None)
         print(result)
         print("Account successfully created.")
         return json.dumps(result)
