@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { NavBar } from './navbar'
 import { Api } from '../api';
 import { Redirect } from 'react-router-dom';
+import circle from '../thumbnail_image.png';
 
 class AddStudentToClass extends React.Component {
     api = new Api();
@@ -15,7 +16,7 @@ class AddStudentToClass extends React.Component {
             password: "",
             conf_password: "",
             role: "S",
-            teacher: localStorage.getItem("username"),
+            teacher: sessionStorage.getItem("username"),
             className: "thisclass"
         }
 
@@ -93,7 +94,9 @@ class AddStudentToClass extends React.Component {
                         class="btn btn-primary"
                         onClick={() => this.createAccount()}>Submit</button></Link>
                     </form>
-
+                    <div style={{position: 'absolute', left: '50%', top: '15%'}}>
+                        <img src={circle} width="400" height="400" />
+                    </div>
               </>
 
         );

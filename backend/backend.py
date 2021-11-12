@@ -12,6 +12,7 @@ import pymysql
 import ssl
 import smtplib
 from datetime import date, timedelta
+import json
 
 # import endpoint
 from ClassesAdministrator.manage_students_account import manage_stud_accounts
@@ -84,7 +85,7 @@ db = sli_database.DB(app)
 #   "code": 1 for success, 0 for failure
 #   "token": token generated after login authenticated
 #   "username": user that has been logged in
-#   "isLoggedIn": set to true for frontend localStorage
+#   "isLoggedIn": set to true for frontend sessionStorage
 #   "role": role of user logged in
 @app.route("/api/authenticateLogin", methods=['POST'])
 @cross_origin()
@@ -123,11 +124,11 @@ def login():
             response["isLoggedIn"] = True
             response["role"] = role
             print(response)
-            return response # success
+            return json.dumps(response) # success
         else:
-            return {"code": 0} # failure- password incorrect
+            return json.dumps({"code": 0}) # failure- password incorrect
     else:
-        return {"code": 0} # failure- email doesn't exist
+        return json.dumps({"code": 0}) # failure- email doesn't exist
 
 # Gets user information based on token. Used for displaying name
 # on dashboard and maintaining session after login. Also used to
@@ -138,7 +139,7 @@ def login():
 #
 # response data format:
 #   "username": user that is logged in
-#   "isLoggedIn": set to true for frontend localStorage if already logged in, false otherwise
+#   "isLoggedIn": set to true for frontend sessionStorage if already logged in, false otherwise
 #   "fname": first name of user to display on dashboard
 @app.route("/api/getCurrentUserToken", methods=['POST'])
 @cross_origin()
@@ -167,7 +168,7 @@ def getUserToken():
         if user_info and len(user_info) > 0:
             response["fname"] = user_info[0][0]
 
-        return response
+        return json.dumps(response)
 
     except Exception as ex:
         print(ex)
@@ -188,11 +189,11 @@ def getClassesList():
             response["classes"] = result
         else:
             response["code"] = 0
-        return response
+        return json.dumps(response)
     except Exception as ex:
         print(ex)
         response["code"] = 0
-        return response
+        return json.dummps(response)
 
 @app.route("/api/getStudentsFromClass", methods=['POST'])
 @cross_origin()
@@ -209,8 +210,8 @@ def getStudentsFromClass():
                 print(results)
                 response["studentList"] = [student[0] for student in results]
             print(response)
-            return response
-        return {"invalid class or teacher"}
+            return json.dumps(response)
+        return json.dumps({"invalid class or teacher"})
     except Exception as ex:
         print(ex)
 
@@ -225,11 +226,11 @@ def createAccount():
             create_result = createUser(data["username"], data["password"], data["role"], data["fname"], data["lname"])
             if data["role"] == "S" and create_result == "success" and "teacher" in data and "className" in data:
                 db.addStudentToClass(data["teacher"], data["className"], data["username"])
-            return {"code": 1}
+            return json.dumps({"code": 1})
         except:
-            return {"code": 2}
+            return json.dumps({"code": 2})
     else:
-        return {"code": 0}
+        return json.dumps({"code": 0})
 
 
 def createUser(username, password, role, fname, lname,
@@ -247,7 +248,7 @@ def createUser(username, password, role, fname, lname,
         result = db.createAccount(username, password, role, fname=None, lname=None)
         print(result)
         print("Account successfully created.")
-        return result
+        return json.dumps(result)
     except Exception as Ex:
         print("Error creating account: %s"%(Ex))
 
@@ -271,10 +272,10 @@ def createClass():
             print("adsfdf")
             db.createNewClass(username, class_name)
             response["code"] = 1
-        return response
+        return json.dumps(response)
 
     except Exception as ex:
-        return {"code": 0}
+        return json.dumps({"code": 0})
 
 @app.route("/api/sendPasswordEmail", methods=['POST'])
 def sendPasswordEmail():
@@ -320,7 +321,7 @@ def sendPasswordEmail():
     except Exception as e:
         print(e)
         response = {"code": 500}
-    return response
+    return json.dumps(response)
 
 # given a link extension from the url, checks to see if it matches an extension in DB and if so, returns "username"
 @app.route("/api/getResetLinkUser", methods=['POST'])
@@ -347,7 +348,7 @@ def getResetLinkUser():
     except:
         response["code"] = 0
     print(response)
-    return response
+    return json.dumps(response)
 
 @app.route("/hello", methods=['POST'])
 def getHello():
@@ -358,7 +359,7 @@ def getHello():
     print(email, name)
     records = db.createNewClass(email, name)
     print(records)
-    return {"sucess": data}
+    return json.dumps({"sucess": data})
 
 @app.route("/api/testLogin", methods=['POST'])
 @cross_origin()
@@ -371,8 +372,8 @@ def getTestLogin():
     get_password = result[0][1]
     print(result)
     if get_mail == username and get_password == password:
-        return {"code": 1}
-    return {"code": 0}
+        return json.dumps({"code": 1})
+    return json.dumps({"code": 0})
 
 @app.route("/api/logWork", methods=['POST'])
 @cross_origin()
@@ -382,10 +383,10 @@ def logWork():
     print(data)
     try:
         db.logWork(data)
-        return {"code": 1} #success
+        return json.dumps({"code": 1}) #success
     except Exception as ex:
         print(ex)
-        return {"code": 0} #id not in database
+        return json.dumps({"code": 0}) #id not in database
 
 @app.route("/api/logout", methods=['POST'])
 @cross_origin()
@@ -397,10 +398,10 @@ def logout():
     try:
         print("deleting token")
         db.deleteToken(username)
-        return {"code": 1} #success
+        return json.dumps({"code": 1}) #success
     except Exception as ex:
         print(ex)
-        return {"code": 0} #id not in database
+        return json.dumps({"code": 0}) #id not in database
 
 # this is temporary token generating algorithm
 # need to use library later
@@ -423,8 +424,8 @@ def setUserToken(username, token):
 # owned by the teacher.
 #
 # input data format:
-#   "username": username of user who's campagins should be retrieved (from localStorage)
-#   "role": role of the user, either "T" or "S" (from localStorage)
+#   "username": username of user who's campagins should be retrieved (from sessionStorage)
+#   "role": role of the user, either "T" or "S" (from sessionStorage)
 #
 # response data format:
 #   "code": 1 for success, 0 for failure
@@ -445,10 +446,10 @@ def getCampaigns():
         response["code"] = 1
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response)
 
 # "goal" is the goal for the student in the form [total_hours, target_date]
-# no input data from frontend input necessary (gets username from localStorage)
+# no input data from frontend input necessary (gets username from sessionStorage)
 @app.route("/api/getGoal", methods = ['POST'])
 @cross_origin()
 def getGoal():
@@ -461,9 +462,9 @@ def getGoal():
         response["code"] = 1
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response)
 
-# needed from frontend state: "username" can come from localStorage, "class" which is the class name,
+# needed from frontend state: "username" can come from sessionStorage, "class" which is the class name,
 # "name" of campaign, "total_hours", "start_date", and "due_date"
 @app.route("/api/createCampaign", methods = ['POST'])
 @cross_origin()
@@ -481,9 +482,9 @@ def createCampaign():
         response["code"] = 1
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response)
 
-# needed from frontend state: "username" can come from localStorage, "total_hours", and "target_date"
+# needed from frontend state: "username" can come from sessionStorage, "total_hours", and "target_date"
 @app.route("/api/createGoal", methods = ['POST'])
 @cross_origin()
 def createGoal():
@@ -497,7 +498,7 @@ def createGoal():
         response["code"] = 1
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response)
 
 @app.route("/api/setNewPassword", methods=['POST'])
 @cross_origin()
@@ -524,14 +525,14 @@ def setNewPassword():
             response["code"] = 0
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response)
 
 # Gets current progress for either a specific student or all students in a specific class, depending on 
 # user role. Queries database for each student for each campaign and calculates the percentage of completion
 # of that student for the given campaign.
 #
 # input data format: 
-#   "role": role of user, either "T" or "S" (from localStorage)
+#   "role": role of user, either "T" or "S" (from sessionStorage)
 #   "username": username of student whose progress we want or of teacher whose class we want
 #   "class": present if role is "T", name of class we want to see progress of
 #   "student_filter": 
@@ -631,10 +632,10 @@ def getProgress():
                 total_progress.append(campaign_progress)
         response["progress"] = total_progress
         response["code"] = 1
-        return response
+        return json.dumps(response)
     except:
         response["code"] = 0
-        return response
+        return json.dumps(response)
 
 # Helper function for /api/getProgress that calculates percentage of completion of a specific campaign
 # for a given student. Also handles that case where the student has not logged any work for the campaign.
@@ -658,7 +659,7 @@ def calculateProgress(progress, username, goal_hours):
         total = 0
         percentage = "0%"
     progress = (user, int(total), percentage)
-    return progress
+    return json.dumps(progress)
 '''
 Gets total hours of logged work in specific class or for a specific student depending on role
 Query has the option to be filtered by start date, end date, and teachers can request to see
@@ -697,7 +698,7 @@ def getTotalHours():
         return response
     except:
         response["code"] = 0
-        return response
+        return json.dumps(response)
 
 '''
 Gets a list of recent work logged by students in a class or by a specific student. 
@@ -747,4 +748,4 @@ def getRecentWork():
         return response
     except:
         response["code"] = 0
-        return response
+        return json.dumps(response)

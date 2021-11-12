@@ -10,7 +10,7 @@ class LogWork extends React.Component {
   constructor() {
     super();
     this.state = {
-        user: localStorage.getItem("username"),
+        user: sessionStorage.getItem("username"),
         project: "",
         SDG: "",
         date: "",

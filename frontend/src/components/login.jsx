@@ -25,10 +25,10 @@ class Login extends React.Component {
                     alert(data.msg);
                     window.location.reload();
                 } else {
-                    localStorage.setItem('isLoggedIn', data["isLoggedIn"]);
-                    localStorage.setItem('token', data["token"]);
-                    localStorage.setItem('username', data["username"]);
-                    localStorage.setItem('role', data["role"]);
+                    sessionStorage.setItem('isLoggedIn', data["isLoggedIn"]);
+                    sessionStorage.setItem('token', data["token"]);
+                    sessionStorage.setItem('username', data["username"]);
+                    sessionStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
                     window.location.reload();
@@ -41,7 +41,7 @@ class Login extends React.Component {
         this.api.getCurrentUser().then(
             response => {
                 console.log(response.data["isLoggedIn"]);
-                localStorage.setItem("isLoggedIn", response.data["isLoggedIn"]);
+                sessionStorage.setItem("isLoggedIn", response.data["isLoggedIn"]);
                 //this.setState({isLoggedIn: response.data["isLoggedIn"]});
             })
             .catch(() => console.log("ok"))
@@ -56,7 +56,7 @@ class Login extends React.Component {
     }
 
     render() {
-        if (localStorage.getItem("isLoggedIn")) {
+        if (sessionStorage.getItem("isLoggedIn")) {
             return <Redirect push to="/dashboard" />
         }
         return (

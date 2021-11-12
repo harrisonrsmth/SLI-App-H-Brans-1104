@@ -12,7 +12,7 @@ class MyClasses extends React.Component {
         this.state = {
             "role": "T",
             "className": "this class",
-            "teacher": localStorage.getItem("username"),
+            "teacher": sessionStorage.getItem("username"),
             users: [
                 "Please add student to class"
             ]
@@ -55,7 +55,10 @@ class MyClasses extends React.Component {
                 <div className="m-2 ml-4 mr-4">
                     <h3>My Classes</h3>
                     <Link to="/addStudent"><button className="btn btn-primary float-right">Add Student</button></Link>
-                    <Link to="/myClasses"><button type="submit" class="btn btn-primary">Add Class</button></Link>
+
+                    <Link to="/createClass"><button type="submit" class="btn btn-primary">Add Class</button></Link>
+                    <hr />
+
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select a Class</label>
                         <select class="form-select" id="exampleFormControlSelect1">
@@ -64,6 +67,7 @@ class MyClasses extends React.Component {
                             <option>Anh's Class</option>
                         </select>
                     </div>
+
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
