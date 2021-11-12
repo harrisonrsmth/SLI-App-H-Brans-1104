@@ -134,7 +134,6 @@ class DB:
         cursor.execute(insert_sql, insert_input)
         print("created new class successful")
         connection.close()
-        return "ok"
 
     def deleteToken(self, username):
         connection = self.mysql.connect()

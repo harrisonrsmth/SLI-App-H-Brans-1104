@@ -175,14 +175,15 @@ def getUserToken():
 
 
 
-@app.route("/api/getClassesList", methods=['POST'])
+@app.route("/api/getClassesList", methods=['GET'])
 @cross_origin()
 def getClassesList():
-    data = request.get_json(force=True)
+    # data = request.get_json(force=True)
     response = {}
     try:
-        teacher = data["username"]
-        result = db.getClasses(teacher)
+        # teacher = data["username"]
+        username = request.args.get("username")
+        result = db.getClasses(username)
         if result and len(result) > 0:
             response["code"] = 1
             response["classes"] = result
@@ -263,15 +264,13 @@ def createClass():
         data = request.get_json(force=True)
         response = {}
         print(data)
-        role = data["role"]
         username = data["username"]
         class_name = data["className"]
-        print(role, username, class_name)
+        print(username, class_name)
         # role "S" = student and "T" = teacher
-        if role == "T" and username and class_name:
+        if username and class_name:
             print("adsfdf")
-            records = db.createNewClass(username, class_name)
-            response["status"] = "success"
+            db.createNewClass(username, class_name)
             response["code"] = 1
         return json.dumps(response)
 
@@ -328,7 +327,6 @@ def sendPasswordEmail():
 @app.route("/api/getResetLinkUser", methods=['POST'])
 @cross_origin()
 def getResetLinkUser():
-    print("woo")
     data = request.get_json(force=True)
     print(data)
     response = {}
@@ -336,15 +334,10 @@ def getResetLinkUser():
     print(link)
     try:
         cipher_suite = Fernet(key)
-        print("1")
         # decoded_link = bytes(link).decode("utf-8")
-        print("2")
         encrypted_link = str.encode(link)
-        print("3")
         unciphered_link = cipher_suite.decrypt(encrypted_link)
-        print("3")
         unciphered_link = bytes(unciphered_link).decode("utf-8")
-        print("4")
         print(unciphered_link)
         results = db.getPasswordLink(unciphered_link)
         if len(results) > 0:

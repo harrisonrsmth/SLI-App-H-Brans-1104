@@ -47,6 +47,14 @@ class Login extends React.Component {
             .catch(() => console.log("ok"))
     }
 
+    handleSelectedRole(role) {
+        if (role == "T") {
+            this.state.role = "T";
+        } else {
+            this.state.role = "S";
+        }
+    }
+
     render() {
         if (sessionStorage.getItem("isLoggedIn")) {
             return <Redirect push to="/dashboard" />
@@ -56,10 +64,14 @@ class Login extends React.Component {
                 <form className="mt-5 w-50 mx-auto" id="login">
                     <div>{this.state.redirect}</div>
                     <h1>Login</h1>
-                    <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off" />
+                    <input type="radio" class="btn-check" name="options-outlined" id="teacher-select" autocomplete="off"
+                        onChange={this.handleSelectedRole("T")}
+                        />
                         <label class="btn btn-outline-primary" for="teacher-select">Teacher</label>
 
-                    <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off" />
+                    <input type="radio" class="btn-check" name="options-outlined" id="student-select" autocomplete="off"
+                        onChange={this.handleSelectedRole("S")}
+                        />
                         <label class="btn btn-outline-success" for="student-select">Student</label>
                     <div className="form-group mt-2 mx-auto">
                         <label for="formGroupExampleInput2">Username/Email</label>
