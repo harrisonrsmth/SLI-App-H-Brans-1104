@@ -10,14 +10,13 @@ class AddStudentToClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fname: "",
-            lname: "",
             username: "",
             password: "",
             conf_password: "",
             role: "S",
             teacher: sessionStorage.getItem("username"),
-            className: "thisclass"
+            className: "",
+            classes: []
         }
 
     }
@@ -36,28 +35,26 @@ class AddStudentToClass extends React.Component {
           }
         )
     }
+    
+    componentDidMount() {
+        this.api.getClasses().then(data => {
+            this.setState({classes: data.classes})
+          })
+    }
     render() {
         return (
             <>
-                <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>
-                    <label class="btn btn-outline-success" for="student-select">Student</label>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput">First Name</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="formGroupExampleInput"
-                            placeholder="Input First Name"
-                            onChange={e => this.setState({ fname: e.target.value })} />
-                    </div>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Last Name</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="formGroupExampleInput2"
-                            placeholder="Input Last Name"
-                            onChange={e => this.setState({ lname: e.target.value })} />
+                <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>                    <div class="form-group">
+                        <label>Select a Class</label>
+                            <select class="form-select" onChange={e => this.setState({ className: e.target.value })}>
+                            <option>--Select a Class--</option>
+                            {
+                                this.state.classes.map((myClass, id) => {
+                                console.log(myClass[0]);
+                                return <option key={id} value={myClass[0]}>{myClass[0]}</option>
+                                })
+                            }
+                            </select>
                     </div>
                     <div class="form-group">
                         <label for="formGroupExampleInput2">Username</label>
@@ -77,7 +74,7 @@ class AddStudentToClass extends React.Component {
                             placeholder="Input Password"
                             onChange={e => this.setState({ password: e.target.value })} />
                         <small id="passwordHelpBlock" class="form-text text-muted">
-                        Your password must be 8-20 characters long
+                        The password must be 8-20 characters long
                         </small>
                     </div>
                     <div class="form-group">

@@ -11,11 +11,12 @@ class MyClasses extends React.Component {
         super(props);
         this.state = {
             "role": "T",
-            "className": "this class",
+            "currentClass": "",
             "teacher": sessionStorage.getItem("username"),
             users: [
                 "Please add student to class"
-            ]
+            ],
+            classes: []
         }
         this.headers = [
             'Username', 'Edit', 'Delete'
@@ -33,6 +34,10 @@ class MyClasses extends React.Component {
                 }
             })
             .catch(() => console.log("ok"))
+        
+        this.api.getClasses().then(data => {
+            this.setState({classes: data.classes})
+          })        
     }
 
     getClasses() {
@@ -60,11 +65,15 @@ class MyClasses extends React.Component {
                     <hr />
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Select a Class</label>
-                        <select class="form-select" id="exampleFormControlSelect1">
-                            <option>Hannah's Class</option>
-                            <option>Brent's Class</option>
-                            <option>Anh's Class</option>
+                        <label>Select a Class</label>
+                        <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                        <option> --Select a Class-- </option>
+                        {
+                          this.state.classes.map((myClass, id) => {
+                            console.log(myClass[0]);
+                            return <option key={id} value={myClass[0]}>{myClass[0]}</option>
+                          })
+                        }
                         </select>
                     </div>
 
