@@ -69,13 +69,15 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            currentClass: ""
+            "currentClass": ""
         }
     }
 
     componentDidMount() {
-      this.api.getCampaigns().then(data => {
-        this.setState({campaigns: data.campaignList});
+      this.api.getCampaigns(this.state).then(data => {
+        console.log(this.state)
+        this.state["campaigns"] = data.campaignList;
+        console.log(data.campaignList)
         console.log(this.state.campaigns)
       })
 
@@ -84,7 +86,9 @@ class Dashboard extends React.Component {
       })
 
       this.api.getClasses().then(data => {
-        this.setState({classes: data.classes})
+        if (data.classes) {
+          this.setState({classes: data.classes})
+        }
       })
       console.log(this.state.classes)
     }
@@ -111,7 +115,7 @@ class Dashboard extends React.Component {
                   Campaigns
                   {sessionStorage.getItem("role") == 'T' &&
                     this.state.campaigns.map(campaign => {
-                      console.log(campaign[0])
+                      // console.log(campaign[0])
                       var date = new Date(campaign[3])
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
@@ -120,10 +124,16 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                   <div class="form-group">
                     <label>Select a Class</label>
-                      <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                      <select class="form-select" onChange={e => {
+                        this.state["currentClass"] = e.target.value
+                        console.log(this.state)
+                        this.componentDidMount()
+                      }
+                      }>
+                        <option> --Select a Class-- </option>
                         {
                           this.state.classes.map((myClass, id) => {
-                            console.log(myClass[0]);
+                            // console.log(myClass[0]);
                             return <option key={id} value={myClass[0]}>{myClass[0]}</option>
                           })
                         }
