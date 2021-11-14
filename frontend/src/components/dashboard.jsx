@@ -47,7 +47,7 @@ function Campaign(props) {
   function Goal(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
-        <Card border="warning" style={{ width: '18rem'}}>
+        <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
           <Card.Title>Goal</Card.Title>
@@ -69,13 +69,15 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            currentClass: ""
+            "currentClass": ""
         }
     }
 
     componentDidMount() {
-      this.api.getCampaigns().then(data => {
-        this.setState({campaigns: data.campaignList});
+      this.api.getCampaigns(this.state).then(data => {
+        console.log(this.state)
+        this.state["campaigns"] = data.campaignList;
+        console.log(data.campaignList)
         console.log(this.state.campaigns)
       })
 
@@ -91,16 +93,6 @@ class Dashboard extends React.Component {
       console.log(this.state.classes)
     }
     
-    
-    // api call
-    // getCurrentUser();
-    // data = {body: {goals: []}}
-    // const data = whatever is returned from api call
-    // {condition && <div> react component}
-    // {body.campaign && <div>{body.campaign.title}</div>}
-    // {body.goal && <div>{body.campaign.title}</div>}
-    // body.goals is an array
-    // body.goals.map(goal => <Goal title={goal.title}>)
     render() { 
         return (
             <div>
@@ -112,9 +104,9 @@ class Dashboard extends React.Component {
                 <font>
                   Campaigns                
                 </font>
-                  {sessionStorage.getItem("role") == 'T' &&
+                  {
                     this.state.campaigns.map(campaign => {
-                      console.log(campaign[0])
+                      // console.log(campaign[0])
                       var date = new Date(campaign[3])
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
@@ -122,22 +114,30 @@ class Dashboard extends React.Component {
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Select a Class</label>
-                      <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                  {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
+                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" onChange={e => {
+                        this.state["currentClass"] = e.target.value
+                        console.log(this.state)
+                        this.componentDidMount()
+                      }
+                      }>
+                        <option> --Select a Class-- </option>
                         {
                           this.state.classes.map((myClass, id) => {
-                            console.log(myClass[0]);
+                            // console.log(myClass[0]);
                             return <option key={id} value={myClass[0]}>{myClass[0]}</option>
                           })
                         }
-                      </select>
+                      </select>}
                 </div>
+
                 {sessionStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
                 {" "}
                 {sessionStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
                 {sessionStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
                 {sessionStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
                 <Link to="/viewProgress"><button type="submit" class="btn btn-primary">View Progress</button></Link>
+
                   <div class="row justify-content-between">
 
                     <div id ="leaf" class="col-4">
@@ -151,7 +151,7 @@ class Dashboard extends React.Component {
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
                   Goals
-                  <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
+                  <Goal date={"Target: 11/25/2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
