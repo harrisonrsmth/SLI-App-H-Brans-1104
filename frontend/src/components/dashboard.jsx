@@ -147,13 +147,6 @@ class Dashboard extends React.Component {
 
                 </div>
 
-                {sessionStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-                {" "}
-                {sessionStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
-                <Link to="/viewProgress"><button type="submit" class="btn btn-primary">View Progress</button></Link>
-
                   <div class="row justify-content-between">
 
                     <div id ="leaf" class="col-4">
