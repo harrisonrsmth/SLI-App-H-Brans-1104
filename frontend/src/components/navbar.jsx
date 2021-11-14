@@ -55,11 +55,16 @@ export class NavBar extends React.Component {
                     {/* <font color='white'>
                         Hello {this.state.firstName}                    
                     </font> */}
+
+                        <Nav.Link href="/logWork">LogWork</Nav.Link>
+                        <Nav.Link href="/viewProgress">ViewProgress</Nav.Link>
+
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/myClasses">Manage Classes</Nav.Link>}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/createCampaign">Create Campaign</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/logWork">Log Work</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/createGoal">Set Goal</Nav.Link>}
                         <Nav.Link href="">View Progress</Nav.Link>
+
                     </Nav>
                     <Nav className="ms-auto">
                         <NavLink className="dropdown-item" to='/'
