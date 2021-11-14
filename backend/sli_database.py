@@ -202,7 +202,7 @@ class DB:
     def studentGetCampaigns(self, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT class, name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
         inputs = (str(student), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -278,11 +278,11 @@ class DB:
     # Returns:
     #   results: list of tuple entries retrieved from database in the form (campaign name, total_hours, start_date, due_date)
     #       in ascending order of due date
-    def teacherGetCampaigns(self, username):
+    def teacherGetCampaigns(self, username, className):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s ORDER BY due_date ASC"
-        inputs = (str(username),)
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s AND class LIKE %s ORDER BY due_date ASC"
+        inputs = (str(username), str(className))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()

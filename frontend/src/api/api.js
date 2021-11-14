@@ -154,10 +154,11 @@ export class Api {
    *    "code": 1 for success, 0 for failure
    *    "campaignList": list of campaigns assigned to or owned by the user in format [campaign name, total_hours, due_date]
    */
-  getCampaigns() {
+  getCampaigns(form) {
     var username = sessionStorage.getItem("username")
     var role = sessionStorage.getItem("role")
-    var data = {"username": username, "role": role}
+    var className = form["currentClass"]
+    var data = {"username": username, "role": role, "className": className}
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/getCampaigns`, data, this.config)
       .then(x => {

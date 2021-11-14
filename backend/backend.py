@@ -113,7 +113,7 @@ def login():
         #str_pwd = records[0][1]
         print(password)
         print(str_pwd)
-        if password == str_pwd and role == records[0][2]:
+        if password == str_pwd:
             token = generateToken(32)
             username = records[0][0]
             print(username, token, "test TOken")
@@ -122,7 +122,7 @@ def login():
             response["token"] = token
             response["username"] = username
             response["isLoggedIn"] = True
-            response["role"] = role
+            response["role"] = records[0][2]
             print(response)
             return json.dumps(response) # success
         else:
@@ -224,30 +224,29 @@ def createAccount():
     data = request.get_json(force=True)
     print(data)
     response = {}
-    print(1)
     try:
         if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
-            print(2)
             try:
                 if data["role"] == "S":
-                    print(3)
                     db.createAccount(data["username"], data["password"], data["role"])
-                    print(4)
                     db.addStudentToClass(data["teacher"], data["className"], data["username"])
-                    print(5)
                 else:
-                    print(6)
                     db.createAccount(data["username"], data["password"], data["role"], data["fname"], data["lname"])
-                    print(7)
-                return json.dumps({"code": 1})
+                    token = generateToken(32)
+                    username = data["username"]
+                    print(username, token, "test TOken")
+                    setUserToken(username, token)
+                    response["token"] = token
+                    response["username"] = username
+                    response["isLoggedIn"] = True
+                    response["role"] = data["role"]
+                response["code"] = 1
+                return json.dumps(response)
             except:
-                print(8)
                 return json.dumps({"code": 2})
         else:
-            print(9)
             return json.dumps({"code": 0})
     except:
-        print(10)
         response["code"] = 0
         return json.dumps(response)
 
@@ -456,7 +455,7 @@ def getCampaigns():
     response = {}
     try:
         if data["role"] == "T":
-            campaigns = db.teacherGetCampaigns(data["username"])
+            campaigns = db.teacherGetCampaigns(data["username"], data["className"])
         else:
             campaigns = db.studentGetCampaigns(data["username"])
         print(campaigns)

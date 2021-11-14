@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Api } from '../api';
 import circle from '../thumbnail_image.png';
+import { NavBar } from './navbar';
+
 
 
 class CreateGoal extends React.Component {
@@ -30,7 +32,9 @@ class CreateGoal extends React.Component {
 
     render() { 
         return (
-        <><form id="createGoal" style={{ position: 'absolute', left: '15%', top: '15%' }}>
+        <>
+        <NavBar/>
+          <form id="createGoal" style={{ position: 'absolute', left: '15%', top: '15%' }}>
             <div class="form-group">
               <label for="formGroupExampleInput">Set a target for service hours?</label>
               <input
@@ -46,14 +50,11 @@ class CreateGoal extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Set a target date!</label>
               <input
-                type="text"
+                type="date"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Date"
                 onChange={e => this.setState({ date: e.target.value })} />
-                <small id="dateHelpBlock" class="form-text text-muted">
-                This should be in format YYYY-MM-DD! For example, January 2, 2021 is 2021-01-02!
-              </small>
             </div>
             <Link to="/dashboard"><button
               type="submit"

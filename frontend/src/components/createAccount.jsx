@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Api } from '../api';
 import circle from '../thumbnail_image.png';
@@ -24,16 +25,29 @@ class CreateAccount extends React.Component {
     this.api.createAccount(this.state).then(
       data => {
         console.log(data);
-        if (data["code"] == 0) {
+        if (data["code"] === 1) {
+          sessionStorage.setItem('isLoggedIn', data["isLoggedIn"]);
+          sessionStorage.setItem('token', data["token"]);
+          sessionStorage.setItem('username', data["username"]);
+          sessionStorage.setItem('role', data["role"]);
+          console.log(this.state);
+          console.log("success");
+          window.location.reload();
+        } else if (data["code"] == 0) {
           alert("Password does not meet requirements");
+          window.location.reload();
         } else if (data["code"] == 2) {
           alert("User already exists");
+          window.location.reload();
         }
       }
     )
   }
 
     render() { 
+      if (sessionStorage.getItem("isLoggedIn")) {
+        return <Redirect push to="/dashboard" />
+    }
         return (
         <>
         <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>
@@ -94,7 +108,7 @@ class CreateAccount extends React.Component {
             <Link to="/"><button
               type="submit"
               class="btn btn-primary"
-              onClick={() => this.createAccount()}>Submit</button></Link>
+              onClick={(event) => {event.preventDefault(); this.createAccount();}}>Submit</button></Link>
           </form>
           <div style={{position: 'absolute', left: '50%', top: '15%'}}>
               <img src={circle} width="400" height="400" />
