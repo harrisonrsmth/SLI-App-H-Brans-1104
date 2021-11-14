@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, NavLink, Redirect } from 'react-router-dom';
 import { Api } from '../api'
+import {Navbar, Nav, NavItem, Container} from 'react-bootstrap';
 
 export class NavBar extends React.Component {
     api = new Api();
@@ -47,45 +48,63 @@ export class NavBar extends React.Component {
             return <Redirect to="/" />
         }
         return (
-            <nav class="navbar navbar-expand-lg navbar-light bg-dark" >
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-items" aria-controls="navbar-items" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-                </button>
-
-                <Link to="/home" className="navbar-brand mr-0 mr-md-2">
-                    <img src={process.env.PUBLIC_URL + '/yoyo.png'} height="30" className="d-inline-block align-top mr-1" alt=""/>
-                </Link>
-                <div className="collapse navbar-collapse" id="navbar-items">
-                    <ul className="nav navbar-nav mr-auto">
-                    {
-                        this.state.menu.map((item, id) => {
-                            if (this.state.user.roleMask & (1 << (id + 1))) {
-                                return (
-                                    <li className="nav-item" key={id}>
-                                    <NavLink className="nav-link" to={item.path} activeClassName="active" >
-                                        {item.name}
-                                    </NavLink>
-                                    </li>
-                                )
-                            }
-                        })
-                    }
-                    </ul>
-
-                    <li className="nav-item d-inline dropdown mr-2">
-                        <NavLink className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Hello {this.state.firstName}
-                        </NavLink>
-
+            <Navbar bg="dark" variant="dark">
+            <Container>
+                <Navbar.Brand href="/dashboard">Seed and Lead</Navbar.Brand>
+                    <Nav className="me-auto">
+                    {/* <font color='white'>
+                        Hello {this.state.firstName}                    
+                    </font> */}
+                        <Nav.Link href="/logWork">LogWork</Nav.Link>
+                        <Nav.Link href="">ViewProgress</Nav.Link>
+                    </Nav>
+                    <Nav className="ms-auto">
                         <NavLink className="dropdown-item" to='/'
                             onClick={() => this.logOut()}>
-                        Logout
-                        </NavLink>
+                            Logout
+                         </NavLink>
+                    </Nav>
+            </Container>
+            </Navbar>
+            // <nav class="navbar navbar-expand-lg navbar-light bg-dark" >
+            //     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-items" aria-controls="navbar-items" aria-expanded="false" aria-label="Toggle navigation">
+            //     <span className="navbar-toggler-icon"></span>
+            //     </button>
 
-                    </li>
+            //     <Link to="/home" className="navbar-brand mr-0 mr-md-2">
+            //         <img src={process.env.PUBLIC_URL + '/yoyo.png'} height="30" className="d-inline-block align-top mr-1" alt=""/>
+            //     </Link>
+            //     <div className="collapse navbar-collapse" id="navbar-items">
+            //         <ul className="nav navbar-nav mr-auto">
+            //         {
+            //             this.state.menu.map((item, id) => {
+            //                 if (this.state.user.roleMask & (1 << (id + 1))) {
+            //                     return (
+            //                         <li className="nav-item" key={id}>
+            //                         <NavLink className="nav-link" to={item.path} activeClassName="active" >
+            //                             {item.name}
+            //                         </NavLink>
+            //                         </li>
+            //                     )
+            //                 }
+            //             })
+            //         }
+            //         </ul>
 
-                </div>
-            </nav>
+            //         <li className="nav-item d-inline dropdown mr-2">
+            //             <NavLink className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            //                 Hello {this.state.firstName}
+            //             </NavLink>
+
+            //             <NavLink className="dropdown-item" to='/'
+            //                 onClick={() => this.logOut()}>
+            //             Logout
+            //             </NavLink>
+
+            //         </li>
+
+            //     </div>
+            // </nav>
         );
     }
 
