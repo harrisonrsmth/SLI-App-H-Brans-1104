@@ -56,7 +56,7 @@ export class NavBar extends React.Component {
                         Hello {this.state.firstName}                    
                     </font> */}
                         <Nav.Link href="/logWork">LogWork</Nav.Link>
-                        <Nav.Link href="">ViewProgress</Nav.Link>
+                        <Nav.Link href="/viewProgress">ViewProgress</Nav.Link>
                     </Nav>
                     <Nav className="ms-auto">
                         <NavLink className="dropdown-item" to='/'
