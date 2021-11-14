@@ -234,4 +234,16 @@ export class Api {
     })
   }
 
+  getRecentWork(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/getRecentWork`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

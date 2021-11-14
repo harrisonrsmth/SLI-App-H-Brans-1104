@@ -69,7 +69,9 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            "currentClass": ""
+            "currentClass": "",
+            recent_work: [],
+            all_work: true
         }
     }
 
@@ -91,6 +93,12 @@ class Dashboard extends React.Component {
         }
       })
       console.log(this.state.classes)
+
+      this.api.getRecentWork(this.state).then(data => {
+        if (data.recent_work) {
+          this.setState({recent_work: data.recent_work})
+        }
+      })
     }
     
     render() { 
