@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Api } from '../api';
 import circle from '../thumbnail_image.png';
+import { NavBar } from './navbar';
 
 
 class CreateCampaign extends React.Component {
@@ -41,7 +42,9 @@ class CreateCampaign extends React.Component {
   
     render() { 
         return (
-        <><form id="createCampaign" style={{ position: 'absolute', left: '15%', top: '15%' }}>
+        <>
+        <NavBar/>
+          <form id="createCampaign" style={{ position: 'absolute', left: '15%', top: '15%' }}>
             <div class="form-group">
               <label for="formGroupExampleInput">Create Your Campaign</label>
               <input

@@ -47,7 +47,7 @@ function Campaign(props) {
   function Goal(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
-        <Card border="warning" style={{ width: '18rem'}}>
+        <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
           <Card.Title>Goal</Card.Title>
@@ -93,16 +93,6 @@ class Dashboard extends React.Component {
       console.log(this.state.classes)
     }
     
-    
-    // api call
-    // getCurrentUser();
-    // data = {body: {goals: []}}
-    // const data = whatever is returned from api call
-    // {condition && <div> react component}
-    // {body.campaign && <div>{body.campaign.title}</div>}
-    // {body.goal && <div>{body.campaign.title}</div>}
-    // body.goals is an array
-    // body.goals.map(goal => <Goal title={goal.title}>)
     render() { 
         return (
             <div>
@@ -111,9 +101,10 @@ class Dashboard extends React.Component {
               <h1>Dashboard</h1>
               <div class="row align-items-start">
                 <div class="col-4">
-                {sessionStorage.getItem("role") == 'T' && <h1>Classes</h1>}
-                  Campaigns
-                  {sessionStorage.getItem("role") == 'T' &&
+                <font>
+                  Campaigns                
+                </font>
+                  {
                     this.state.campaigns.map(campaign => {
                       // console.log(campaign[0])
                       var date = new Date(campaign[3])
@@ -139,13 +130,9 @@ class Dashboard extends React.Component {
                         }
                       </select>
                 </div>
-                {sessionStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-                {sessionStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
                   <div class="row justify-content-between">
 
-                    <div class="col-4" style={{position: 'relative', left: '-10%'}}>
+                    <div id ="leaf" class="col-4">
                       <img src={leaf100} width="200" height="250"/>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
@@ -156,7 +143,7 @@ class Dashboard extends React.Component {
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
                   Goals
-                  <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
+                  <Goal date={"Target: 11/25/2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>

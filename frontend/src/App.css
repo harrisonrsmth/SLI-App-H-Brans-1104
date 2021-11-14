@@ -10,6 +10,12 @@
   text-align: left;
 }
 
+#leaf {
+  position: relative;
+  left: -10%;
+  top: 20%;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

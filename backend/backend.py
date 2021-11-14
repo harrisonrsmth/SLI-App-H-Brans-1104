@@ -113,7 +113,7 @@ def login():
         #str_pwd = records[0][1]
         print(password)
         print(str_pwd)
-        if password == str_pwd and role == records[0][2]:
+        if password == str_pwd:
             token = generateToken(32)
             username = records[0][0]
             print(username, token, "test TOken")
@@ -122,7 +122,7 @@ def login():
             response["token"] = token
             response["username"] = username
             response["isLoggedIn"] = True
-            response["role"] = role
+            response["role"] = records[0][2]
             print(response)
             return json.dumps(response) # success
         else:

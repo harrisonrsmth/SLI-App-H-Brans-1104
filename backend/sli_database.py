@@ -202,7 +202,7 @@ class DB:
     def studentGetCampaigns(self, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT class, name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
         inputs = (str(student), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()

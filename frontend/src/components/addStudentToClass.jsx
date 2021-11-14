@@ -44,6 +44,7 @@ class AddStudentToClass extends React.Component {
     render() {
         return (
             <>
+            <NavBar/>
                 <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>                    <div class="form-group">
                         <label>Select a Class</label>
                             <select class="form-select" onChange={e => this.setState({ className: e.target.value })}>

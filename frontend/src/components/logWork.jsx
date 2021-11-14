@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Api } from '../api';
 import circle from '../thumbnail_image.png';
+import { NavBar } from './navbar';
+
 
 
 class LogWork extends React.Component {
@@ -33,7 +35,9 @@ class LogWork extends React.Component {
 
     render() { 
         return (
-        <><form id="logWork" style={{ position: 'absolute', left: '15%', top: '15%' }}>
+        <>
+        <NavBar/>
+          <form id="logWork" style={{ position: 'absolute', left: '15%', top: '15%' }}>
             <div class="form-group">
               <label for="formGroupExampleInput">Project Name</label>
               <input
@@ -46,7 +50,7 @@ class LogWork extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Date</label>
               <input
-                type="text"
+                type="date"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Date"
