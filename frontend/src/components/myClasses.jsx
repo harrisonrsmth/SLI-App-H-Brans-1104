@@ -60,7 +60,7 @@ class MyClasses extends React.Component {
                 <div className="m-2 ml-4 mr-4">
                     <h3>My Classes</h3>
                     <Link to="/addStudent"><button className="btn btn-primary float-right">Add Student</button></Link>
-
+                    {" "}
                     <Link to="/createClass"><button type="submit" class="btn btn-primary">Add Class</button></Link>
                     <hr />
 
