@@ -13,6 +13,7 @@ import AddStudentToClass from './components/addStudentToClass';
 import ResetPassword from './components/resetPassword';
 import CreateCampaign from './components/createCampaign';
 import CreateGoal from './components/createGoal';
+import ViewProgress from './components/viewProgress';
 //import Card from 'react-bootstrap/Card'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/logWork" component={LogWork} />
       <Route path="/createCampaign" component={CreateCampaign} />
       <Route path="/createGoal" component={CreateGoal} />
+      <Route path="/viewProgress" component ={ViewProgress} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>

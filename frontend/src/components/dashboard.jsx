@@ -122,8 +122,8 @@ class Dashboard extends React.Component {
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Select a Class</label>
-                      <select class="form-select" onChange={e => {
+                  {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
+                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" onChange={e => {
                         this.state["currentClass"] = e.target.value
                         console.log(this.state)
                         this.componentDidMount()
@@ -136,8 +136,9 @@ class Dashboard extends React.Component {
                             return <option key={id} value={myClass[0]}>{myClass[0]}</option>
                           })
                         }
-                      </select>
+                      </select>}
                 </div>
+
                   <div class="row justify-content-between">
 
                     <div id ="leaf" class="col-4">
