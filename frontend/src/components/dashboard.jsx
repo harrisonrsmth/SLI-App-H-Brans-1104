@@ -89,16 +89,6 @@ class Dashboard extends React.Component {
       console.log(this.state.classes)
     }
     
-    
-    // api call
-    // getCurrentUser();
-    // data = {body: {goals: []}}
-    // const data = whatever is returned from api call
-    // {condition && <div> react component}
-    // {body.campaign && <div>{body.campaign.title}</div>}
-    // {body.goal && <div>{body.campaign.title}</div>}
-    // body.goals is an array
-    // body.goals.map(goal => <Goal title={goal.title}>)
     render() { 
         return (
             <div>
@@ -110,7 +100,7 @@ class Dashboard extends React.Component {
                 <font>
                   Campaigns                
                 </font>
-                  {sessionStorage.getItem("role") == 'T' &&
+                  {
                     this.state.campaigns.map(campaign => {
                       console.log(campaign[0])
                       var date = new Date(campaign[3])
@@ -119,22 +109,17 @@ class Dashboard extends React.Component {
                   }
                 </div>
                 <div class="col-4">
-                  <div class="form-group">
-                    <label>Select a Class</label>
-                      <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                  <div class="form-group"> 
+                  {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
+                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
                         {
                           this.state.classes.map((myClass, id) => {
                             console.log(myClass[0]);
                             return <option key={id} value={myClass[0]}>{myClass[0]}</option>
                           })
                         }
-                      </select>
+                      </select>}
                 </div>
-                {sessionStorage.getItem("role") == 'T' && <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>}
-                {" "}
-                {sessionStorage.getItem("role") == 'T' && <Link to="/createCampaign"><button type="submit" class="btn btn-primary">Create a Campaign</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/logWork"><button className="btn btn-primary">Log Work</button></Link>}
-                {sessionStorage.getItem("role") == 'S' && <Link to="/createGoal"><button type="submit" class="btn btn-primary">Set a Goal</button></Link>}
                   <div class="row justify-content-between">
 
                     <div id ="leaf" class="col-4">

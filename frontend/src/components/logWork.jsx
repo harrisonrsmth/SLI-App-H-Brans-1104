@@ -50,7 +50,7 @@ class LogWork extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Date</label>
               <input
-                type="text"
+                type="date"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Date"
