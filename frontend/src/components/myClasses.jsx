@@ -40,7 +40,9 @@ class MyClasses extends React.Component {
             .catch(() => console.log("ok"))
         
         this.api.getClasses().then(data => {
-            this.setState({classes: data.classes})
+            if (data.classes) {
+                this.setState({classes: data.classes})
+            }
           })        
     }
 

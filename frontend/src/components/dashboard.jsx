@@ -75,20 +75,35 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
       this.api.getCampaigns().then(data => {
-        this.setState({campaigns: data.campaignList});
-        console.log(this.state.campaigns)
+        if (data.campaignList) {
+            this.setState({campaigns: data.campaignList});
+            console.log(this.state.campaigns)
+        }
       })
 
       this.api.getGoal().then(data => {
-        this.setState({goal: data.goal})
+        if (data.goal) {
+            this.setState({goal: data.goal})
+        }
       })
 
       this.api.getClasses().then(data => {
-        this.setState({classes: data.classes})
+        if (data.classes) {
+            this.setState({classes: data.classes})
+        }
       })
       console.log(this.state.classes)
     }
-    
+
+    campaignFilter() {
+        console.log("get new campaign");
+        this.api.getCampaigns().then(data => {
+            if (data.campaignList) {
+                this.setState({campaigns: data.campaignList});
+                console.log(this.state.campaigns)
+            }
+          })
+    }
     
     // api call
     // getCurrentUser();
@@ -109,6 +124,7 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                 {sessionStorage.getItem("role") == 'T' && <h1>Classes</h1>}
                   Campaigns
+                  <div class="overflow-scroll">
                   {sessionStorage.getItem("role") == 'T' &&
                     this.state.campaigns.map(campaign => {
                       console.log(campaign[0])
@@ -116,11 +132,15 @@ class Dashboard extends React.Component {
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
+                  </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Select a Class</label>
-                      <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                      <select class="form-select" onChange={e => {
+                        this.campaignFilter();
+                        this.setState({ currentClass: e.target.value });
+                      }}>
                         {
                           this.state.classes.map((myClass, id) => {
                             console.log(myClass[0]);
