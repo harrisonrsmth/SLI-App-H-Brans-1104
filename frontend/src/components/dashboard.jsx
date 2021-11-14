@@ -145,7 +145,7 @@ class Dashboard extends React.Component {
                       <img src={leaf100} width="200" height="250"/>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="250" height="250" />
+                      <img src={badge} width="300" height="250" />
                       
                     </div>
                   </div>
