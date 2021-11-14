@@ -29,8 +29,12 @@ class MyClasses extends React.Component {
                 console.log(response);
                 console.log(this.state.teacher);
                 console.log(response);
-                if (response["studentList"].length > 0) {
-                    this.setState({users: response["studentList"]});
+                try {
+                    if (response["studentList"].length > 0) {
+                        this.setState({users: response["studentList"]});
+                    }
+                } catch {
+                    this.setState({users: ["Please add student to class"]})
                 }
             })
             .catch(() => console.log("ok"))
@@ -66,7 +70,13 @@ class MyClasses extends React.Component {
 
                     <div class="form-group">
                         <label>Select a Class</label>
-                        <select class="form-select" onChange={e => this.setState({ currentClass: e.target.value })}>
+                        <select class="form-select" onChange={e => {
+                            // this.setState({ currentClass: e.target.value })
+                            this.state["currentClass"] = e.target.value
+                            this.componentDidMount()
+                            console.log(this.state)
+                        }
+                        }>
                         <option> --Select a Class-- </option>
                         {
                           this.state.classes.map((myClass, id) => {

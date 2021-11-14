@@ -203,8 +203,8 @@ def getStudentsFromClass():
     print(data)
     response = {}
     try:
-        if data and "className" in data and "teacher" in data:
-            class_name = data["className"]
+        if data and "currentClass" in data and "teacher" in data:
+            class_name = data["currentClass"]
             teacher = data["teacher"]
             results = db.getStudentsOfClass(teacher, class_name)
             if results:
@@ -212,9 +212,10 @@ def getStudentsFromClass():
                 response["studentList"] = [student[0] for student in results]
             print(response)
             return json.dumps(response)
-        return json.dumps({"invalid class or teacher"})
+        return json.dumps({"code": 0})
     except Exception as ex:
         print(ex)
+        return json.dumps({"code": 0})
 
 
 @app.route("/api/createAccount", methods=['POST'])
@@ -222,36 +223,52 @@ def getStudentsFromClass():
 def createAccount():
     data = request.get_json(force=True)
     print(data)
-    if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
-        try:
-            create_result = createUser(data["username"], data["password"], data["role"], data["fname"], data["lname"])
-            if data["role"] == "S" and create_result == "success" and "teacher" in data and "className" in data:
-                db.addStudentToClass(data["teacher"], data["className"], data["username"])
-            return json.dumps({"code": 1})
-        except:
-            return json.dumps({"code": 2})
-    else:
-        return json.dumps({"code": 0})
-
-
-def createUser(username, password, role, fname, lname,
-               querynum=0,
-               updatenum=0,
-               connection_num=0):
-    '''
-    cipher_suite = Fernet(key)
-    password = str.encode(password)
-    ciphered_password = cipher_suite.encrypt(password)
-    ciphered_password = bytes(ciphered_password).decode("utf-8")
-    '''
-
+    response = {}
+    print(1)
     try:
-        result = db.createAccount(username, password, role, fname=None, lname=None)
-        print(result)
-        print("Account successfully created.")
-        return json.dumps(result)
-    except Exception as Ex:
-        print("Error creating account: %s"%(Ex))
+        if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
+            print(2)
+            try:
+                if data["role"] == "S":
+                    print(3)
+                    db.createAccount(data["username"], data["password"], data["role"])
+                    print(4)
+                    db.addStudentToClass(data["teacher"], data["className"], data["username"])
+                    print(5)
+                else:
+                    print(6)
+                    db.createAccount(data["username"], data["password"], data["role"], data["fname"], data["lname"])
+                    print(7)
+                return json.dumps({"code": 1})
+            except:
+                print(8)
+                return json.dumps({"code": 2})
+        else:
+            print(9)
+            return json.dumps({"code": 0})
+    except:
+        print(10)
+        response["code"] = 0
+        return json.dumps(response)
+
+# def createUser(username, password, role, fname, lname,
+#                querynum=0,
+#                updatenum=0,
+#                connection_num=0):
+#     '''
+#     cipher_suite = Fernet(key)
+#     password = str.encode(password)
+#     ciphered_password = cipher_suite.encrypt(password)
+#     ciphered_password = bytes(ciphered_password).decode("utf-8")
+#     '''
+
+#     try:
+#         result = db.createAccount(username, password, role, fname=None, lname=None)
+#         print(result)
+#         print("Account successfully created.")
+#         return json.dumps(result)
+#     except Exception as Ex:
+#         print("Error creating account: %s"%(Ex))
 
 
 

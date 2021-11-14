@@ -145,7 +145,7 @@ class DB:
         print("deleted!")
         connection.close()
 
-    def createAccount(self, username, password, role, fname, lname):
+    def createAccount(self, username, password, role, fname=None, lname=None):
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "INSERT INTO `User` VALUES (%s, %s, %s, %s, %s)"
