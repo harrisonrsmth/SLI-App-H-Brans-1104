@@ -47,7 +47,7 @@ function Campaign(props) {
   function Goal(props) {
     return (
       <div style={{position: 'relative', left: '15%'}}>
-        <Card border="warning" style={{ width: '18rem'}}>
+        <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
           <Card.Title>Goal</Card.Title>
@@ -133,7 +133,7 @@ class Dashboard extends React.Component {
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
                   Goals
-                  <Goal date={"September 15, 2021"} description={"Helped by recycling goods at my school"}/>
+                  <Goal date={"Target: 11/25/2021"} description={"Helped by recycling goods at my school"}/>
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
