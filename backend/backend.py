@@ -625,7 +625,7 @@ def getProgress():
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
                 for campaign in campaigns:
-                    campaign_progress = [campaign, []]
+                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                     progress = db.getStudentProgress(student_filter, campaign[2], campaign[3])
                     progress = calculateProgress(progress, student_filter, campaign[2])
                     campaign_progress[1].append(progress)
@@ -639,7 +639,7 @@ def getProgress():
                 print(3)
                 for campaign in campaigns:
                     print(4)
-                    campaign_progress = [campaign, []]
+                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                     print(5)
                     for student in students:
                         print(6)
@@ -655,7 +655,7 @@ def getProgress():
             # student is viewing progress
             campaigns = list(db.studentGetCampaigns(data["username"]))
             for campaign in campaigns:
-                campaign_progress = [campaign, []]
+                campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                 progress = db.getStudentProgress(data["username"], campaign[2], campaign[3])
                 progress = calculateProgress(progress, data["username"], campaign[2])
                 campaign_progress[1].append(progress)

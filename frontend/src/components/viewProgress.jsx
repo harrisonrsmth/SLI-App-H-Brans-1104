@@ -9,7 +9,9 @@ class ViewProgress extends React.Component {
 
     componentDidMount() {
         this.api.getProgress(this.state).then(data => {
-            this.setState({campaigns: data.progress})
+            console.log(data.progress)
+            this.state["campaigns"] = data.progress
+            console.log(this.state)
           })
         console.log(this.state.campaigns)
     }
@@ -17,9 +19,9 @@ class ViewProgress extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            campaigns: [],
+            "campaigns": [],
             student_filter: "",
-            currentClass: "class01"
+            currentClass: "class"
         }
     }
     render() {
