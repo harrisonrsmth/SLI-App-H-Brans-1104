@@ -7,8 +7,20 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 class ViewProgress extends React.Component {
     api = new Api();
 
+    componentDidMount() {
+        this.api.getProgress(this.state).then(data => {
+            this.setState({campaigns: data.progress})
+          })
+        console.log(this.state.campaigns)
+    }
+
     constructor(props) {
         super(props);
+        this.state = {
+            campaigns: [],
+            student_filter: "",
+            currentClass: "class01"
+        }
     }
     render() {
         return (

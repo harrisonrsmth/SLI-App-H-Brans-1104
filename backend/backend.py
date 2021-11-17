@@ -612,16 +612,18 @@ def setNewPassword():
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
+    print(data)
     response = {}
     try:
         total_progress = []
         if data["role"] == "T":
+            print('hi')
             # teacher is viewing progress
             student_filter = data["student_filter"]
-            if student_filter:
+            print(1)
+            if len(student_filter) > 0:
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
-                print(campaigns)
                 for campaign in campaigns:
                     campaign_progress = [campaign, []]
                     progress = db.getStudentProgress(student_filter, campaign[2], campaign[3])
@@ -630,15 +632,25 @@ def getProgress():
                     total_progress.append(campaign_progress)
             else:
                 # teacher views progress of entire class
-                students = list(db.getStudentsOfClass(data["username"], data["class"]))
-                campaigns = list(db.teacherGetCampaigns(data["username"]))
+                print(1)
+                students = list(db.getStudentsOfClass(data["username"], data["currentClass"]))
+                print(2)
+                campaigns = list(db.teacherGetCampaigns(data["username"], data["currentClass"]))
+                print(3)
                 for campaign in campaigns:
+                    print(4)
                     campaign_progress = [campaign, []]
+                    print(5)
                     for student in students:
+                        print(6)
                         progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
+                        print(7)
                         progress = calculateProgress(progress, student[0], campaign[1])
+                        print(8)
                         campaign_progress[1].append(progress)
+                        print(9)
                     total_progress.append(campaign_progress)
+                    print(10)
         else:
             # student is viewing progress
             campaigns = list(db.studentGetCampaigns(data["username"]))
@@ -651,7 +663,9 @@ def getProgress():
         response["progress"] = total_progress
         response["code"] = 1
         return json.dumps(response)
-    except:
+    except Exception as e:
+        print(4)
+        print(e)
         response["code"] = 0
         return json.dumps(response)
 
