@@ -50,7 +50,7 @@ function Campaign(props) {
         <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
-          <Card.Title>Tree Planting</Card.Title>
+          <Card.Title>{props.title}</Card.Title>
           <Card.Text>
             {props.description}
           </Card.Text>
@@ -164,12 +164,13 @@ class Dashboard extends React.Component {
                       <img src={leaf100} width="200" height="250"/>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="300" height="250" />
+                      <img src={badge} width="250" height="250" />
                       
                     </div>
                   </div>
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
+                {sessionStorage.getItem("role") == 'T' && <font>Recent Work</font>}
                         {sessionStorage.getItem("role") == 'T' &&
                           this.state.recent_work.map(recent => {
                             // console.log(myClass[0]);
@@ -177,8 +178,8 @@ class Dashboard extends React.Component {
                             return <RecentWork student={recent[0]} date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
                           })
                         }
-                  Goals
-                  <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"}/>
+                  {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
+                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"} title={"Tree Planting"}/>}
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
