@@ -248,4 +248,18 @@ export class Api {
     })
   }
 
+  getProgress(form) {
+    form["role"] = sessionStorage.getItem("role")
+    form["username"] = sessionStorage.getItem("username")
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/getProgress`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }
