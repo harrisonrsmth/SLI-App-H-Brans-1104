@@ -235,6 +235,8 @@ export class Api {
   }
 
   getRecentWork(form) {
+    form["role"] = sessionStorage.getItem("role")
+    form["username"] = sessionStorage.getItem("username")
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/getRecentWork`, form, this.config)
       .then(x => {

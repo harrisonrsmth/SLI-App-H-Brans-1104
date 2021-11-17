@@ -731,16 +731,16 @@ def getRecentWork():
     try:
         if data["role"] == "T":
             if data["all_work"]:
-                recent_work = db.teacherGetRecentWork(data["username"], data["class"])
-                if len(recent_work == 0):
+                recent_work = db.teacherGetRecentWork(data["username"], data["currentClass"])
+                if len(recent_work) == 0:
                     response["message"] = "There has not been any work logged for this class."
                     response["code"] = 2
                 else:
                     response["recent_work"] = recent_work
                     response["code"] = 1
             else:
-                recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
-                if len(recent_work == 0):
+                recent_work = db.teacherGetRecentWork(data["username"], data["currentClass"], start_date, end_date)
+                if len(recent_work) == 0:
                     response["message"] = "There has not been any work logged in the last 14 days for this class."
                     response["code"] = 2
                 else:
@@ -749,7 +749,7 @@ def getRecentWork():
         else:
             if data["all_work"]:
                 recent_work = db.studentGetRecentWork(data["username"])
-                if len(recent_work == 0):
+                if len(recent_work) == 0:
                     response["message"] = "You have not logged any work."
                     response["code"] = 2
                 else:
@@ -757,13 +757,13 @@ def getRecentWork():
                     response["code"] = 1
             else:
                 recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
-                if len(recent_work == 0):
+                if len(recent_work) == 0:
                     response["message"] = "You have not logged any work in the last 14 days."
                     response["code"] = 2
                 else:
                     response["recent_work"] = recent_work
                     response["code"] = 1
         return response
-    except:
+    except Exception as e:
         response["code"] = 0
         return json.dumps(response)
