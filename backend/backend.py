@@ -463,7 +463,7 @@ def getCampaigns():
         response["code"] = 1
     except:
         response["code"] = 0
-    return response
+    return json.dumps(response, indent=4, sort_keys=True, default=str)
 
 # "goal" is the goal for the student in the form [total_hours, target_date]
 # no input data from frontend input necessary (gets username from sessionStorage)
@@ -727,7 +727,7 @@ def getTotalHours():
             total = int(db.getStudentProgress(data["username"], start_date, end_date)[0][1])
         response["total_hours"] = total
         response["code"] = 1
-        return response
+        return json.dumps(response, indent=4, sort_keys=True, default=str)
     except:
         response["code"] = 0
         return json.dumps(response)
@@ -777,7 +777,7 @@ def getRecentWork():
                 else:
                     response["recent_work"] = recent_work
                     response["code"] = 1
-        return response
+        return json.dumps(response, indent=4, sort_keys=True, default=str)
     except Exception as e:
         response["code"] = 0
         return json.dumps(response)
