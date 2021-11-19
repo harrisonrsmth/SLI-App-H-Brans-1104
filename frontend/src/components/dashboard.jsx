@@ -135,7 +135,7 @@ class Dashboard extends React.Component {
                 </font>
                   {
                     this.state.campaigns.map(campaign => {
-                      // console.log(campaign[0])
+                      console.log(campaign[0] + "here");
                       var date = new Date(campaign[3])
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
