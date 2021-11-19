@@ -14,6 +14,7 @@ import ResetPassword from './components/resetPassword';
 import CreateCampaign from './components/createCampaign';
 import CreateGoal from './components/createGoal';
 import ViewProgress from './components/viewProgress';
+import ViewProgressT from './components/viewProgressT';
 //import Card from 'react-bootstrap/Card'
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <Route path="/createCampaign" component={CreateCampaign} />
       <Route path="/createGoal" component={CreateGoal} />
       <Route path="/viewProgress" component ={ViewProgress} />
+      <Route path="/viewProgressT" component ={ViewProgressT} />
       <Route exact path="/" component={Home} />
       </Switch>
     </div>
