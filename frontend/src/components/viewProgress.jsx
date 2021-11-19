@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { NavBar } from './navbar'
 import { Api } from '../api';
 import ProgressBar from 'react-bootstrap/ProgressBar'
+import Card from 'react-bootstrap/Card';
 
 class ViewProgress extends React.Component {
     api = new Api();
@@ -30,6 +31,20 @@ class ViewProgress extends React.Component {
                 <NavBar/>
                 <div className="m-2 ml-4 mr-4">
                     <h3>View Progress</h3>
+                    <div style={{position: 'absolute', left: '15%'}}>
+                        <Card border="success" style={{ width: '18rem'}}>
+                        <Card.Body>
+                        <Card.Title>You have completed 9 total hours of work this year! </Card.Title>
+                        </Card.Body>
+                        </Card><br />
+                    </div>
+                    <div style={{position: 'relative', left: '65%'}}>
+                        <Card border="success" style={{ width: '18rem'}}>
+                        <Card.Body>
+                        <Card.Title>Your class has completed 83 total hours of work this year! </Card.Title>
+                        </Card.Body>
+                        </Card><br />
+                    </div>
                     <h4>Campaigns</h4>
                     <table className="table table-striped table-bordered">
                         <thead>
@@ -37,9 +52,9 @@ class ViewProgress extends React.Component {
                                 <th>Campaign Name</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
-                                <th>Hours Assigned</th>
-                                <th>Hours Completed</th>
-                                <th>Completion Percentage</th>
+                                <th>Your Hours Assigned</th>
+                                <th>Your Hours Completed</th>
+                                <th>Your Completion Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,8 +72,6 @@ class ViewProgress extends React.Component {
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Goal Name</th>
-                                <th>Start Date</th>
                                 <th>Target Date</th>
                                 <th>Goal Hours</th>
                                 <th>Hours Completed</th>
@@ -67,8 +80,6 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Tree Planting</td>
-                            <td>11/1/2021</td>
                             <td>11/30/2021</td>
                             <td>10</td>
                             <td>6</td>
