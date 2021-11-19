@@ -125,7 +125,6 @@ class Dashboard extends React.Component {
                       return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
-                  </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
