@@ -7,8 +7,22 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 class ViewProgress extends React.Component {
     api = new Api();
 
+    componentDidMount() {
+        this.api.getProgress(this.state).then(data => {
+            console.log(data.progress)
+            this.state["campaigns"] = data.progress
+            console.log(this.state)
+          })
+        console.log(this.state.campaigns)
+    }
+
     constructor(props) {
         super(props);
+        this.state = {
+            "campaigns": [],
+            student_filter: "",
+            currentClass: "class"
+        }
     }
     render() {
         return (
@@ -30,11 +44,11 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Complete 4 hours of Riverside Cleanup</td>
+                            <td>Riverside Cleanup</td>
                             <td>11/14/2021</td>
                             <td>12/14/2021</td>
-                            <td>3</td>
                             <td>4</td>
+                            <td>3</td>
                             <td>75% <ProgressBar variant="success" animated now={75}/></td>
                         </tr>
                         </tbody>
@@ -53,11 +67,11 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Complete 10 hours of Tree Planting</td>
+                            <td>Tree Planting</td>
                             <td>11/1/2021</td>
                             <td>11/30/2021</td>
-                            <td>6</td>
                             <td>10</td>
+                            <td>6</td>
                             <td>60% <ProgressBar variant="success" animated now={60}/></td>
                         </tr>
                         </tbody>
@@ -75,21 +89,21 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Complete 10 hours of Tree Planting</td>
+                            <td>Tree Planting</td>
                             <td>11/6/2021</td>
                             <td>Spent 6 hours at a local park and planted 4 trees</td>
                             <td>Life On Land</td>
                             <td>6</td>
                         </tr>
                         <tr>
-                            <td>Complete 4 hours of Riverside Cleanup</td>
+                            <td>Riverside Cleanup</td>
                             <td>11/14/2021</td>
                             <td>Spent 1 hour picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>1</td>
                         </tr>
                         <tr>
-                            <td>Complete 4 hours of Riverside Cleanup</td>
+                            <td>Riverside Cleanup</td>
                             <td>11/15/2021</td>
                             <td>Spent 2 more hours picking up trash by the river</td>
                             <td>Life Below Water</td>

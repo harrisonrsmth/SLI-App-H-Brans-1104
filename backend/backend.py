@@ -612,38 +612,50 @@ def setNewPassword():
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
+    print(data)
     response = {}
     try:
         total_progress = []
         if data["role"] == "T":
+            print('hi')
             # teacher is viewing progress
             student_filter = data["student_filter"]
-            if student_filter:
+            print(1)
+            if len(student_filter) > 0:
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
-                print(campaigns)
                 for campaign in campaigns:
-                    campaign_progress = [campaign, []]
+                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                     progress = db.getStudentProgress(student_filter, campaign[2], campaign[3])
                     progress = calculateProgress(progress, student_filter, campaign[2])
                     campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
             else:
                 # teacher views progress of entire class
-                students = list(db.getStudentsOfClass(data["username"], data["class"]))
-                campaigns = list(db.teacherGetCampaigns(data["username"]))
+                print(1)
+                students = list(db.getStudentsOfClass(data["username"], data["currentClass"]))
+                print(2)
+                campaigns = list(db.teacherGetCampaigns(data["username"], data["currentClass"]))
+                print(3)
                 for campaign in campaigns:
-                    campaign_progress = [campaign, []]
+                    print(4)
+                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
+                    print(5)
                     for student in students:
+                        print(6)
                         progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
+                        print(7)
                         progress = calculateProgress(progress, student[0], campaign[1])
+                        print(8)
                         campaign_progress[1].append(progress)
+                        print(9)
                     total_progress.append(campaign_progress)
+                    print(10)
         else:
             # student is viewing progress
             campaigns = list(db.studentGetCampaigns(data["username"]))
             for campaign in campaigns:
-                campaign_progress = [campaign, []]
+                campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                 progress = db.getStudentProgress(data["username"], campaign[2], campaign[3])
                 progress = calculateProgress(progress, data["username"], campaign[2])
                 campaign_progress[1].append(progress)
@@ -651,7 +663,9 @@ def getProgress():
         response["progress"] = total_progress
         response["code"] = 1
         return json.dumps(response)
-    except:
+    except Exception as e:
+        print(4)
+        print(e)
         response["code"] = 0
         return json.dumps(response)
 
@@ -731,16 +745,16 @@ def getRecentWork():
     try:
         if data["role"] == "T":
             if data["all_work"]:
-                recent_work = db.teacherGetRecentWork(data["username"], data["class"])
-                if len(recent_work == 0):
+                recent_work = db.teacherGetRecentWork(data["username"], data["currentClass"])
+                if len(recent_work) == 0:
                     response["message"] = "There has not been any work logged for this class."
                     response["code"] = 2
                 else:
                     response["recent_work"] = recent_work
                     response["code"] = 1
             else:
-                recent_work = db.teacherGetRecentWork(data["username"], data["class"], start_date, end_date)
-                if len(recent_work == 0):
+                recent_work = db.teacherGetRecentWork(data["username"], data["currentClass"], start_date, end_date)
+                if len(recent_work) == 0:
                     response["message"] = "There has not been any work logged in the last 14 days for this class."
                     response["code"] = 2
                 else:
@@ -749,7 +763,7 @@ def getRecentWork():
         else:
             if data["all_work"]:
                 recent_work = db.studentGetRecentWork(data["username"])
-                if len(recent_work == 0):
+                if len(recent_work) == 0:
                     response["message"] = "You have not logged any work."
                     response["code"] = 2
                 else:
@@ -757,13 +771,13 @@ def getRecentWork():
                     response["code"] = 1
             else:
                 recent_work = db.studentGetRecentWork(data["username"], start_date, end_date)
-                if len(recent_work == 0):
+                if len(recent_work) == 0:
                     response["message"] = "You have not logged any work in the last 14 days."
                     response["code"] = 2
                 else:
                     response["recent_work"] = recent_work
                     response["code"] = 1
         return response
-    except:
+    except Exception as e:
         response["code"] = 0
         return json.dumps(response)

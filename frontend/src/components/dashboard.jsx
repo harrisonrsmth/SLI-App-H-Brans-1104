@@ -50,9 +50,27 @@ function Campaign(props) {
         <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>{props.date}</Card.Header>
         <Card.Body>
-          <Card.Title>Goal</Card.Title>
+          <Card.Title>{props.title}</Card.Title>
           <Card.Text>
             {props.description}
+          </Card.Text>
+          <ProgressBar variant="success" animated now={60}/>
+        </Card.Body>
+        </Card><br />
+      </div>
+    );
+  }
+
+  function RecentWork(props) {
+    return (
+      <div style={{position: 'relative', left: '15%'}}>
+        <Card border="primary" style={{ width: '18rem'}}>
+        <Card.Header>{props.student}: {props.date}</Card.Header>
+        <Card.Body>
+          <Card.Title>{props.name}: {props.hours} hours</Card.Title>
+          <Card.Text>
+            {props.description}
+            {props.sdg}
           </Card.Text>
           <ProgressBar variant="success" animated now={30}/>
         </Card.Body>
@@ -69,7 +87,9 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            "currentClass": ""
+            "currentClass": "",
+            "recent_work": [],
+            all_work: false
         }
     }
 
@@ -94,6 +114,13 @@ class Dashboard extends React.Component {
         }
       })
       console.log(this.state.classes)
+
+      this.api.getRecentWork(this.state).then(data => {
+        if (data.recent_work) {
+          this.state["recent_work"] = data.recent_work
+        } 
+        console.log(data.recent_work)
+      })
     }
 
     
@@ -158,8 +185,16 @@ class Dashboard extends React.Component {
                   </div>
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
-                  Goals
-                  <Goal date={"Target: 11/25/2021"} description={"Helped by recycling goods at my school"}/>
+                {sessionStorage.getItem("role") == 'T' && <font>Recent Work</font>}
+                        {sessionStorage.getItem("role") == 'T' &&
+                          this.state.recent_work.map(recent => {
+                            // console.log(myClass[0]);
+                            var date = new Date(recent[3])
+                            return <RecentWork student={recent[0]} date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
+                          })
+                        }
+                  {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
+                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"} title={"Tree Planting"}/>}
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
