@@ -72,7 +72,6 @@ function Campaign(props) {
             {props.description}
             {props.sdg}
           </Card.Text>
-          <ProgressBar variant="success" animated now={30}/>
         </Card.Body>
         </Card><br />
       </div>
@@ -89,6 +88,7 @@ class Dashboard extends React.Component {
             goal: [],
             "currentClass": "",
             "recent_work": [],
+            "message": "",
             all_work: false
         }
     }
@@ -115,8 +115,14 @@ class Dashboard extends React.Component {
       this.api.getRecentWork(this.state).then(data => {
         if (data.recent_work) {
           this.state["recent_work"] = data.recent_work
-        } 
+        } else if (data.message) {
+          this.state["message"] = data.message
+        } else {
+          this.state["recent_work"] = []
+          this.state["message"] = ""
+        }
         console.log(data.recent_work)
+        console.log(data.message)
       })
     }
     
@@ -178,6 +184,8 @@ class Dashboard extends React.Component {
                             return <RecentWork student={recent[0]} date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
                           })
                         }
+                  {sessionStorage.getItem("role") == 'T' && this.state.message > 0 && <font>Recent Work</font>}
+                        {"\n\n" && this.state.message}
                   {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
                   {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"} title={"Tree Planting"}/>}
                 </div>
