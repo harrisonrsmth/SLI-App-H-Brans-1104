@@ -57,9 +57,10 @@ export class NavBar extends React.Component {
                     </font> */}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/myClasses">Manage Classes</Nav.Link>}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/createCampaign">Create Campaign</Nav.Link>}
+                        {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/viewProgressT">View Progress</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/logWork">Log Work</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/createGoal">Set Goal</Nav.Link>}
-                        <Nav.Link href="/viewProgress">View Progress</Nav.Link>
+                        {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/viewProgress">View Progressl</Nav.Link>}
 
                     </Nav>
                     <Nav className="ms-auto">
