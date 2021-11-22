@@ -38,7 +38,7 @@ class CreateGoal extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput">Set a target for service hours?</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="formGroupExampleInput"
                 placeholder="Input number of hours"

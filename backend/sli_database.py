@@ -308,6 +308,7 @@ class DB:
         inputs = (str(start_date), str(due_date), str(username))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
+        print(results)
         connection.close()
         return results
 

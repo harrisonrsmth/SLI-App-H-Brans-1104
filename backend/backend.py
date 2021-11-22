@@ -474,8 +474,7 @@ def getGoal():
     response = {}
     try:
         goal = db.getGoal(data["username"])
-        print(goal)
-        response["goal"] = goal
+        response["goal"] = [goal[0][0], str(goal[0][1])]
         response["code"] = 1
     except:
         response["code"] = 0
@@ -509,9 +508,9 @@ def createGoal():
     data = request.get_json(force=True)
     response = {}
     try:
-        student = data["username"]
-        total_hours = data["total_hours"]
-        target_date = data["target_date"]
+        student = data["user"]
+        total_hours = data["hours"]
+        target_date = data["date"]
         db.createGoal(student, total_hours, target_date)
         response["code"] = 1
     except:
@@ -612,15 +611,12 @@ def setNewPassword():
 @cross_origin()
 def getProgress():
     data = request.get_json(force=True)
-    print(data)
     response = {}
     try:
         total_progress = []
         if data["role"] == "T":
-            print('hi')
             # teacher is viewing progress
             student_filter = data["student_filter"]
-            print(1)
             if len(student_filter) > 0:
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
@@ -632,40 +628,28 @@ def getProgress():
                     total_progress.append(campaign_progress)
             else:
                 # teacher views progress of entire class
-                print(1)
                 students = list(db.getStudentsOfClass(data["username"], data["currentClass"]))
-                print(2)
                 campaigns = list(db.teacherGetCampaigns(data["username"], data["currentClass"]))
-                print(3)
                 for campaign in campaigns:
-                    print(4)
                     campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
-                    print(5)
                     for student in students:
-                        print(6)
                         progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
-                        print(7)
                         progress = calculateProgress(progress, student[0], campaign[1])
-                        print(8)
                         campaign_progress[1].append(progress)
-                        print(9)
                     total_progress.append(campaign_progress)
-                    print(10)
         else:
             # student is viewing progress
             campaigns = list(db.studentGetCampaigns(data["username"]))
             for campaign in campaigns:
                 campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                 progress = db.getStudentProgress(data["username"], campaign[2], campaign[3])
-                progress = calculateProgress(progress, data["username"], campaign[2])
+                progress = calculateProgress(progress, data["username"], campaign[1])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
         response["progress"] = total_progress
         response["code"] = 1
         return json.dumps(response)
     except Exception as e:
-        print(4)
-        print(e)
         response["code"] = 0
         return json.dumps(response)
 
@@ -682,6 +666,7 @@ def getProgress():
 def calculateProgress(progress, username, goal_hours):
     if len(progress) > 0:
         user, total = progress[0]
+        total = int(total)
         percentage = round(total / goal_hours * 100, 0)
         if percentage > 100:
             percentage = 100
@@ -690,7 +675,7 @@ def calculateProgress(progress, username, goal_hours):
         user = username
         total = 0
         percentage = "0%"
-    progress = (user, int(total), percentage)
+    progress = (user, total, percentage)
     return json.dumps(progress)
 '''
 Gets total hours of logged work in specific class or for a specific student depending on role
