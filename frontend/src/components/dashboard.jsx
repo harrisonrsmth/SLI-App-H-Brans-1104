@@ -141,7 +141,7 @@ class Dashboard extends React.Component {
                     this.state.campaigns.map(campaign => {
                       // console.log(campaign[0])
                       var date = new Date(campaign[3])
-                      return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                      return <Campaign date={date.getMonth() + 1 + '/' + (date.getDate() + 1)  + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
                 </div>
@@ -186,8 +186,8 @@ class Dashboard extends React.Component {
                         }
                   {sessionStorage.getItem("role") == 'T' && this.state.message > 0 && <font>Recent Work</font>}
                         {"\n\n" && this.state.message}
-                  {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"} title={"Tree Planting"}/>}
+                  {sessionStorage.getItem("role") == 'S' && <font>Current Goal</font>}
+                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 12/31/2021"} title={"Log 10 hours"}/>}
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>

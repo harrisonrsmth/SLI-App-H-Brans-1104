@@ -71,14 +71,11 @@ class CreateCampaign extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput2">Required Hours</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Required Hours"
                 onChange={e => this.setState({ hours: e.target.value })} />
-                <small id="hoursHelpBlock" class="form-text text-muted">
-                This should be a number! (1, 2, etc.)
-              </small>
             </div>
             <div class="form-group">
               <label for="formGroupExampleInput2">Start Date</label>

@@ -60,11 +60,11 @@ class ViewProgress extends React.Component {
                         <tbody>
                         <tr>
                             <td>Riverside Cleanup</td>
-                            <td>11/14/2021</td>
-                            <td>12/14/2021</td>
-                            <td>4</td>
-                            <td>3</td>
-                            <td>75% <ProgressBar variant="success" animated now={75}/></td>
+                            <td>11/19/2021</td>
+                            <td>12/19/2021</td>
+                            <td>5</td>
+                            <td>1</td>
+                            <td>20% <ProgressBar variant="success" animated now={20}/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -80,10 +80,10 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
-                            <td>11/30/2021</td>
+                            <td>12/31/2021</td>
                             <td>10</td>
-                            <td>6</td>
-                            <td>60% <ProgressBar variant="success" animated now={60}/></td>
+                            <td>1</td>
+                            <td>10% <ProgressBar variant="success" animated now={10}/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -99,27 +99,27 @@ class ViewProgress extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        {/* <tr>
                             <td>Tree Planting</td>
                             <td>11/6/2021</td>
                             <td>Spent 6 hours at a local park and planted 4 trees</td>
                             <td>Life On Land</td>
                             <td>6</td>
-                        </tr>
+                        </tr> */}
                         <tr>
-                            <td>Riverside Cleanup</td>
-                            <td>11/14/2021</td>
+                            <td>Cleanup</td>
+                            <td>11/19/2021</td>
                             <td>Spent 1 hour picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>1</td>
                         </tr>
-                        <tr>
+                        {/* <tr>
                             <td>Riverside Cleanup</td>
                             <td>11/15/2021</td>
                             <td>Spent 2 more hours picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>2</td>
-                        </tr>
+                        </tr> */}
                         </tbody>
                     </table>
                 </div>
