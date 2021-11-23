@@ -22,7 +22,7 @@ class ForgotPassword extends React.Component {
             data => {
                 console.log(data);
 
-                if (data["code"] != 200) {
+                if (data["code"] != 1) {
                     alert(data.msg);
                 } else {
                     console.log("success");

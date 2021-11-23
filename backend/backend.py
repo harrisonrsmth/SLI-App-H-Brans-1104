@@ -71,23 +71,25 @@ db = sli_database.DB(app)
 
 #createUserTeacher(cursor, 0, "email_test", "pass_test", "f_test", "l_test")
 
-# Authenticates login with username and password input from login screen. 
-# This fetches the login information for the given username passed in and then
-# verifies that the input password matches the decrypted password and the input
-# role matches the fetched role. If login is authenticated, then the a token is
-# generated for that user and it is passed back to the front end.
-#
-# input data format: 
-#   "username": username entered on login screen
-#   "password": password entered on login screen
-#   "role": role entered on login screen
-#
-# response data format:
-#   "code": 1 for success, 0 for failure
-#   "token": token generated after login authenticated
-#   "username": user that has been logged in
-#   "isLoggedIn": set to true for frontend sessionStorage
-#   "role": role of user logged in
+'''
+Authenticates login with username and password input from login screen. 
+This fetches the login information for the given username passed in and then
+verifies that the input password matches the decrypted password and the input
+role matches the fetched role. If login is authenticated, then the a token is
+generated for that user and it is passed back to the front end.
+
+input data format: 
+    "username": username entered on login screen
+    "password": password entered on login screen
+    "role": role entered on login screen
+
+response data format:
+    "code": 1 for success, 0 for failure
+    "token": token generated after login authenticated
+    "username": user that has been logged in
+    "isLoggedIn": set to true for frontend sessionStorage
+    "role": role of user logged in
+'''
 @app.route("/api/authenticateLogin", methods=['POST'])
 @cross_origin()
 def login():
@@ -130,17 +132,19 @@ def login():
     else:
         return json.dumps({"code": 0}) # failure- email doesn't exist
 
-# Gets user information based on token. Used for displaying name
-# on dashboard and maintaining session after login. Also used to
-# verify if a user is already logged in.
-#
-# input data format: 
-#   "token": session token for a specific user
-#
-# response data format:
-#   "username": user that is logged in
-#   "isLoggedIn": set to true for frontend sessionStorage if already logged in, false otherwise
-#   "fname": first name of user to display on dashboard
+'''
+Gets user information based on token. Used for displaying name
+on dashboard and maintaining session after login. Also used to
+verify if a user is already logged in.
+
+input data format: 
+    "token": session token for a specific user
+
+response data format:
+    "username": user that is logged in
+    "isLoggedIn": set to true for frontend sessionStorage if already logged in, false otherwise
+    "fname": first name of user to display on dashboard
+'''
 @app.route("/api/getCurrentUserToken", methods=['GET'])
 @cross_origin()
 def getUserToken():
@@ -174,8 +178,17 @@ def getUserToken():
     except Exception as ex:
         print(ex)
 
+'''
+Used for teachers to get a list of their classes to be displayed in dropdown menus
+to select a particular class.
 
+input data format:
+    "username": username of teacher who's classes we want
 
+output data format:
+    "code": 1 for success, 0 for failure
+    "classes": list of all classes owned by the teacher
+'''
 @app.route("/api/getClassesList", methods=['GET'])
 @cross_origin()
 def getClassesList():
@@ -196,6 +209,18 @@ def getClassesList():
         response["code"] = 0
         return json.dumps(response)
 
+'''
+Used by teachers to get the complete list of students in a given class that the teacher
+owns. This information is displayed on the manage classes page.
+
+input data format:
+    "current_class": specific class that we want a student list for
+    "username": username of teacher who owns the class
+
+output data format:
+    "code": 1 for success, 0 for failure
+    "studentList": list of student usernames in the given class
+'''
 @app.route("/api/getStudentsFromClass", methods=['GET'])
 @cross_origin()
 def getStudentsFromClass():
@@ -216,13 +241,35 @@ def getStudentsFromClass():
                 print(results)
                 response["studentList"] = [student[0] for student in results]
             print(response)
+            response["code"] = 1
             return json.dumps(response)
         return json.dumps({"code": 0})
     except Exception as ex:
         print(ex)
         return json.dumps({"code": 0})
 
+'''
+Creates a student or teacher account depending on the role passed in. Teacher
+accounts are created from create account page, student accounts are made from 
+add student to class page. If the user is a student, the new account is also added
+to the teacher's class that is passed in. If the new user is a teacher, after creating
+the account, the user will be logged in.
 
+input data format:
+    "role": role of new user
+    "username": username of new user
+    "password": password of new user
+    "conf_password": confirmation of new password
+    "teacher": if role is "S", username of teacher who is creating the account
+    "current_class": if role is "S", name of class which the student will be added to
+
+output data format:
+    "code": 1 for success, 2 for invalid login info, 0 for failure
+    "username": if role is "T", username of user that has been created/logged in
+    "token": if role is "T", token of user that has been logged in
+    "isLoggedIn": if role is "T", whether or not user has been logged in
+    "role": if role is "T", role of user that has been logged in
+'''
 @app.route("/api/createAccount", methods=['POST'])
 @cross_origin()
 def createAccount():
@@ -274,6 +321,16 @@ def createAccount():
 #     except Exception as Ex:
 #         print("Error creating account: %s"%(Ex))
 
+'''
+Used by teachers to create a new class. This can be found from the manage classes page.
+
+input data format:
+    "username": username of teacher who is creating class
+    "class_name": name of new class
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/createNewClass", methods=['POST'])
 @cross_origin()
 def createClass():
@@ -294,6 +351,17 @@ def createClass():
     except Exception as ex:
         return json.dumps({"code": 0})
 
+'''
+Generates an encrypted link extension that is associated to the specific teacher
+and sends a valid reset password link to the teacher's email. The associated link 
+extension and username are also added to the database for later retrieval.
+
+input data format:
+    "email": email of teacher who is resetting their password.
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/sendPasswordEmail", methods=['POST'])
 def sendPasswordEmail():
     data = request.get_json(force=True)
@@ -334,13 +402,22 @@ def sendPasswordEmail():
             server.login(sender_email, password)
             print("check here")
             server.sendmail(sender_email, receiver_email, message)
-        response = {"code": 200}
+        response = {"code": 1}
     except Exception as e:
         print(e)
-        response = {"code": 500}
+        response = {"code": 0}
     return json.dumps(response)
 
-# given a link extension from the url, checks to see if it matches an extension in DB and if so, returns "username"
+'''
+Gets the associated teacher's username given the URL extension for resetting their password.
+
+input data format:
+    "link": url extension associated with the intended user
+
+output data format:
+    "code": 1 for success, 0 for failure
+    "username": username of teacher associated with the given link extension
+'''
 @app.route("/api/getResetLinkUser", methods=['GET'])
 @cross_origin()
 def getResetLinkUser():
@@ -367,6 +444,21 @@ def getResetLinkUser():
     print(response)
     return json.dumps(response)
 
+'''
+Allows students to log work they have completed and adds it to the database to be
+counted towards campaigns and goals.
+
+input data format:
+    "username": username of student logging work
+    "project": name of the work completed
+    "SDG": SDG that the work applies to
+    "date": date the work was completed
+    "hours": total hours of work
+    "description": short description of work completed
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/logWork", methods=['POST'])
 @cross_origin()
 def logWork():
@@ -386,6 +478,17 @@ def logWork():
         print(ex)
         return json.dumps({"code": 0}) #id not in database
 
+'''
+Logs out a user that is currently logged in. Deletes token and session information
+from the database and sessionStorage. A user is also logged out when they close the 
+window.
+
+input data format:
+    "username": username of user logging out.
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/logout", methods=['POST'])
 @cross_origin()
 def logout():
@@ -403,11 +506,27 @@ def logout():
 
 # this is temporary token generating algorithm
 # need to use library later
+'''
+Helper function to generate a token for a user
+
+parameters:
+    length: length of token (32)
+
+returns:
+    valid token to authenticate user login
+'''
 def generateToken(length):
     allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
     result = [allowed_chars[random.randint(0, len(allowed_chars) - 1)] for _ in range(length)]
     return "".join(result)
 
+'''
+Helper function to set the token for the given user in the database.
+
+parameters:
+    username: username of user who's token is generated
+    token: token for the given user
+'''
 def setUserToken(username, token):
     try:
         if username and token:
@@ -416,19 +535,20 @@ def setUserToken(username, token):
     except Exception as ex:
         return ex
 
-# Retrieves the campaigns either for a specific student or a specific teacher depending on the role.
-# If the user is a student, this will get the student's personal instance of each campaign for the class
-# they are in. If the user is a teacher, this will get the overall instance of each campaign in all classes
-# owned by the teacher.
-#
-# input data format:
-#   "username": username of user who's campagins should be retrieved (from sessionStorage)
-#   "role": role of the user, either "T" or "S" (from sessionStorage)
-#
-# response data format:
-#   "code": 1 for success, 0 for failure
-#   "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
+'''
+Retrieves the campaigns either for a specific student or a specific teacher depending on the role.
+If the user is a student, this will get the student's personal instance of each campaign for the class
+they are in. If the user is a teacher, this will get the overall instance of each campaign in all classes
+owned by the teacher.
 
+input data format:
+    "username": username of user who's campagins should be retrieved (from sessionStorage)
+    "role": role of the user, either "T" or "S" (from sessionStorage)
+
+response data format:
+    "code": 1 for success, 0 for failure
+    "campaignList": list of campaigns assigned to or owned by the user in format [campaign_name, total_hours, start_date, due_date]
+'''
 @app.route("/api/getCampaigns", methods = ['GET'])
 @cross_origin()
 def getCampaigns():
@@ -449,8 +569,17 @@ def getCampaigns():
         response["code"] = 0
     return json.dumps(response, indent=4, sort_keys=True, default=str)
 
-# "goal" is the goal for the student in the form [total_hours, target_date]
-# no input data from frontend input necessary (gets username from sessionStorage)
+'''
+Gets a student's goal to be displayed on the dashboard. A student will only have one
+goal at a time.
+
+input data format:
+    "username": username of student who's goal we want
+
+output data format:
+    "code": 1 for success, 0 for failure
+    "goal": goal of the student in the form [total_hours, target_date]
+'''
 @app.route("/api/getGoal", methods = ['GET'])
 @cross_origin()
 def getGoal():
@@ -466,8 +595,21 @@ def getGoal():
         response["code"] = 0
     return json.dumps(response)
 
-# needed from frontend state: "username" can come from sessionStorage, "class" which is the class name,
-# "name" of campaign, "total_hours", "start_date", and "due_date"
+'''
+Used by teachers to create a campaign for a class that they own. The campaign is then
+visible by every student in that class.
+
+input data format:
+    "username": username of teacher creating the campaign
+    "current_class": class name that the campaign will be assigned to
+    "name": name of the campaign
+    "hours": total hours required to complete the campaign
+    "start_date": date the the campaign starts
+    "due_date": due date of the campaign
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/createCampaign", methods = ['POST'])
 @cross_origin()
 def createCampaign():
@@ -488,6 +630,19 @@ def createCampaign():
     return json.dumps(response)
 
 # needed from frontend state: "username" can come from sessionStorage, "total_hours", and "target_date"
+'''
+Used by students to set a goal for themselves. A student will only have one goal
+at a time. If a student already has a goal and sets a new one, the old goal is
+overwritten.
+
+input data format:
+    "username": username of the student setting the goal
+    "total_hours": total hours to achieve the goal
+    "target_date": target date for the goal to be completed by
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/createGoal", methods = ['POST'])
 @cross_origin()
 def createGoal():
@@ -503,6 +658,18 @@ def createGoal():
         response["code"] = 0
     return json.dumps(response)
 
+'''
+Used by teachers once they receive a reset password link to reset their password.
+Replaces old password in the database with the new password.
+
+input data format:
+    "username": username of teacher resetting their password
+    "new_password": newly reset password
+    "conf_new_password": confirmation of new password
+
+output data format:
+    "code": 1 for success, 0 for failure
+'''
 @app.route("/api/setNewPassword", methods=['POST'])
 @cross_origin()
 def setNewPassword():
@@ -530,69 +697,72 @@ def setNewPassword():
         response["code"] = 0
     return json.dumps(response)
 
-# Gets current progress for either a specific student or all students in a specific class, depending on 
-# user role. Queries database for each student for each campaign and calculates the percentage of completion
-# of that student for the given campaign.
-#
-# input data format: 
-#   "role": role of user, either "T" or "S" (from sessionStorage)
-#   "username": username of student whose progress we want or of teacher whose class we want
-#   "class": present if role is "T", name of class we want to see progress of
-#   "student_filter": 
-#
-# output data format:
-#   "code": 1 for success, 0 for failure
-#   "progress": list of all student progress for all campaigns of class in the form of
-#       [[campaign1, progress1], [campaign2, progess2], ...]
-#       with campaign# in the form of
-#           [class_name, campaign_name, total_hours, start_date, due_date]
-#       and progress# in the form of
-#           [[student1], [student2], ...]
-#           with student# in the form of
-#               [username, hours_complete, percentage_complete]
-#       example:
-#       [
-#           [
-#               [
-#                   "campaign1",
-#                   5,
-#                   "Tue, 02 Nov 2021 00:00:00 GMT",
-#                   "Sat, 06 Nov 2021 00:00:00 GMT"
-#               ],
-#               [
-#                   [
-#                       "student1",
-#                       3,
-#                       "60%"
-#                   ],
-#                   [
-#                       "student2",
-#                       3,
-#                       "60%"
-#                   ]
-#               ]
-#           ],
-#           [
-#               [
-#                   "campaign2",
-#                   10,
-#                   "Wed, 03 Nov 2021 00:00:00 GMT",
-#                   "Sun, 07 Nov 2021 00:00:00 GMT"
-#               ],
-#               [
-#                   [
-#                       "student1",
-#                       3,
-#                       "30%"
-#                   ],
-#                   [
-#                       "student2",
-#                       3,
-#                       "30%"
-#                   ]
-#               ]
-#           ]
-#       ]
+'''
+Gets current progress for either a specific student or all students in a specific class, depending on 
+user role. Queries database for each student for each campaign and calculates the percentage of completion
+of that student for the given campaign. Progess for campaigns is calculated by summing the total hours
+of work completed in the window set by the start and due dates of each campaign.
+
+input data format: 
+    "role": role of user, either "T" or "S" (from sessionStorage)
+    "username": username of student whose progress we want or of teacher whose class we want
+    "class": present if role is "T", name of class we want to see progress of
+    "student_filter": 
+
+output data format:
+    "code": 1 for success, 0 for failure
+    "progress": list of all student progress for all campaigns of class in the form of
+        [[campaign1, progress1], [campaign2, progess2], ...]
+        with campaign# in the form of
+            [class_name, campaign_name, total_hours, start_date, due_date]
+        and progress# in the form of
+            [[student1], [student2], ...]
+            with student# in the form of
+                [username, hours_complete, percentage_complete]
+        example:
+        [
+            [
+                [
+                    "campaign1",
+                    5,
+                    "Tue, 02 Nov 2021 00:00:00 GMT",
+                    "Sat, 06 Nov 2021 00:00:00 GMT"
+                ],
+                [
+                    [
+                        "student1",
+                        3,
+                        "60%"
+                    ],
+                    [
+                        "student2",
+                        3,
+                        "60%"
+                    ]
+                ]
+            ],
+            [
+                [
+                    "campaign2",
+                    10,
+                    "Wed, 03 Nov 2021 00:00:00 GMT",
+                    "Sun, 07 Nov 2021 00:00:00 GMT"
+                ],
+                [
+                    [
+                        "student1",
+                        3,
+                        "30%"
+                    ],
+                    [
+                        "student2",
+                        3,
+                        "30%"
+                    ]
+                ]
+            ]
+        ]
+'''
 @app.route("/api/getProgress", methods=['GET'])
 @cross_origin()
 def getProgress():
@@ -657,16 +827,18 @@ def getProgress():
         response["code"] = 0
         return json.dumps(response)
 
-# Helper function for /api/getProgress that calculates percentage of completion of a specific campaign
-# for a given student. Also handles that case where the student has not logged any work for the campaign.
-#
-# Parameters:
-#   progress: result of getStudentProgress database query in the form (user, total_hours)
-#   username: username of student in case student is not found in query
-#   goal_hours: total hours of campaign
-#
-# Returns:
-#   progress: complete progress report in the form (user, total_hours, percentage_complete)
+'''
+Helper function for /api/getProgress that calculates percentage of completion of a specific campaign
+for a given student. Also handles that case where the student has not logged any work for the campaign.
+
+Parameters:
+    progress: result of getStudentProgress database query in the form (user, total_hours)
+    username: username of student in case student is not found in query
+    goal_hours: total hours of campaign
+
+Returns:
+    progress: complete progress report in the form (user, total_hours, percentage_complete)
+'''
 def calculateProgress(progress, username, goal_hours):
     if len(progress) > 0:
         user, total = progress[0]
@@ -724,7 +896,20 @@ def getTotalHours():
         return json.dumps(response)
 
 '''
-Gets a list of recent work logged by students in a class or by a specific student. 
+Gets a list of recent work logged by students in a class or by a specific student. If this is
+called from the dashboard to be displayed there, it will only retrieve work from the last 14 days.
+Otherwise, if it is called from the view progress page, it will retrieve all past work.
+
+input data format:
+    "role": role of user retrieving progress
+    "all_work": boolean flag to signal whether to retrieve all work or last 14 days of work
+    "username": username of user retrieving progress
+    "current_class": if role is "T", name of class who's progress we want
+
+output data format:
+    "code": 1 for success, 0 for failure
+    "recent_work": list of recent work in the format [username, project, SDG, date, hours, description]
+    "message": if no recent work, message telling user that no work has been logged in the time frame
 '''
 @app.route("/api/getRecentWork", methods=['GET'])
 @cross_origin()
