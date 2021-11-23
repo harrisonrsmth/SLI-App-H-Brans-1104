@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            "currentClass": "",
+            "current_class": "",
             "recent_work": [],
             "message": "",
             all_work: false
@@ -145,7 +145,7 @@ class Dashboard extends React.Component {
                   <div class="form-group">
                   {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
                   {sessionStorage.getItem("role") == 'T' && <select class="form-select" id="class-selecter" onChange={async(e) => {
-                        this.state["currentClass"] = e.target.value
+                        this.state["current_class"] = e.target.value
                         await this.componentDidMount()
                       }
                       }>

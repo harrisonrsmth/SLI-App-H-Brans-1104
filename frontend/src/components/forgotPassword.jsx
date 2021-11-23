@@ -39,13 +39,13 @@ class ForgotPassword extends React.Component {
                     <h1>Forgot Password</h1>
                     <div className="form-group mt-2 mx-auto">
                         <label for="formGroupExampleInput2">Email</label>
-                        <input type="text"
+                        <input type="email"
                                 class="form-control"
                                 id="formGroupExampleInput2"
                                 placeholder="Input Email"
                                 onChange={e => this.setState({email: e.target.value})}/>
                         <small id="emailHelpBlock" class="form-text text-muted">
-                            Teachers, enter your email here to be sent your password! Be sure to check your spam folder.
+                            Teachers, enter your email here to be sent a link to reset your password! Be sure to check your spam folder.
                             Students, go to your teacher to retrieve your password.
                         </small>
                     </div>

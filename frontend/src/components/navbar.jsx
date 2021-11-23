@@ -8,7 +8,6 @@ export class NavBar extends React.Component {
 
     state = {
         isLoggedIn: false,
-        firstName: "",
         username: "",
         menu: [],
     }
@@ -19,7 +18,7 @@ export class NavBar extends React.Component {
             .then(data => {
                 console.log("navbar loaded")
                 console.log(data)
-                this.setState({firstName: data["fname"], username: data["username"]})
+                this.setState({username: data["username"]})
             })
             .catch(err => this.setState({isLoggedIn: true}))
 
@@ -52,9 +51,6 @@ export class NavBar extends React.Component {
             <Container>
                 <Navbar.Brand href="/dashboard">Seed and Lead</Navbar.Brand>
                     <Nav className="me-auto">
-                    {/* <font color='white'>
-                        Hello {this.state.firstName}                    
-                    </font> */}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/myClasses">Manage Classes</Nav.Link>}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/createCampaign">Create Campaign</Nav.Link>}
                         {sessionStorage.getItem("role") == 'T' && <Nav.Link href="/viewProgressT">View Progress</Nav.Link>}

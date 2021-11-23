@@ -1,4 +1,5 @@
 # import mysql.connector as mysql
+import datetime
 from types import resolve_bases
 from dotenv import load_dotenv
 import os
@@ -190,11 +191,11 @@ class DB:
         cursor.execute(sql, value)
         connection.close()
 
-    def logWork(self, data):
+    def logWork(self, username, project, sdg, date, hours, description):
         connection = self.mysql.connect()
         cursor = connection.cursor()
         sql = "INSERT INTO `Work` (user, project, SDG, date, hours, description) VALUES (%s, %s, %s, %s, %s, %s)"
-        inputs = (str(data["user"]), str(data["project"]), str(data["SDG"]), str(data["date"]), int(data["hours"]), str(data["description"]))
+        inputs = (str(username), str(project), str(sdg), str(date), int(hours), str(description))
         print(inputs)
         cursor.execute(sql, inputs)
         connection.close()

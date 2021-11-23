@@ -27,7 +27,7 @@ export class Api {
   getUserByToken(token) {
       var data = {'token': token};
       return new Promise((resolve, reject) => {
-        axios.post(`${this.url}/api/getCurrentUserToken`, data, this.config)
+        axios.get(`${this.url}/api/getCurrentUserToken`, {params: data})
             .then(x => {
                 resolve(x.data);
                 }
@@ -83,23 +83,9 @@ export class Api {
     })
   }
 
-  getAllClass(form) {
-    var id = sessionStorage.getItem("userID");
-    var data = {"teacher_id": id}
-    return new Promise((resolve, reject) => {
-          axios.post(`${this.url}/api/getAllClass`, form, this.config)
-          .then(x => {
-            resolve(x.data);
-          })
-          .catch(x => {
-            reject(x);
-          })
-        });
-  }
-
   getStudentList(form) {
       return new Promise((resolve, reject) => {
-            axios.post(`${this.url}/api/getStudentsFromClass`, form, this.config)
+            axios.get(`${this.url}/api/getStudentsFromClass`, {params: form})
             .then(x => {
               resolve(x.data);
             })
@@ -124,7 +110,7 @@ export class Api {
 
   getResetLinkUser(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getResetLinkUser`, form, this.config)
+      axios.post(`${this.url}/api/getResetLinkUser`, {params: form})
       .then(x => {
         resolve(x.data);
       })
@@ -157,10 +143,10 @@ export class Api {
   getCampaigns(form) {
     var username = sessionStorage.getItem("username")
     var role = sessionStorage.getItem("role")
-    var className = form["currentClass"]
-    var data = {"username": username, "role": role, "className": className}
+    var current_class = form["current_class"]
+    var data = {"username": username, "role": role, "current_class": current_class}
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getCampaigns`, data, this.config)
+      axios.get(`${this.url}/api/getCampaigns`, {params: data})
       .then(x => {
         resolve(x.data);
       })
@@ -174,7 +160,7 @@ export class Api {
     var username = sessionStorage.getItem("username")
     var data = {"username": username}
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getGoal`, data, this.config)
+      axios.get(`${this.url}/api/getGoal`, {params: data})
       .then(x => {
         resolve(x.data);
       })
@@ -224,7 +210,7 @@ export class Api {
     var username = sessionStorage.getItem("username")
     var data = {"username": username}
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getClassesList`, data, this.config)
+      axios.get(`${this.url}/api/getClassesList`, {params: data})
       .then(x => {
         resolve(x.data);
       })
@@ -238,7 +224,7 @@ export class Api {
     form["role"] = sessionStorage.getItem("role")
     form["username"] = sessionStorage.getItem("username")
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getRecentWork`, form, this.config)
+      axios.get(`${this.url}/api/getRecentWork`, {params: form})
       .then(x => {
         resolve(x.data);
       })
@@ -252,7 +238,7 @@ export class Api {
     form["role"] = sessionStorage.getItem("role")
     form["username"] = sessionStorage.getItem("username")
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/getProgress`, form, this.config)
+      axios.get(`${this.url}/api/getProgress`, {params: form})
       .then(x => {
         resolve(x.data);
       })

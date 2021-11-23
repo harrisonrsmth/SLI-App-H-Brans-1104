@@ -22,7 +22,7 @@ class ViewProgress extends React.Component {
         this.state = {
             "campaigns": [],
             student_filter: "",
-            currentClass: "class"
+            current_class: "class"
         }
     }
     render() {

@@ -12,8 +12,8 @@ class ResetPassword extends React.Component {
             link: window.location.href.split("/")[4],
             username: "",
             "redirect": false,
-            newPassword: "",
-            conf_newPassword: ""
+            new_password: "",
+            conf_new_password: ""
         };
     }
 
@@ -65,7 +65,7 @@ class ResetPassword extends React.Component {
                             id="exampleInputEmail1" 
                             aria-describedby="emailHelp" 
                             placeholder="New Password"
-                            onChange={e => this.setState({newPassword: e.target.value})}/>
+                            onChange={e => this.setState({new_password: e.target.value})}/>
                         <small id="emailHelp" class="form-text text-muted">New password should be between 8-20 characters.</small>
                     </div>
                     <div class="form-group">
@@ -75,7 +75,7 @@ class ResetPassword extends React.Component {
                             class="form-control" 
                             id="exampleInputPassword1" 
                             placeholder="Re-enter New Password"
-                            onChange={e => this.setState({conf_newPassword: e.target.value})}/>
+                            onChange={e => this.setState({conf_new_password: e.target.value})}/>
                     </div>
                     <button 
                         type="submit" 
