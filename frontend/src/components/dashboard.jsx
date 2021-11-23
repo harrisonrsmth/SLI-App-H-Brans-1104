@@ -93,40 +93,36 @@ class Dashboard extends React.Component {
         }
     }
 
-    componentDidMount() {
-      this.api.getCampaigns(this.state).then(data => {
-        console.log(this.state)
-        this.state["campaigns"] = data.campaignList;
-        console.log(data.campaignList)
-        console.log(this.state.campaigns)
+    async componentDidMount() {
+      await this.api.getCampaigns(this.state).then(data => {
+        this.setState({campaigns: data.campaignList});
       })
 
-      this.api.getGoal().then(data => {
+      await this.api.getGoal().then(data => {
         this.setState({goal: data.goal})
       })
 
-      this.api.getClasses().then(data => {
+      await this.api.getClasses().then(data => {
         if (data.classes) {
           this.setState({classes: data.classes})
         }
       })
-      console.log(this.state.classes)
-
-      this.api.getRecentWork(this.state).then(data => {
+      await this.api.getRecentWork(this.state).then(data => {
         if (data.recent_work) {
-          this.state["recent_work"] = data.recent_work
+          this.setState({recent_work: data.recent_work})
+          this.setState({message: ""})
         } else if (data.message) {
-          this.state["message"] = data.message
+          this.setState({recent_work: []})
+          this.setState({message: data.message})
         } else {
-          this.state["recent_work"] = []
-          this.state["message"] = ""
+          this.setState({recent_work: []})
+          this.setState({message: ""})
         }
-        console.log(data.recent_work)
-        console.log(data.message)
       })
+      return true;
     }
     
-    render() { 
+    render() {
         return (
             <div>
             <React.Fragment>
@@ -139,7 +135,7 @@ class Dashboard extends React.Component {
                 </font>
                   {
                     this.state.campaigns.map(campaign => {
-                      // console.log(campaign[0])
+                      console.log(campaign[0] + "here");
                       var date = new Date(campaign[3])
                       return <Campaign date={date.getMonth() + 1 + '/' + (date.getDate() + 1)  + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
@@ -148,10 +144,9 @@ class Dashboard extends React.Component {
                 <div class="col-4">
                   <div class="form-group">
                   {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
-                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" onChange={e => {
+                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" id="class-selecter" onChange={async(e) => {
                         this.state["currentClass"] = e.target.value
-                        console.log(this.state)
-                        this.componentDidMount()
+                        await this.componentDidMount()
                       }
                       }>
                         <option> --Select a Class-- </option>
