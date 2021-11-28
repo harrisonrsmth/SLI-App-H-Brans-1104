@@ -8,21 +8,28 @@ import Card from 'react-bootstrap/Card';
 class ViewProgressT extends React.Component {
     api = new Api();
 
-    componentDidMount() {
-        this.api.getProgress(this.state).then(data => {
+    async componentDidMount() {
+        await this.api.getProgress(this.state).then(data => {
             console.log(data.progress)
-            this.state["campaigns"] = data.progress
+            this.setState({campaigns: data.progress})
             console.log(this.state)
           })
         console.log(this.state.campaigns)
+
+        await this.api.getClasses().then(data => {
+            if (data.classes) {
+              this.setState({classes: data.classes})
+            }
+          })
     }
 
     constructor(props) {
         super(props);
         this.state = {
+            classes: [],
             "campaigns": [],
             student_filter: "",
-            currentClass: "class"
+            currentClass: ""
         }
     }
     render() {
@@ -30,6 +37,19 @@ class ViewProgressT extends React.Component {
             <>
                 <NavBar/>
                 <h3>View Progress</h3>
+                <select class="form-select" id="class-selecter" onChange={async(e) => {
+                        this.state["currentClass"] = e.target.value
+                        await this.componentDidMount()
+                      }
+                      }>
+                        <option> --Select a Class-- </option>
+                        {
+                          this.state.classes.map((myClass, id) => {
+                            // console.log(myClass[0]);
+                            return <option key={id} value={myClass[0]}>{myClass[0]}</option>
+                          })
+                        }
+                      </select>
                     <div style={{position: 'relative', left: '39%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
