@@ -806,13 +806,12 @@ def getProgress():
             campaigns = list(db.studentGetCampaigns(username))
             for campaign in campaigns:
                 campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
-                progress = db.getStudentProgress(username, campaign[2], campaign[3])
-                progress = calculateProgress(progress, username, campaign[2])
+                progress = db.getStudentProgress(username, campaign[0][2], campaign[0][3])
+                progress = calculateProgress(progress, username, campaign[0][2])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
         response["progress"] = total_progress
         response["code"] = 1
-        print(response)
         return json.dumps(response)
     except Exception as e:
         response["code"] = 0

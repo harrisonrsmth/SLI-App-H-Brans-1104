@@ -213,7 +213,7 @@ class DB:
     def studentGetCampaigns(self, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date desc"
         inputs = (str(student), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -228,7 +228,7 @@ class DB:
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()
-        return results
+        return (results[0][0], str(results[0][1]))
 
     def createCampaign(self, teacher, class_name, name, total_hours, start_date, due_date):
         connection = self.mysql.connect()
@@ -293,7 +293,7 @@ class DB:
     def teacherGetCampaigns(self, username, className):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s AND class LIKE %s ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s AND class LIKE %s ORDER BY due_date desc"
         inputs = (str(username), str(className))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -341,7 +341,7 @@ class DB:
     def teacherGetRecentWork(self, username, class_name, start_date = "1900-01-01", end_date = date.today()):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s;"
+        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s order by date desc;"
         inputs = (str(username), str(class_name), str(start_date), str(end_date))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()

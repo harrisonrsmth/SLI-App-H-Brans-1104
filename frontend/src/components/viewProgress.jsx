@@ -22,8 +22,13 @@ class ViewProgress extends React.Component {
 
     componentDidMount() {
         this.api.getProgress(this.state).then(data => {
+            console.log(data.progress)
             if (data.progress) {
                 this.setState({campaigns: data.progress})
+                console.log(this.state.campaigns)
+
+            } else {
+                console.log('hello')
             }
         })
 
