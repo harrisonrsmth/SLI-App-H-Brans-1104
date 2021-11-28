@@ -53,7 +53,7 @@ class ViewProgressT extends React.Component {
                     <div style={{position: 'relative', left: '39%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>Your class has completed 83 total hours of work this year! </Card.Title>
+                        <Card.Title>Your class has completed 1 total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>
@@ -72,11 +72,11 @@ class ViewProgressT extends React.Component {
                         <tbody>
                         <tr>
                             <td>Riverside Cleanup</td>
-                            <td>11/14/2021</td>
-                            <td>12/14/2021</td>
-                            <td>100</td>
-                            <td>83</td>
-                            <td>83% <ProgressBar variant="success" animated now={83}/></td>
+                            <td>11/19/2021</td>
+                            <td>12/19/2021</td>
+                            <td>10</td>
+                            <td>1</td>
+                            <td>10% <ProgressBar variant="success" animated now={10}/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -93,6 +93,13 @@ class ViewProgressT extends React.Component {
                         </thead>
                         <tbody>
                         <tr>
+                            <td>bob1</td>
+                            <td>11/19/2021</td>
+                            <td>Spent 1 hour picking up trash by the river</td>
+                            <td>Life Below Water</td>
+                            <td>1</td>
+                        </tr>
+                        {/* <tr>
                             <td>Johnny A</td>
                             <td>11/6/2021</td>
                             <td>Picked up trash</td>
@@ -112,7 +119,7 @@ class ViewProgressT extends React.Component {
                             <td>Suzie and I went to the river and picked up trash</td>
                             <td>Life Below Water</td>
                             <td>3</td>
-                        </tr>
+                        </tr> */}
                         </tbody>
                     </table>
             </>

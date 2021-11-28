@@ -10,9 +10,7 @@ class CreateClass extends React.Component {
         super(props);
         this.state = {
             username: sessionStorage.getItem("username"),
-            className: "",
-            classDescription: "",
-
+            class_name: ""
         }
     }
 
@@ -40,7 +38,7 @@ class CreateClass extends React.Component {
                     <input type="text"
                         class="form-control"
                         id="formGroupExampleInput"
-                        onChange={e => this.setState({className: e.target.value})}/>
+                        onChange={e => this.setState({class_name: e.target.value})}/>
                 </div>
                 {/* This doesn't work right now, might change later if needed
                 <div class="form-group">

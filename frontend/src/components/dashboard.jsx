@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            "currentClass": "",
+            "current_class": "",
             "recent_work": [],
             "message": "",
             all_work: false
@@ -136,7 +136,7 @@ class Dashboard extends React.Component {
                   {
                     this.state.campaigns.map(campaign => {
                       var date = new Date(campaign[3])
-                      return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                      return <Campaign date={date.getMonth() + 1 + '/' + (date.getDate() + 1)  + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
                 </div>
@@ -144,7 +144,7 @@ class Dashboard extends React.Component {
                   <div class="form-group">
                   {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
                   {sessionStorage.getItem("role") == 'T' && <select class="form-select" id="class-selecter" onChange={async(e) => {
-                        this.state["currentClass"] = e.target.value
+                        this.state["current_class"] = e.target.value
                         await this.componentDidMount()
                       }
                       }>

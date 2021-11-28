@@ -11,9 +11,9 @@ class MyClasses extends React.Component {
         super(props);
         this.state = {
             "role": "T",
-            "currentClass": "",
-            "teacher": sessionStorage.getItem("username"),
-            users: [
+            "current_class": "",
+            "username": sessionStorage.getItem("username"),
+            students: [
                 "Please add student to class"
             ],
             classes: []
@@ -27,14 +27,14 @@ class MyClasses extends React.Component {
         this.api.getStudentList(this.state).then(
             response => {
                 console.log(response);
-                console.log(this.state.teacher);
+                console.log(this.state.username);
                 console.log(response);
                 try {
                     if (response["studentList"].length > 0) {
-                        this.setState({users: response["studentList"]});
+                        this.setState({students: response["studentList"]});
                     }
                 } catch {
-                    this.setState({users: ["Please add student to class"]})
+                    this.setState({students: ["Please add student to class"]})
                 }
             })
             .catch(() => console.log("ok"))
@@ -74,7 +74,7 @@ class MyClasses extends React.Component {
                         <label>Select a Class</label>
                         <select class="form-select" onChange={e => {
                             // this.setState({ currentClass: e.target.value })
-                            this.state["currentClass"] = e.target.value
+                            this.state["current_class"] = e.target.value
                             this.componentDidMount()
                             console.log(this.state)
                         }
@@ -101,7 +101,7 @@ class MyClasses extends React.Component {
                         </thead>
                         <tbody>
                         {
-                            this.state.users.map((user, id) => (
+                            this.state.students.map((user, id) => (
                             <tr key={id}>
                                 <td>{user}</td>
                                 <td><Link style={{fontSize:"0.6em"}} to={`/admin/info/${user.id}`} className="btn btn-sm btn-info" > Edit </Link></td>

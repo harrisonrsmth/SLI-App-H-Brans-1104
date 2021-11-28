@@ -131,27 +131,27 @@ class ViewProgress extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        {/* <tr>
                             <td>Tree Planting</td>
                             <td>11/6/2021</td>
                             <td>Spent 6 hours at a local park and planted 4 trees</td>
                             <td>Life On Land</td>
                             <td>6</td>
-                        </tr>
+                        </tr> */}
                         <tr>
-                            <td>Riverside Cleanup</td>
-                            <td>11/14/2021</td>
+                            <td>Cleanup</td>
+                            <td>11/19/2021</td>
                             <td>Spent 1 hour picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>1</td>
                         </tr>
-                        <tr>
+                        {/* <tr>
                             <td>Riverside Cleanup</td>
                             <td>11/15/2021</td>
                             <td>Spent 2 more hours picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>2</td>
-                        </tr>
+                        </tr> */}
                         </tbody>
                     </table>
                 </div>

@@ -15,7 +15,7 @@ class AddStudentToClass extends React.Component {
             conf_password: "",
             role: "S",
             teacher: sessionStorage.getItem("username"),
-            className: "",
+            current_class: "",
             classes: []
         }
 
@@ -47,7 +47,7 @@ class AddStudentToClass extends React.Component {
             <NavBar/>
                 <form id="createAccount" style={{ position: 'absolute', left: '15%', top: '15%' }}>                    <div class="form-group">
                         <label>Select a Class</label>
-                            <select class="form-select" onChange={e => this.setState({ className: e.target.value })}>
+                            <select class="form-select" onChange={e => this.setState({ current_class: e.target.value })}>
                             <option>--Select a Class--</option>
                             {
                                 this.state.classes.map((myClass, id) => {
