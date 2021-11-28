@@ -94,13 +94,13 @@ response data format:
 @cross_origin()
 def login():
     data = request.get_json(force=True)
-    print(str(data) + " ,,,,,")
+    # print(str(data) + " ,,,,,")
     username = data["username"]
     password = data["password"]
     response = {}
     records = db.getLogin(username)
     if len(records) > 0:
-        print(records)
+        # print(records)
         # ignore encoding for testing
         """
         cipher_suite = Fernet(key)
@@ -113,19 +113,19 @@ def login():
         #if password == get_password:
         str_pwd = bytes(records[0][1]).decode("utf-8")
         #str_pwd = records[0][1]
-        print(password)
-        print(str_pwd)
+        # print(password)
+        # print(str_pwd)
         if password == str_pwd:
             token = generateToken(32)
             username = records[0][0]
-            print(username, token, "test TOken")
+            # print(username, token, "test TOken")
             setUserToken(username, token)
             response["code"] = 1
             response["token"] = token
             response["username"] = username
             response["isLoggedIn"] = True
             response["role"] = records[0][2]
-            print(response)
+            # print(response)
             return json.dumps(response) # success
         else:
             return json.dumps({"code": 0}) # failure- password incorrect
@@ -176,7 +176,8 @@ def getUserToken():
         return json.dumps(response)
 
     except Exception as ex:
-        print(ex)
+        # print(ex)
+        return json.dumps({"code": 0})
 
 '''
 Used for teachers to get a list of their classes to be displayed in dropdown menus
@@ -205,7 +206,7 @@ def getClassesList():
             response["code"] = 0
         return json.dumps(response)
     except Exception as ex:
-        print(ex)
+        # print(ex)
         response["code"] = 0
         return json.dumps(response)
 
@@ -230,22 +231,22 @@ def getStudentsFromClass():
     try:
         current_class = request.args.get("current_class", default=None)
         teacher = request.args.get("username", default=None)
-        print("#########")
-        print(current_class)
-        print(teacher)
+        # print("#########")
+        # print(current_class)
+        # print(teacher)
         if teacher and current_class:
             # class_name = data["currentClass"]
             # teacher = data["teacher"]
             results = db.getStudentsOfClass(teacher, current_class)
             if results:
-                print(results)
+                # print(results)
                 response["studentList"] = [student[0] for student in results]
-            print(response)
+            # print(response)
             response["code"] = 1
             return json.dumps(response)
         return json.dumps({"code": 0})
     except Exception as ex:
-        print(ex)
+        # print(ex)
         return json.dumps({"code": 0})
 
 '''
@@ -274,7 +275,7 @@ output data format:
 @cross_origin()
 def createAccount():
     data = request.get_json(force=True)
-    print(data)
+    # print(data)
     response = {}
     try:
         if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
@@ -286,7 +287,7 @@ def createAccount():
                     db.createAccount(data["username"], data["password"], data["role"], data["fname"], data["lname"])
                     token = generateToken(32)
                     username = data["username"]
-                    print(username, token, "test TOken")
+                    # print(username, token, "test TOken")
                     setUserToken(username, token)
                     response["token"] = token
                     response["username"] = username
@@ -337,13 +338,13 @@ def createClass():
     try:
         data = request.get_json(force=True)
         response = {}
-        print(data)
+        # print(data)
         username = data["username"]
         class_name = data["class_name"]
-        print(username, class_name)
+        # print(username, class_name)
         # role "S" = student and "T" = teacher
         if username and class_name:
-            print("adsfdf")
+            # print("adsfdf")
             db.createNewClass(username, class_name)
             response["code"] = 1
         return json.dumps(response)
@@ -365,7 +366,7 @@ output data format:
 @app.route("/api/sendPasswordEmail", methods=['POST'])
 def sendPasswordEmail():
     data = request.get_json(force=True)
-    print(data)
+    # print(data)
     creatingLink = True
 
     # creating unique link extension for user to be added to database
@@ -378,11 +379,11 @@ def sendPasswordEmail():
             enc_link = str.encode(link)
             ciphered_link = cipher_suite.encrypt(enc_link)
             ciphered_link = bytes(ciphered_link).decode("utf-8")
-            print(ciphered_link)
+            # print(ciphered_link)
             db.createPasswordLink(data["email"], link)
             creatingLink = False
         except Exception as e:
-            print(e)
+            # print(e)
             return
     try:
         port = 465  # For SSL
@@ -398,13 +399,13 @@ def sendPasswordEmail():
         message = "Subject: {}\n\n{}".format(subject, text)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            print("check forgot password")
+            # print("check forgot password")
             server.login(sender_email, password)
-            print("check here")
+            # print("check here")
             server.sendmail(sender_email, receiver_email, message)
         response = {"code": 1}
     except Exception as e:
-        print(e)
+        # print(e)
         response = {"code": 0}
     return json.dumps(response)
 
@@ -425,14 +426,14 @@ def getResetLinkUser():
     # print(data)
     response = {}
     link = request.args.get("link", default=None)
-    print(link)
+    # print(link)
     try:
         cipher_suite = Fernet(key)
         # decoded_link = bytes(link).decode("utf-8")
         encrypted_link = str.encode(link)
         unciphered_link = cipher_suite.decrypt(encrypted_link)
         unciphered_link = bytes(unciphered_link).decode("utf-8")
-        print(unciphered_link)
+        # print(unciphered_link)
         results = db.getPasswordLink(unciphered_link)
         if len(results) > 0:
             response["username"] = results[0][0]
@@ -441,7 +442,7 @@ def getResetLinkUser():
             response["code"] = 0
     except:
         response["code"] = 0
-    print(response)
+    # print(response)
     return json.dumps(response)
 
 '''
@@ -464,7 +465,7 @@ output data format:
 def logWork():
     data = request.get_json(force=True)
     #data["date"] = datetime.strptime(data["date"],'%Y%m%d')
-    print(data)
+    # print(data)
     try:
         username = data["username"]
         project = data["project"]
@@ -475,7 +476,7 @@ def logWork():
         db.logWork(username, project, sdg, work_date, hours, description)
         return json.dumps({"code": 1}) #success
     except Exception as ex:
-        print(ex)
+        # print(ex)
         return json.dumps({"code": 0}) #id not in database
 
 '''
@@ -493,15 +494,15 @@ output data format:
 @cross_origin()
 def logout():
     data = request.get_json(force=True)
-    print(data)
+    # print(data)
     username = data["username"]
-    print(username)
+    # print(username)
     try:
-        print("deleting token")
+        # print("deleting token")
         db.deleteToken(username)
         return json.dumps({"code": 1}) #success
     except Exception as ex:
-        print(ex)
+        # print(ex)
         return json.dumps({"code": 0}) #id not in database
 
 # this is temporary token generating algorithm
@@ -531,7 +532,7 @@ def setUserToken(username, token):
     try:
         if username and token:
             record = db.insertToken(username, token)
-            print("insert token sucessful")
+            # print("insert token sucessful")
     except Exception as ex:
         return ex
 
@@ -562,7 +563,7 @@ def getCampaigns():
             campaigns = db.teacherGetCampaigns(username, current_class)
         else:
             campaigns = db.studentGetCampaigns(username)
-        print(campaigns)
+        # print(campaigns)
         response["campaignList"] = campaigns
         response["code"] = 1
     except:
@@ -588,7 +589,7 @@ def getGoal():
     response = {}
     try:
         goal = db.getGoal(username)
-        print(goal)
+        # print(goal)
         response["goal"] = goal
         response["code"] = 1
     except:
@@ -614,7 +615,7 @@ output data format:
 @cross_origin()
 def createCampaign():
     data = request.get_json(force=True)
-    print(data)
+    # print(data)
     response = {}
     try:
         username = data["username"]
@@ -673,21 +674,12 @@ output data format:
 @app.route("/api/setNewPassword", methods=['POST'])
 @cross_origin()
 def setNewPassword():
-    print("1")
     data = request.get_json(force=True)
-    print("2")
     response = {}
-    print("3")
     try:
         username = data["username"]
-        print("4")
         password = data["new_password"]
-        print("5")
         conf_password = data["conf_new_password"]
-        print("6")
-        print(username)
-        print(password)
-        print(conf_password)
         if len(password) >= 8 and password == conf_password:
             db.resetPassword(username, password)
             response["code"] = 1
@@ -776,10 +768,9 @@ def getProgress():
     try:
         total_progress = []
         if role == "T":
-            print('hi')
             # teacher is viewing progress
             print(1)
-            if len(student_filter) > 0:
+            if student_filter:
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
                 for campaign in campaigns:
@@ -789,26 +780,27 @@ def getProgress():
                     campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
             else:
-                # teacher views progress of entire class
-                print(1)
-                students = list(db.getStudentsOfClass(username, current_class))
                 print(2)
-                campaigns = list(db.teacherGetCampaigns(username, current_class))
+                # teacher views progress of entire class
+                students = list(db.getStudentsOfClass(username, current_class))
                 print(3)
+                campaigns = list(db.teacherGetCampaigns(username, current_class))
+                print(4)
                 for campaign in campaigns:
-                    print(4)
-                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                     print(5)
+                    campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
+                    print(6)
                     for student in students:
-                        print(6)
-                        progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
                         print(7)
-                        progress = calculateProgress(progress, student[0], campaign[1])
+                        progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
                         print(8)
-                        campaign_progress[1].append(progress)
+                        progress = calculateProgress(progress, student[0], campaign[1])
+                        print(type(progress))
                         print(9)
+                        campaign_progress[1].append(progress)
+                        print(10)
                     total_progress.append(campaign_progress)
-                    print(10)
+                    print(11)
         else:
             # student is viewing progress
             campaigns = list(db.studentGetCampaigns(username))
@@ -820,10 +812,9 @@ def getProgress():
                 total_progress.append(campaign_progress)
         response["progress"] = total_progress
         response["code"] = 1
+        print(response)
         return json.dumps(response)
     except Exception as e:
-        print(4)
-        print(e)
         response["code"] = 0
         return json.dumps(response)
 
@@ -851,7 +842,7 @@ def calculateProgress(progress, username, goal_hours):
         total = 0
         percentage = "0%"
     progress = (user, int(total), percentage)
-    return json.dumps(progress)
+    return progress
 '''
 Gets total hours of logged work in specific class or for a specific student depending on role
 Query has the option to be filtered by start date, end date, and teachers can request to see
