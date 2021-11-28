@@ -11,8 +11,8 @@ class CreateCampaign extends React.Component {
   constructor() {
     super();
     this.state = {
-        teacher: sessionStorage.getItem("username"),
-        className: "",
+        username: sessionStorage.getItem("username"),
+        current_class: "",
         name: "",
         hours: "",
         start_date: "",
@@ -56,7 +56,7 @@ class CreateCampaign extends React.Component {
             </div>
             <div class="form-group">
               <label>Which class is this for?</label>
-                <select class="form-select" onChange={e => this.setState({ className: e.target.value })}>
+                <select class="form-select" onChange={e => this.setState({ current_class: e.target.value })}>
                   <option> --Select a Class-- </option>
                   {
                     this.state.classes.map((myClass, id) => {
@@ -65,20 +65,17 @@ class CreateCampaign extends React.Component {
                     })
                   }
                 </select>
-                {/* onChange={e => this.setState({ className: e.target.value })} */}
+                {/* onChange={e => this.setState({ current_class: e.target.value })} */}
 
             </div>
             <div class="form-group">
               <label for="formGroupExampleInput2">Required Hours</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Required Hours"
                 onChange={e => this.setState({ hours: e.target.value })} />
-                <small id="hoursHelpBlock" class="form-text text-muted">
-                This should be a number! (1, 2, etc.)
-              </small>
             </div>
             <div class="form-group">
               <label for="formGroupExampleInput2">Start Date</label>

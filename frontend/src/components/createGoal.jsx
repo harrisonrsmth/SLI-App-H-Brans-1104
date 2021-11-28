@@ -12,9 +12,9 @@ class CreateGoal extends React.Component {
   constructor() {
     super();
     this.state = {
-        user: sessionStorage.getItem("username"),
-        hours: "",
-        date: ""
+        username: sessionStorage.getItem("username"),
+        total_hours: "",
+        target_date: ""
     };
   }
 
@@ -38,11 +38,11 @@ class CreateGoal extends React.Component {
             <div class="form-group">
               <label for="formGroupExampleInput">Set a target for service hours?</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="formGroupExampleInput"
                 placeholder="Input number of hours"
-                onChange={e => this.setState({ hours: e.target.value })} />
+                onChange={e => this.setState({ total_hours: e.target.value })} />
                 <small id="hoursHelpBlock" class="form-text text-muted">
                 This should be a number! (1, 2, etc.)
               </small>
@@ -54,7 +54,7 @@ class CreateGoal extends React.Component {
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Date"
-                onChange={e => this.setState({ date: e.target.value })} />
+                onChange={e => this.setState({ target_date: e.target.value })} />
             </div>
             <Link to="/dashboard"><button
               type="submit"

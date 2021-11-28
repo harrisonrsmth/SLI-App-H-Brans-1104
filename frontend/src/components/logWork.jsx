@@ -12,7 +12,7 @@ class LogWork extends React.Component {
   constructor() {
     super();
     this.state = {
-        user: sessionStorage.getItem("username"),
+        username: sessionStorage.getItem("username"),
         project: "",
         SDG: "",
         date: "",
@@ -60,6 +60,7 @@ class LogWork extends React.Component {
               <label for="formGroupExampleInput2">Description</label>
               <input
                 type="text"
+                maxLength="200"
                 class="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Input Description"
@@ -79,7 +80,8 @@ class LogWork extends React.Component {
             </div>
             <div class="form-group">
               <label for="exampleFormControlSelect1">Which SDG?</label>
-              <select class="form-select" id="exampleFormControlSelect1">
+              <select class="form-select" id="exampleFormControlSelect1"
+                onChange={e => this.setState({ SDG: e.target.value })}>
                 <option>-- Select an SDG --</option>
                 <option>No Poverty</option>
                 <option>Zero Hunger</option>

@@ -72,7 +72,6 @@ function Campaign(props) {
             {props.description}
             {props.sdg}
           </Card.Text>
-          <ProgressBar variant="success" animated now={30}/>
         </Card.Body>
         </Card><br />
       </div>
@@ -87,12 +86,14 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
-            "currentClass": "",
+            "current_class": "",
             "recent_work": [],
+            "message": "",
             all_work: false
         }
     }
 
+<<<<<<< HEAD
     componentDidMount() {
 
       this.api.getCampaigns(this.state).then(data => {
@@ -106,24 +107,39 @@ class Dashboard extends React.Component {
         if (data.goal) {
             this.setState({goal: data.goal})
         }
+=======
+    async componentDidMount() {
+      await this.api.getCampaigns(this.state).then(data => {
+        this.setState({campaigns: data.campaignList});
       })
 
-      this.api.getClasses().then(data => {
+      await this.api.getGoal().then(data => {
+        this.setState({goal: data.goal})
+>>>>>>> 199bcbdb80d0f19a8c54f70d15a416add86b5fa6
+      })
+
+      await this.api.getClasses().then(data => {
         if (data.classes) {
           this.setState({classes: data.classes})
         }
       })
-      console.log(this.state.classes)
-
-      this.api.getRecentWork(this.state).then(data => {
+      await this.api.getRecentWork(this.state).then(data => {
         if (data.recent_work) {
-          this.state["recent_work"] = data.recent_work
-        } 
-        console.log(data.recent_work)
+          this.setState({recent_work: data.recent_work})
+          this.setState({message: ""})
+        } else if (data.message) {
+          this.setState({recent_work: []})
+          this.setState({message: data.message})
+        } else {
+          this.setState({recent_work: []})
+          this.setState({message: ""})
+        }
       })
+      return true;
     }
 
     
+<<<<<<< HEAD
     // api call
     // getCurrentUser();
     // data = {body: {goals: []}}
@@ -135,6 +151,9 @@ class Dashboard extends React.Component {
     // body.goals.map(goal => <Goal title={goal.title}>)
 
     render() { 
+=======
+    render() {
+>>>>>>> 199bcbdb80d0f19a8c54f70d15a416add86b5fa6
         return (
             <div>
             <React.Fragment>
@@ -147,19 +166,18 @@ class Dashboard extends React.Component {
                 </font>
                   {
                     this.state.campaigns.map(campaign => {
-                      // console.log(campaign[0])
+                      console.log(campaign[0] + "here");
                       var date = new Date(campaign[3])
-                      return <Campaign date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                      return <Campaign date={date.getMonth() + 1 + '/' + (date.getDate() + 1)  + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                   {sessionStorage.getItem("role") == 'T' && <label>Select a Class</label>}
-                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" onChange={e => {
-                        this.state["currentClass"] = e.target.value
-                        console.log(this.state)
-                        this.componentDidMount()
+                  {sessionStorage.getItem("role") == 'T' && <select class="form-select" id="class-selecter" onChange={async(e) => {
+                        this.state["current_class"] = e.target.value
+                        await this.componentDidMount()
                       }
                       }>
                         <option> --Select a Class-- </option>
@@ -193,8 +211,10 @@ class Dashboard extends React.Component {
                             return <RecentWork student={recent[0]} date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
                           })
                         }
-                  {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 11/30/2021"} description={"Planted trees at my school"} title={"Tree Planting"}/>}
+                  {sessionStorage.getItem("role") == 'T' && this.state.message > 0 && <font>Recent Work</font>}
+                        {"\n\n" && this.state.message}
+                  {sessionStorage.getItem("role") == 'S' && <font>Current Goal</font>}
+                  {sessionStorage.getItem("role") == 'S' && <Goal date={"Target: 12/31/2021"} title={"Log 10 hours"}/>}
                 </div>
               </div>
               {/* <Link to="/myClasses"><button type="submit" class="btn btn-primary">Manage Classes</button></Link>
