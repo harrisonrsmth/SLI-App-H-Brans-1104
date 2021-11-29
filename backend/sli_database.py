@@ -351,7 +351,7 @@ class DB:
     def studentGetRecentWork(self, username, start_date = "1900-01-01", end_date = date.today()):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user like %s AND date BETWEEN %s and %s;"
+        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user like %s AND date BETWEEN %s and %s order by date;"
         inputs = (str(username), str(start_date), str(end_date))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()

@@ -28,7 +28,7 @@ class ViewProgress extends React.Component {
                 console.log(this.state.campaigns)
 
             } else {
-                console.log('hello')
+                this.setState({campaigns: []})
             }
         })
 
@@ -86,11 +86,11 @@ class ViewProgress extends React.Component {
                                     return (
                                         <tr key={id}>
                                             <td>{campaign[0][0]}</td>
-                                            <td>{campaign[0][3]}</td>
                                             <td>{campaign[0][2]}</td>
+                                            <td>{campaign[0][3]}</td>
+                                            <td>{campaign[1][0][1]}</td>
                                             <td>{campaign[0][1]}</td>
-                                            <td>fix</td>
-                                            <td>fix</td>
+                                            <td>{campaign[1][0][2]}% <ProgressBar variant="success" animated now={campaign[1][0][2]}/></td>
                                         </tr>
                                     )
                                     
@@ -116,12 +116,6 @@ class ViewProgress extends React.Component {
                                 <td>{this.state.goal[0]}</td>
                                 <td>fix</td>
                             </tr>
-                        {/* <tr>
-                            <td>11/30/2021</td>
-                            <td>10</td>
-                            <td>6</td>
-                            <td>60% <ProgressBar variant="success" animated now={60}/></td>
-                        </tr> */}
                         </tbody>
                     </table>
                     <h4>Logged Work</h4>
@@ -136,26 +130,27 @@ class ViewProgress extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
+                        {
+                                this.state["loggedWork"].map((work, id) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>{work[1]}</td>
+                                            <td>{work[3]}</td>
+                                            <td>{work[5]}</td>
+                                            <td>{work[2]}</td>
+                                            <td>{work[4]}</td>
+
+                                        </tr>
+                                    )
+                                    
+                                })
+                            }
                         {/* <tr>
-                            <td>Tree Planting</td>
-                            <td>11/6/2021</td>
-                            <td>Spent 6 hours at a local park and planted 4 trees</td>
-                            <td>Life On Land</td>
-                            <td>6</td>
-                        </tr> */}
-                        <tr>
                             <td>Cleanup</td>
                             <td>11/19/2021</td>
                             <td>Spent 1 hour picking up trash by the river</td>
                             <td>Life Below Water</td>
                             <td>1</td>
-                        </tr>
-                        {/* <tr>
-                            <td>Riverside Cleanup</td>
-                            <td>11/15/2021</td>
-                            <td>Spent 2 more hours picking up trash by the river</td>
-                            <td>Life Below Water</td>
-                            <td>2</td>
                         </tr> */}
                         </tbody>
                     </table>

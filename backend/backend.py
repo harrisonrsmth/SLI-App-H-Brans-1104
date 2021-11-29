@@ -836,11 +836,10 @@ def calculateProgress(progress, username, goal_hours):
         percentage = round(total / goal_hours * 100, 0)
         if percentage > 100:
             percentage = 100
-        percentage = str(percentage) + "%"
     else:
         user = username
         total = 0
-        percentage = "0%"
+        percentage = 0
     progress = (user, int(total), percentage)
     return progress
 '''
