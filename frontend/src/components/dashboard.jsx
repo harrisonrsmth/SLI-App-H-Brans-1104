@@ -93,21 +93,7 @@ class Dashboard extends React.Component {
         }
     }
 
-<<<<<<< HEAD
-    componentDidMount() {
 
-      this.api.getCampaigns(this.state).then(data => {
-        console.log(this.state)
-        this.state["campaigns"] = data.campaignList;
-        console.log(data.campaignList)
-        console.log(this.state.campaigns)
-      })
-
-      this.api.getGoal().then(data => {
-        if (data.goal) {
-            this.setState({goal: data.goal})
-        }
-=======
     async componentDidMount() {
       await this.api.getCampaigns(this.state).then(data => {
         this.setState({campaigns: data.campaignList});
@@ -115,7 +101,6 @@ class Dashboard extends React.Component {
 
       await this.api.getGoal().then(data => {
         this.setState({goal: data.goal})
->>>>>>> 199bcbdb80d0f19a8c54f70d15a416add86b5fa6
       })
 
       await this.api.getClasses().then(data => {
@@ -139,21 +124,8 @@ class Dashboard extends React.Component {
     }
 
     
-<<<<<<< HEAD
-    // api call
-    // getCurrentUser();
-    // data = {body: {goals: []}}
-    // const data = whatever is returned from api call
-    // {condition && <div> react component}
-    // {body.campaign && <div>{body.campaign.title}</div>}
-    // {body.goal && <div>{body.campaign.title}</div>}
-    // body.goals is an array
-    // body.goals.map(goal => <Goal title={goal.title}>)
 
-    render() { 
-=======
     render() {
->>>>>>> 199bcbdb80d0f19a8c54f70d15a416add86b5fa6
         return (
             <div>
             <React.Fragment>
