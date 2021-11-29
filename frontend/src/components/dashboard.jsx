@@ -90,7 +90,8 @@ class Dashboard extends React.Component {
             "recent_work": [],
             "message": "",
             all_work: false,
-            leaf: leaf00
+            leaf: leaf00,
+            badge: false
         }
     }
 
@@ -110,13 +111,17 @@ class Dashboard extends React.Component {
           let total = data.total_hours;
           total *= 10;
           total = 5 * Math.round(total/5);
-          if (total > 100) {
+          if (total >= 100) {
             this.setState({leaf: this.leafMapping[100]});
+            this.setState({badge: true});
+          } else {
+            this.setState({leaf: this.leafMapping[total]});
+            this.setState({badge: false});
           }
-          this.setState({leaf: this.leafMapping[total]});
-        })
+        });
       } else {
         this.setState({leaf: this.leafMapping[0]});
+        this.setState({badge: false});
       }
       
 
@@ -190,8 +195,9 @@ class Dashboard extends React.Component {
                       </div>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="250" height="250" />
-                      
+                      <div style={{width: 250, height: 250}}>
+                        {this.state.badge && <img src={badge} width="250" height="250"/>}
+                      </div>                      
                     </div>
                   </div>
                 </div>
