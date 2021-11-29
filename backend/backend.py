@@ -952,3 +952,26 @@ def getRecentWork():
     except Exception as e:
         response["code"] = 0
         return json.dumps(response)
+
+@app.route("/api/getGoalProgress", methods=['GET'])
+@cross_origin()
+def getGoalProgress():
+    try:
+        username = request.args.get("username", default=None)
+        response = {}
+        goal = db.getGoal(username)
+        if len(goal) > 0:
+            total_hours = goal[0]
+            target_date = goal[1]
+            progress = db.getStudentProgress(username, None, target_date)
+            if len(progress) > 0:
+                current_hours = int(progress[0][1])
+            else:
+                current_hours = 0
+            response["total_hours"] = total_hours
+            response["current_hours"] =  current_hours
+        response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response

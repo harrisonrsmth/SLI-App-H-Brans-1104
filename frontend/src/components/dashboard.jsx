@@ -99,7 +99,9 @@ class Dashboard extends React.Component {
       })
 
       await this.api.getGoal().then(data => {
-        this.setState({goal: data.goal})
+        if (data.goal) {
+          this.setState({goal: data.goal})
+        }
       })
 
       await this.api.getClasses().then(data => {
