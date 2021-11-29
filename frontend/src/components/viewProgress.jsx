@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { NavBar } from './navbar'
 import { Api } from '../api';
@@ -8,23 +8,46 @@ import Card from 'react-bootstrap/Card';
 class ViewProgress extends React.Component {
     api = new Api();
 
-    componentDidMount() {
-        this.api.getProgress(this.state).then(data => {
-            console.log(data.progress)
-            this.state["campaigns"] = data.progress
-            console.log(this.state)
-          })
-        console.log(this.state.campaigns)
-    }
-
     constructor(props) {
         super(props);
         this.state = {
-            "campaigns": [],
+            campaigns: [],
             student_filter: "",
-            current_class: "class"
+            currentClass: "class01",
+            goal: [],
+            loggedWork: [],
+            all_work: true
         }
     }
+
+    componentDidMount() {
+        this.api.getProgress(this.state).then(data => {
+            console.log(data.progress)
+            if (data.progress) {
+                this.setState({campaigns: data.progress})
+                console.log(this.state.campaigns)
+
+            } else {
+                console.log('hello')
+            }
+        })
+
+        this.api.getGoal(this.state).then(data => {
+            if (data.goal) {
+                this.setState({goal: data.goal})
+            }
+        })
+
+        this.api.getRecentWork(this.state).then(data => {
+            console.log(data.recent_work)
+            if (data.recent_work) {
+                this.setState({loggedWork: data.recent_work})
+            } else {
+                this.setState({loggedWork: []})
+            }
+        })
+    }
+
     render() {
         return (
             <>
@@ -52,20 +75,28 @@ class ViewProgress extends React.Component {
                                 <th>Campaign Name</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
-                                <th>Your Hours Assigned</th>
                                 <th>Your Hours Completed</th>
+                                <th>Your Hours Assigned</th>
                                 <th>Your Completion Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Riverside Cleanup</td>
-                            <td>11/19/2021</td>
-                            <td>12/19/2021</td>
-                            <td>5</td>
-                            <td>1</td>
-                            <td>20% <ProgressBar variant="success" animated now={20}/></td>
-                        </tr>
+                            {
+                                this.state["campaigns"].map((campaign, id) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>{campaign[0][0]}</td>
+                                            <td>{campaign[0][3]}</td>
+                                            <td>{campaign[0][2]}</td>
+                                            <td>{campaign[0][1]}</td>
+                                            <td>fix</td>
+                                            <td>fix</td>
+                                        </tr>
+                                    )
+                                    
+                                })
+                            }
+                        
                         </tbody>
                     </table>
                     <h4>Current Goal</h4>
@@ -73,18 +104,24 @@ class ViewProgress extends React.Component {
                         <thead>
                             <tr>
                                 <th>Target Date</th>
-                                <th>Goal Hours</th>
                                 <th>Hours Completed</th>
+                                <th>Goal Hours</th>
                                 <th>Completion Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>12/31/2021</td>
+                            <tr>
+                                <td>{this.state.goal[1]}</td>
+                                <td>fix</td>
+                                <td>{this.state.goal[0]}</td>
+                                <td>fix</td>
+                            </tr>
+                        {/* <tr>
+                            <td>11/30/2021</td>
                             <td>10</td>
-                            <td>1</td>
-                            <td>10% <ProgressBar variant="success" animated now={10}/></td>
-                        </tr>
+                            <td>6</td>
+                            <td>60% <ProgressBar variant="success" animated now={60}/></td>
+                        </tr> */}
                         </tbody>
                     </table>
                     <h4>Logged Work</h4>
