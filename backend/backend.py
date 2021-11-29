@@ -881,17 +881,25 @@ def getTotalHours():
     current_class = request.args.get("current_class", default=None)
     response = {}
     try:
+        total = 0
         if role == "T":
             if student_filter:
-                total = int(db.getStudentProgress(student_filter, start_date, end_date)[0][1])
+                student_progress = db.getStudentProgress(student_filter, start_date, end_date)[0][1]
+                if student_progress:
+                    total = int(student_progress)
             else:
-                total = int(db.getClassTotalHours(username, current_class, start_date, end_date)[0][0])
+                class_hours = db.getClassTotalHours(username, current_class, start_date, end_date)[0][0]
+                if class_hours:
+                    total = int(class_hours)
         else:
-            total = int(db.getStudentProgress(username, start_date, end_date)[0][1])
+            student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
+            if student_progress:
+                total = int(student_progress)
         response["total_hours"] = total
         response["code"] = 1
         return json.dumps(response, indent=4, sort_keys=True, default=str)
-    except:
+    except Exception as e:
+        print(e)
         response["code"] = 0
         return json.dumps(response)
 
