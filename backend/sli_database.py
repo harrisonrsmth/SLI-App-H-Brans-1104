@@ -330,7 +330,7 @@ class DB:
         if not end_date:
             end_date = str(date.today())
         connection = self.mysql.connect()
-        cursor = connection.connect()
+        cursor = connection.cursor()
         sql = "SELECT sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user IN (SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s);"
         inputs = (str(start_date), str(end_date), str(username), str(class_name))
         cursor.execute(sql, inputs)
