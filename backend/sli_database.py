@@ -49,11 +49,11 @@ class DB:
     def getLogin(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        print(username)
+        # print(username)
         cursor.execute("SELECT username, password, role, fname FROM `User` WHERE username LIKE \"%" + str(username) + "\"")
         result = cursor.fetchall()
         connection.close()
-        print("get login done")
+        # print("get login done")
         return result
 
     '''def getTeacherLogin(self, email):
@@ -85,26 +85,26 @@ class DB:
     def getUserToken(self, token):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        print("entered sql")
+        # print("entered sql")
         sql = "SELECT `user`, token_val FROM Token WHERE token_val = '{}'".format(token)
-        print("wrote sql script")
+        # print("wrote sql script")
         #get_token = (str(token), )
-        print("got token")
+        # print("got token")
         #################################################
         try:
             #self.cursor.execute(sql, get_token)
             cursor.execute(sql)
         except Exception as e:
-            print(e)
+            # print(e)
             return e
-        print("printing")
+        # print("printing")
         result = cursor.fetchall()
-        print(result)
+        # print(result)
         connection.close()
         return result
 
     def insertToken(self, username, token):
-        print("ADB")
+        # print("ADB")
         connection = self.mysql.connect()
         cursor = connection.cursor()
         deleted_old_token = "DELETE FROM Token WHERE `user`=%s"
@@ -113,13 +113,13 @@ class DB:
         cursor.execute("""DELETE FROM Token WHERE `user`=%s""", (username,))
         connection.commit()
         result = cursor.fetchall()
-        print(result)
+        # print(result)
         #print("insert new token")
         connection.close()
 
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        print("insert new token")
+        # print("insert new token")
         sql = "INSERT INTO Token VALUES (%s, %s)"
         input = (str(username), str(token))
         cursor.execute(sql, input)
@@ -133,17 +133,17 @@ class DB:
         insert_sql = "INSERT INTO Class VALUES (%s, %s)"
         insert_input = (str(teacher), str(class_name))
         cursor.execute(insert_sql, insert_input)
-        print("created new class successful")
+        # print("created new class successful")
         connection.close()
 
     def deleteToken(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        print("deleting...")
+        # print("deleting...")
         sql = "DELETE FROM Token WHERE `user` = %s"
         del_input = (str(username), )
         cursor.execute(sql, del_input)
-        print("deleted!")
+        # print("deleted!")
         connection.close()
 
     def createAccount(self, username, password, role, fname=None, lname=None):
@@ -196,14 +196,24 @@ class DB:
         cursor = connection.cursor()
         sql = "INSERT INTO `Work` (user, project, SDG, date, hours, description) VALUES (%s, %s, %s, %s, %s, %s)"
         inputs = (str(username), str(project), str(sdg), str(date), int(hours), str(description))
-        print(inputs)
+        # print(inputs)
         cursor.execute(sql, inputs)
         connection.close()
 
+    '''
+    Gets all campagins for the class that the given student is in.
+
+    Parameters:
+        student: username of student who's campaigns we want
+    
+    Returns:
+        results: list of tuple entries retrieved from database in the form (campaign name, total_hours, start_date, due_date) 
+        in ascending order of due date
+    '''
     def studentGetCampaigns(self, student):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE (teacher, class) in (SELECT teacher, class FROM InClass WHERE student LIKE %s) ORDER BY due_date desc"
         inputs = (str(student), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -218,7 +228,7 @@ class DB:
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()
-        return results
+        return (results[0][0], str(results[0][1]))
 
     def createCampaign(self, teacher, class_name, name, total_hours, start_date, due_date):
         connection = self.mysql.connect()
@@ -271,10 +281,11 @@ class DB:
         cursor.execute(sql, inputs)
         connection.close()
 
-    # Gets all campaigns for all classes that a teacher owns to be displayed on the teacher's dashboard.
+    # Gets all campaigns for a given class that a teacher owns to be displayed on the teacher's dashboard.
     #
     # Parameters:
     #   username: teacher's username
+    #   className: name of teacher's class
     #
     # Returns:
     #   results: list of tuple entries retrieved from database in the form (campaign name, total_hours, start_date, due_date)
@@ -282,7 +293,7 @@ class DB:
     def teacherGetCampaigns(self, username, className):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s AND class LIKE %s ORDER BY due_date ASC"
+        sql = "SELECT name, total_hours, start_date, due_date FROM Campaign WHERE teacher LIKE %s AND class LIKE %s ORDER BY due_date desc"
         inputs = (str(username), str(className))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
@@ -309,6 +320,7 @@ class DB:
         inputs = (str(start_date), str(due_date), str(username))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
+        print(results)
         connection.close()
         return results
 
@@ -329,7 +341,7 @@ class DB:
     def teacherGetRecentWork(self, username, class_name, start_date = "1900-01-01", end_date = date.today()):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s;"
+        sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user in (SELECT student FROM InClass WHERE teacher LIKE %s and class LIKE %s) and date BETWEEN %s and %s order by date desc;"
         inputs = (str(username), str(class_name), str(start_date), str(end_date))
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
