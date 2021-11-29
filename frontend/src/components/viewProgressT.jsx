@@ -11,25 +11,37 @@ class ViewProgressT extends React.Component {
     async componentDidMount() {
         await this.api.getProgress(this.state).then(data => {
             console.log(data.progress)
-            this.setState({campaigns: data.progress})
-            console.log(this.state)
+            if (data.progress) {
+                this.setState({campaigns: data.progress})
+            } else {
+                this.setState({campaigns: []})
+            }
           })
-        console.log(this.state.campaigns)
 
-        await this.api.getClasses().then(data => {
+        await this.api.getClasses(this.state).then(data => {
             if (data.classes) {
               this.setState({classes: data.classes})
             }
-          })
+        })
+
+        await this.api.getRecentWork(this.state).then(data => {
+            console.log(data.recent_work)
+            if (data.recent_work) {
+                this.setState({loggedWork: data.recent_work})
+            } else {
+                this.setState({loggedWork: []})
+            }
+        })
     }
 
     constructor(props) {
         super(props);
         this.state = {
             classes: [],
-            "campaigns": [],
+            campaigns: [],
             student_filter: "",
-            currentClass: ""
+            current_class: "",
+            loggedWork: []
         }
     }
     render() {
@@ -38,7 +50,7 @@ class ViewProgressT extends React.Component {
                 <NavBar/>
                 <h3>View Progress</h3>
                 <select class="form-select" id="class-selecter" onChange={async(e) => {
-                        this.state["currentClass"] = e.target.value
+                        await this.setState({current_class: e.target.value})
                         await this.componentDidMount()
                       }
                       }>
@@ -64,20 +76,27 @@ class ViewProgressT extends React.Component {
                                 <th>Campaign Name</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
-                                <th>Class Hours Assigned</th>
                                 <th>Class Hours Completed</th>
+                                <th>Class Hours Assigned</th>
                                 <th>Class Completion Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Riverside Cleanup</td>
-                            <td>11/19/2021</td>
-                            <td>12/19/2021</td>
-                            <td>10</td>
-                            <td>1</td>
-                            <td>10% <ProgressBar variant="success" animated now={10}/></td>
-                        </tr>
+                        {
+                                this.state.campaigns.map((campaign, id) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>{campaign[0][0]}</td>
+                                            <td>{campaign[0][2]}</td>
+                                            <td>{campaign[0][3]}</td>
+                                            <td>{campaign[1][0][1]}</td>
+                                            <td>{campaign[0][1]}</td>
+                                            <td>{campaign[1][0][2]}% <ProgressBar variant="success" animated now={campaign[1][0][2]}/></td>
+                                        </tr>
+                                    )
+                                    
+                                })
+                            }
                         </tbody>
                     </table>
                     <h4>Logged Work</h4>
@@ -92,34 +111,22 @@ class ViewProgressT extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>bob1</td>
-                            <td>11/19/2021</td>
-                            <td>Spent 1 hour picking up trash by the river</td>
-                            <td>Life Below Water</td>
-                            <td>1</td>
-                        </tr>
-                        {/* <tr>
-                            <td>Johnny A</td>
-                            <td>11/6/2021</td>
-                            <td>Picked up trash</td>
-                            <td>Life Below Water</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Suzie Q</td>
-                            <td>11/5/2021</td>
-                            <td>Spent 3 hours cleaning up by the river</td>
-                            <td>Life Below Water</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Hannah W</td>
-                            <td>11/5/2021</td>
-                            <td>Suzie and I went to the river and picked up trash</td>
-                            <td>Life Below Water</td>
-                            <td>3</td>
-                        </tr> */}
+                        {
+                                this.state["loggedWork"].map((work, id) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>{work[0]}</td>
+                                            <td>{work[3]}</td>
+                                            <td>{work[5]}</td>
+                                            <td>{work[2]}</td>
+                                            <td>{work[4]}</td>
+
+                                        </tr>
+                                    )
+                                    
+                                })
+                            }
+                        
                         </tbody>
                     </table>
             </>

@@ -89,7 +89,8 @@ class Dashboard extends React.Component {
             "current_class": "",
             "recent_work": [],
             "message": "",
-            all_work: false
+            all_work: false, 
+            goal_date: new Date("1900-12-01")
         }
     }
 
@@ -99,7 +100,10 @@ class Dashboard extends React.Component {
       })
 
       await this.api.getGoal().then(data => {
-        this.setState({goal: data.goal})
+        if (data.goal) {
+          this.setState({goal: data.goal})
+          this.state.goal_date = new Date(this.state.goal[1])
+        }
       })
 
       await this.api.getClasses().then(data => {
@@ -178,12 +182,7 @@ class Dashboard extends React.Component {
                     })
                 }
                 {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                {sessionStorage.getItem("role") == 'S' && 
-                  this.state.goal.map(goal => {
-                    var date = new Date(goal[1])
-                    return <Goal date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} hours={goal[0]}/>
-                  })
-                }
+                {sessionStorage.getItem("role") == 'S' && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]}/>}
                 </div>
               </div>
             </React.Fragment>

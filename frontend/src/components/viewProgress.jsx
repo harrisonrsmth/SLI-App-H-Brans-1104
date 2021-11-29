@@ -22,11 +22,8 @@ class ViewProgress extends React.Component {
 
     componentDidMount() {
         this.api.getProgress(this.state).then(data => {
-            console.log(data.progress)
             if (data.progress) {
                 this.setState({campaigns: data.progress})
-                console.log(this.state.campaigns)
-
             } else {
                 this.setState({campaigns: []})
             }
@@ -39,7 +36,6 @@ class ViewProgress extends React.Component {
         })
 
         this.api.getRecentWork(this.state).then(data => {
-            console.log(data.recent_work)
             if (data.recent_work) {
                 this.setState({loggedWork: data.recent_work})
             } else {
@@ -82,7 +78,7 @@ class ViewProgress extends React.Component {
                         </thead>
                         <tbody>
                             {
-                                this.state["campaigns"].map((campaign, id) => {
+                                this.state.campaigns.map((campaign, id) => {
                                     return (
                                         <tr key={id}>
                                             <td>{campaign[0][0]}</td>

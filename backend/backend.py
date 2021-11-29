@@ -785,6 +785,7 @@ def getProgress():
                 students = list(db.getStudentsOfClass(username, current_class))
                 print(3)
                 campaigns = list(db.teacherGetCampaigns(username, current_class))
+                print(campaigns)
                 print(4)
                 for campaign in campaigns:
                     print(5)
