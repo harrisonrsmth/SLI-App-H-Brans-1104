@@ -248,4 +248,30 @@ export class Api {
     })
   }
 
+  getTotalHours(form) {
+    form["role"] = sessionStorage.getItem("role")
+    form["username"] = sessionStorage.getItem("username")
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.url}/api/getTotalHours`, {params: form})
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
+  deleteUserAccount(form) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${this.url}/api/deleteUserAccount`, form, this.config)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
 }

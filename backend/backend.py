@@ -872,17 +872,28 @@ def getTotalHours():
     current_class = request.args.get("current_class", default=None)
     response = {}
     try:
-        if role == "T":
-            if student_filter:
-                total = int(db.getStudentProgress(student_filter, start_date, end_date)[0][1])
+        total = 0
+        try:
+            if role == "T":
+                if student_filter:
+                    student_progress = db.getStudentProgress(student_filter, start_date, end_date)[0][1]
+                    if student_progress:
+                        total = int(student_progress)
+                else:
+                    class_hours = db.getClassTotalHours(username, current_class, start_date, end_date)[0][0]
+                    if class_hours:
+                        total = int(class_hours)
             else:
-                total = int(db.getClassTotalHours(username, current_class, start_date, end_date)[0][0])
-        else:
-            total = int(db.getStudentProgress(username, start_date, end_date)[0][1])
+                student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
+                if student_progress:
+                    total = int(student_progress)
+        except IndexError:
+            pass
         response["total_hours"] = total
         response["code"] = 1
         return json.dumps(response, indent=4, sort_keys=True, default=str)
-    except:
+    except Exception as e:
+        print(e)
         response["code"] = 0
         return json.dumps(response)
 
@@ -952,3 +963,42 @@ def getRecentWork():
     except Exception as e:
         response["code"] = 0
         return json.dumps(response)
+
+@app.route("/api/getGoalProgress", methods=['GET'])
+@cross_origin()
+def getGoalProgress():
+    try:
+        username = request.args.get("username", default=None)
+        response = {}
+        goal = db.getGoal(username)
+        if len(goal) > 0:
+            total_hours = goal[0]
+            target_date = goal[1]
+            progress = db.getStudentProgress(username, None, target_date)
+            if len(progress) > 0:
+                current_hours = int(progress[0][1])
+            else:
+                current_hours = 0
+            response["total_hours"] = total_hours
+            response["current_hours"] =  current_hours
+        response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+
+@app.route("/api/deleteUserAccount", methods=['POST'])
+@cross_origin()
+def deleteUserAccount():
+    try:
+        data = request.get_json(force=True)
+        username = data["currStudent"]
+        response = {}
+        print(username + "hello")
+        db.deleteUser(username)
+        response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response

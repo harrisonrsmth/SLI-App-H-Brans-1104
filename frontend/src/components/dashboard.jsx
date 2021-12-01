@@ -89,18 +89,47 @@ class Dashboard extends React.Component {
             "current_class": "",
             "recent_work": [],
             "message": "",
-            all_work: false
+            all_work: false,
+            leaf: leaf00,
+            badge: false
         }
     }
 
 
+    leafMapping = {0: leaf00, 5: leaf05, 10: leaf10, 15: leaf15, 20: leaf20, 25: leaf25, 30: leaf30, 35: leaf35, 40: leaf40, 45: leaf45, 50: leaf50, 55: leaf55, 60: leaf60, 65: leaf65, 70: leaf70, 75: leaf75, 80: leaf80, 85: leaf85, 90: leaf90, 95: leaf95, 100: leaf100};
     async componentDidMount() {
       await this.api.getCampaigns(this.state).then(data => {
         this.setState({campaigns: data.campaignList});
       })
 
+      if (this.current_class !== "") {
+        let form = {
+          "role" : sessionStorage.getItem("role"),
+          "username" : sessionStorage.getItem("username"),
+          "current_class" : this.state.current_class
+        }
+        await this.api.getTotalHours(form).then(data => {
+          let total = data.total_hours;
+          total *= 10;
+          total = 5 * Math.round(total/5);
+          if (total >= 100) {
+            this.setState({leaf: this.leafMapping[100]});
+            this.setState({badge: true});
+          } else {
+            this.setState({leaf: this.leafMapping[total]});
+            this.setState({badge: false});
+          }
+        });
+      } else {
+        this.setState({leaf: this.leafMapping[0]});
+        this.setState({badge: false});
+      }
+      
+
       await this.api.getGoal().then(data => {
-        this.setState({goal: data.goal})
+        if (data.goal) {
+          this.setState({goal: data.goal})
+        }
       })
 
       await this.api.getClasses().then(data => {
@@ -162,14 +191,17 @@ class Dashboard extends React.Component {
 
                 </div>
 
-                  <div class="row justify-content-between">
+                  <div class="row justify-content-between" style={{paddingTop: "80px"}}>
 
-                    <div id ="leaf" class="col-4">
-                      <img src={leaf100} width="200" height="250"/>
+                    <div id ="leaf" class="col-4" style={{position: 'relative'}}>
+                      <div style={{position: 'absolute', bottom: '0'}}>
+                        <img src={this.state.leaf} width="200"/>
+                      </div>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="250" height="250" />
-                      
+                      <div style={{width: 250, height: 250}}>
+                        {this.state.badge && <img src={badge} width="250" height="250"/>}
+                      </div>                      
                     </div>
                   </div>
                 </div>

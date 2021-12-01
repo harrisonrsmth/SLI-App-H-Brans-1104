@@ -17,7 +17,7 @@ CREATE TABLE Class (
     teacher VARCHAR(40),
     name VARCHAR(100),
     PRIMARY KEY (teacher, name),
-    FOREIGN KEY (teacher) REFERENCES `User`(username)
+    FOREIGN KEY (teacher) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Token;
@@ -25,7 +25,7 @@ CREATE TABLE Token (
     `user` VARCHAR(40),
     token_val VARCHAR(50),
     PRIMARY KEY (`user`, token_val),
-    FOREIGN KEY (`user`) REFERENCES `User`(username)
+    FOREIGN KEY (`user`) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS InClass;
@@ -34,8 +34,8 @@ CREATE TABLE InClass (
     class VARCHAR(100),
     student VARCHAR(40),
     PRIMARY KEY (teacher, class, student),
-    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name),
-    FOREIGN KEY (student) REFERENCES `User`(username)
+    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name) ON DELETE CASCADE,
+    FOREIGN KEY (student) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `Work`;
@@ -48,7 +48,7 @@ CREATE TABLE `Work` (
     hours INT,
     `description` VARCHAR(200),
     PRIMARY KEY (id),
-    FOREIGN KEY (`user`) REFERENCES `User`(username)
+    FOREIGN KEY (`user`) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Campaign;
@@ -60,7 +60,7 @@ CREATE TABLE Campaign (
     start_date DATE,
     due_date DATE,
     PRIMARY KEY (teacher, class, name),
-    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name)
+    FOREIGN KEY (teacher, class) REFERENCES Class(teacher, name) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Goal;
@@ -69,7 +69,7 @@ CREATE TABLE Goal (
     total_hours INT,
     target_date DATE,
     PRIMARY KEY (`user`),
-    FOREIGN KEY (`user`) REFERENCES `User`(username)
+    FOREIGN KEY (`user`) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ResetLink;
@@ -77,7 +77,7 @@ CREATE TABLE ResetLink (
     `user` VARCHAR(40),
     link VARBINARY(140),
     PRIMARY KEY (`user`, link),
-    FOREIGN KEY (`user`) REFERENCES `User`(username)
+    FOREIGN KEY (`user`) REFERENCES `User`(username) ON DELETE CASCADE
 );
 
 /*INSERT INTO teacher (email, password, fname, lname) VALUES ("hey", "whatsup", "anh", "ho");

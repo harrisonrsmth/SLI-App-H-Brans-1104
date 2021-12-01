@@ -330,7 +330,7 @@ class DB:
         if not end_date:
             end_date = str(date.today())
         connection = self.mysql.connect()
-        cursor = connection.connect()
+        cursor = connection.cursor()
         sql = "SELECT sum(hours) FROM Work WHERE date BETWEEN %s AND %s AND user IN (SELECT student FROM InClass WHERE teacher LIKE %s AND class LIKE %s);"
         inputs = (str(start_date), str(end_date), str(username), str(class_name))
         cursor.execute(sql, inputs)
@@ -353,6 +353,16 @@ class DB:
         cursor = connection.cursor()
         sql = "SELECT user, project, SDG, date, hours, description FROM Work WHERE user like %s AND date BETWEEN %s and %s;"
         inputs = (str(username), str(start_date), str(end_date))
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results
+
+    def deleteUser(self, username):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "DELETE FROM USER WHERE username like %s;"
+        inputs = (str(username),)
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
         connection.close()
