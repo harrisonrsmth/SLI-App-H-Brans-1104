@@ -873,19 +873,22 @@ def getTotalHours():
     response = {}
     try:
         total = 0
-        if role == "T":
-            if student_filter:
-                student_progress = db.getStudentProgress(student_filter, start_date, end_date)[0][1]
+        try:
+            if role == "T":
+                if student_filter:
+                    student_progress = db.getStudentProgress(student_filter, start_date, end_date)[0][1]
+                    if student_progress:
+                        total = int(student_progress)
+                else:
+                    class_hours = db.getClassTotalHours(username, current_class, start_date, end_date)[0][0]
+                    if class_hours:
+                        total = int(class_hours)
+            else:
+                student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
                 if student_progress:
                     total = int(student_progress)
-            else:
-                class_hours = db.getClassTotalHours(username, current_class, start_date, end_date)[0][0]
-                if class_hours:
-                    total = int(class_hours)
-        else:
-            student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
-            if student_progress:
-                total = int(student_progress)
+        except IndexError:
+            pass
         response["total_hours"] = total
         response["code"] = 1
         return json.dumps(response, indent=4, sort_keys=True, default=str)
@@ -978,6 +981,22 @@ def getGoalProgress():
                 current_hours = 0
             response["total_hours"] = total_hours
             response["current_hours"] =  current_hours
+        response["code"] = 1
+        return response
+    except:
+        response["code"] = 0
+        return response
+
+
+@app.route("/api/deleteUserAccount", methods=['POST'])
+@cross_origin()
+def deleteUserAccount():
+    try:
+        data = request.get_json(force=True)
+        username = data["currStudent"]
+        response = {}
+        print(username + "hello")
+        db.deleteUser(username)
         response["code"] = 1
         return response
     except:

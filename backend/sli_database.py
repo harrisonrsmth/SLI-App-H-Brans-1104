@@ -357,3 +357,13 @@ class DB:
         results = cursor.fetchall()
         connection.close()
         return results
+
+    def deleteUser(self, username):
+        connection = self.mysql.connect()
+        cursor = connection.cursor()
+        sql = "DELETE FROM USER WHERE username like %s;"
+        inputs = (str(username),)
+        cursor.execute(sql, inputs)
+        results = cursor.fetchall()
+        connection.close()
+        return results

@@ -91,9 +91,11 @@ class Dashboard extends React.Component {
             "message": "",
             goal_date: new Date("1900-12-01"),
             all_work: false,
-            leaf: leaf00
+            leaf: leaf00,
+            badge: false
         }
     }
+
 
     leafMapping = {0: leaf00, 5: leaf05, 10: leaf10, 15: leaf15, 20: leaf20, 25: leaf25, 30: leaf30, 35: leaf35, 40: leaf40, 45: leaf45, 50: leaf50, 55: leaf55, 60: leaf60, 65: leaf65, 70: leaf70, 75: leaf75, 80: leaf80, 85: leaf85, 90: leaf90, 95: leaf95, 100: leaf100};
     async componentDidMount() {
@@ -111,13 +113,17 @@ class Dashboard extends React.Component {
           let total = data.total_hours;
           total *= 10;
           total = 5 * Math.round(total/5);
-          if (total > 100) {
+          if (total >= 100) {
             this.setState({leaf: this.leafMapping[100]});
+            this.setState({badge: true});
+          } else {
+            this.setState({leaf: this.leafMapping[total]});
+            this.setState({badge: false});
           }
-          this.setState({leaf: this.leafMapping[total]});
-        })
+        });
       } else {
         this.setState({leaf: this.leafMapping[0]});
+        this.setState({badge: false});
       }
       
 
@@ -147,7 +153,9 @@ class Dashboard extends React.Component {
       })
       return true;
     }
+
     
+
     render() {
         return (
             <div>
@@ -182,6 +190,7 @@ class Dashboard extends React.Component {
                           })
                         }
                       </select>}
+
                 </div>
 
                   <div class="row justify-content-between" style={{paddingTop: "80px"}}>
@@ -192,8 +201,9 @@ class Dashboard extends React.Component {
                       </div>
                     </div>
                     <div class="col-4" style={{position: 'relative', left: '-15%'}}>
-                      <img src={badge} width="250" height="250" />
-                      
+                      <div style={{width: 250, height: 250}}>
+                        {this.state.badge && <img src={badge} width="250" height="250"/>}
+                      </div>                      
                     </div>
                   </div>
                 </div>

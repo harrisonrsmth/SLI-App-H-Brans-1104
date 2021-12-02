@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { NavBar } from './navbar'
 import { Api } from '../api';
 import { Redirect } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
 
 class MyClasses extends React.Component {
     api = new Api();
@@ -14,16 +15,30 @@ class MyClasses extends React.Component {
             "current_class": "",
             "username": sessionStorage.getItem("username"),
             students: [
-                "Please add student to class"
+
             ],
-            classes: []
+            classes: [],
+
+            deleteFormShow: false,
+            currStudent: ""
         }
         this.headers = [
-            'Username', 'Edit', 'Delete'
+            'Username', 'Delete'
         ];
     }
 
     componentDidMount() {
+
+        this.updateStudentList()
+
+        this.api.getClasses().then(data => {
+            if (data.classes) {
+                this.setState({classes: data.classes})
+            }
+          })        
+    }
+
+    updateStudentList() {
         this.api.getStudentList(this.state).then(
             response => {
                 console.log(response);
@@ -34,16 +49,10 @@ class MyClasses extends React.Component {
                         this.setState({students: response["studentList"]});
                     }
                 } catch {
-                    this.setState({students: ["Please add student to class"]})
+                    this.setState({students: []})
                 }
             })
             .catch(() => console.log("ok"))
-        
-        this.api.getClasses().then(data => {
-            if (data.classes) {
-                this.setState({classes: data.classes})
-            }
-          })        
     }
 
     getClasses() {
@@ -57,6 +66,29 @@ class MyClasses extends React.Component {
             }
         )
         .catch(() => console.log("ok"))
+    }
+
+    handleDeleteUser(username) {
+        console.log(username);
+        this.setState({currStudent: username});
+        this.handleShow();
+    }
+    onDeleteSubmit = () => {
+        this.handleClose();
+        this.api.deleteUserAccount(this.state).then(
+            response => {
+                if (response["code"] === 1) {
+                    this.updateStudentList()
+                }
+            }
+        ).catch(() => console.log("deleted user sucessfully"))
+    }
+
+    handleClose = () => {
+        return this.setState({deleteFormShow: false, currStudent: ""});
+    }
+    handleShow = () => {
+        return this.setState({deleteFormShow: true})
     }
 
     render() {
@@ -104,13 +136,26 @@ class MyClasses extends React.Component {
                             this.state.students.map((user, id) => (
                             <tr key={id}>
                                 <td>{user}</td>
-                                <td><Link style={{fontSize:"0.6em"}} to={`/admin/info/${user.id}`} className="btn btn-sm btn-info" > Edit </Link></td>
                                 <td><button style={{fontSize:"0.6em"}}
                                 className="btn btn-sm btn-danger"
-                                onClick={() => this.deleteUser(user.firstName, user.id)}> Delete </button></td>
+                                onClick={() => this.handleDeleteUser(user)}> Delete </button></td>
                             </tr>
                             ))
                         }
+                        <Modal show={this.state.deleteFormShow} onHide={this.handleClose}>
+                            <Modal.Header handleClose>
+                                <Modal.Title>Delete Current Student</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div>{this.state.currStudent}</div>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <button className="btn btn-sm btn-danger" variant="secondary" onClick={this.handleClose}>
+                                    Cancel
+                                </button>
+                                <button className="btn btn-sm btn-primary" onClick={this.onDeleteSubmit}>Submit</button>
+                            </Modal.Footer>
+                        </Modal>
                         </tbody>
                     </table>
                 </div>
