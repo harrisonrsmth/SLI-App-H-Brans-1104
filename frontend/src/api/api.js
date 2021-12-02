@@ -170,6 +170,20 @@ export class Api {
     })
   }
 
+  getGoalProgress() {
+    var username = sessionStorage.getItem("username")
+    var data = {"username": username}
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.url}/api/getGoalProgress`, {params: data})
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+
   createCampaign(form) {
     return new Promise((resolve, reject) => {
       axios.post(`${this.url}/api/createCampaign`, form, this.config)

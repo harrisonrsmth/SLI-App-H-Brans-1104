@@ -24,6 +24,12 @@ class ViewProgressT extends React.Component {
             }
         })
 
+        await this.api.getTotalHours(this.state).then(data => {
+            if (data.total_hours) {
+                this.setState({totalHours: data.total_hours})
+            }
+        })
+
         await this.api.getRecentWork(this.state).then(data => {
             console.log(data.recent_work)
             if (data.recent_work) {
@@ -41,7 +47,8 @@ class ViewProgressT extends React.Component {
             campaigns: [],
             student_filter: "",
             current_class: "",
-            loggedWork: []
+            loggedWork: [],
+            totalHours: 0
         }
     }
     render() {
@@ -65,7 +72,7 @@ class ViewProgressT extends React.Component {
                     <div style={{position: 'relative', left: '39%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>Your class has completed 1 total hours of work this year! </Card.Title>
+                        <Card.Title>Your class has completed {this.state.totalHours} total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>

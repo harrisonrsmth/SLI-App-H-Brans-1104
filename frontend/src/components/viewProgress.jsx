@@ -15,8 +15,10 @@ class ViewProgress extends React.Component {
             student_filter: "",
             currentClass: "class01",
             goal: [],
+            goalProgress: 0,
             loggedWork: [],
-            all_work: true
+            all_work: true,
+            totalHours: 0
         }
     }
 
@@ -35,11 +37,23 @@ class ViewProgress extends React.Component {
             }
         })
 
+        this.api.getGoalProgress(this.state).then(data => {
+            if (data.current_hours) {
+                this.setState({goalProgress: data.current_hours})
+            }
+        })
+
         this.api.getRecentWork(this.state).then(data => {
             if (data.recent_work) {
                 this.setState({loggedWork: data.recent_work})
             } else {
                 this.setState({loggedWork: []})
+            }
+        })
+
+        this.api.getTotalHours(this.state).then(data => {
+            if (data.total_hours) {
+                this.setState({totalHours: data.total_hours})
             }
         })
     }
@@ -53,14 +67,14 @@ class ViewProgress extends React.Component {
                     <div style={{position: 'absolute', left: '15%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>You have completed 9 total hours of work this year! </Card.Title>
+                        <Card.Title>You have completed {this.state.totalHours} total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>
                     <div style={{position: 'relative', left: '65%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>Your class has completed 83 total hours of work this year! </Card.Title>
+                        <Card.Title>Your class has completed FIX total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>
@@ -108,9 +122,9 @@ class ViewProgress extends React.Component {
                         <tbody>
                             <tr>
                                 <td>{this.state.goal[1]}</td>
-                                <td>fix</td>
+                                <td>{this.state.goalProgress}</td>
                                 <td>{this.state.goal[0]}</td>
-                                <td>fix</td>
+                                <td>{(this.state.goalProgress / this.state.goal[0]) * 100}% <ProgressBar variant="success" animated now={(this.state.goalProgress / this.state.goal[0]) * 100}/></td>
                             </tr>
                         </tbody>
                     </table>

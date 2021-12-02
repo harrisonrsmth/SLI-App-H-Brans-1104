@@ -35,8 +35,9 @@ class CreateCampaign extends React.Component {
 
   componentDidMount() {
     this.api.getClasses().then(data => {
-      this.setState({classes: data.classes})
-      console.log(this.state.classes)
+      if (data.classes) {
+        this.setState({classes: data.classes})
+      }
     })
   }
   

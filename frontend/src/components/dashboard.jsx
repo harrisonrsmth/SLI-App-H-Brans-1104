@@ -50,11 +50,11 @@ function Campaign(props) {
         <Card border="primary" style={{ width: '18rem'}}>
         <Card.Header>Target: {props.date}</Card.Header>
         <Card.Body>
-          <Card.Title>Goal</Card.Title>
+          <Card.Title> Complete {props.hours} hours by the target date.</Card.Title>
           <Card.Text>
-            Complete {props.hours} by the target date.
+           
           </Card.Text>
-          <ProgressBar variant="success" animated now={60}/>
+          <ProgressBar variant="success" animated now={props.completed}/>
         </Card.Body>
         </Card><br />
       </div>
@@ -86,6 +86,7 @@ class Dashboard extends React.Component {
             classes: [],
             campaigns: [],
             goal: [],
+            goalProgress: 0,
             "current_class": "",
             "recent_work": [],
             "message": "",
@@ -101,6 +102,12 @@ class Dashboard extends React.Component {
     async componentDidMount() {
       await this.api.getCampaigns(this.state).then(data => {
         this.setState({campaigns: data.campaignList});
+      })
+
+      this.api.getGoalProgress(this.state).then(data => {
+        if (data.current_hours) {
+            this.setState({goalProgress: data.current_hours})
+        }
       })
 
       if (this.current_class !== "") {
@@ -216,7 +223,7 @@ class Dashboard extends React.Component {
                     })
                 }
                 {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                {sessionStorage.getItem("role") == 'S' && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]}/>}
+                {sessionStorage.getItem("role") == 'S' && (this.state.goal !== []) && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
                 </div>
               </div>
             </React.Fragment>
