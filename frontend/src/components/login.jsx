@@ -21,16 +21,16 @@ class Login extends React.Component {
     login() {
         this.api.login(this.state).then(
             data => {
-                if (data["code"] == 0) {
-                    alert(data.msg);
-                    window.location.reload();
-                } else {
+                if (data["code"] == 1) {
                     sessionStorage.setItem('isLoggedIn', data["isLoggedIn"]);
                     sessionStorage.setItem('token', data["token"]);
                     sessionStorage.setItem('username', data["username"]);
                     sessionStorage.setItem('role', data["role"]);
                     console.log(this.state);
                     console.log("success");
+                    window.location.reload();
+                } else {
+                    alert(data.msg);
                     window.location.reload();
                 }
             }
