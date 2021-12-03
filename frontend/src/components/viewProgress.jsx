@@ -16,7 +16,8 @@ class ViewProgress extends React.Component {
             goalProgress: 0,
             loggedWork: [],
             all_work: true,
-            totalHours: 0
+            indiv_hours: 0,
+            class_hours: 0
         }
     }
 
@@ -50,8 +51,11 @@ class ViewProgress extends React.Component {
         })
 
         this.api.getTotalHours(this.state).then(data => {
-            if (data.total_hours) {
-                this.setState({totalHours: data.total_hours})
+            if (data.indiv_hours) {
+                this.setState({indiv_hours: data.indiv_hours})
+            }
+            if (data.class_hours) {
+                this.setState({class_hours: data.class_hours})
             }
         })
     }
@@ -65,14 +69,14 @@ class ViewProgress extends React.Component {
                     <div style={{position: 'absolute', left: '15%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>You have completed {this.state.totalHours} total hours of work this year! </Card.Title>
+                        <Card.Title>You have completed {this.state.indiv_hours} total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>
                     <div style={{position: 'relative', left: '65%'}}>
                         <Card border="success" style={{ width: '18rem'}}>
                         <Card.Body>
-                        <Card.Title>Your class has completed FIX total hours of work this year! </Card.Title>
+                        <Card.Title>Your class has completed {this.state.class_hours} total hours of work this year! </Card.Title>
                         </Card.Body>
                         </Card><br />
                     </div>

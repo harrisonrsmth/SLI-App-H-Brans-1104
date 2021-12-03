@@ -281,18 +281,5 @@ export class Api {
       })
     })
   }
-  
-  getStudentClass() {
-    var form = {"username": sessionStorage.getItem("username")}
-    return new Promise((resolve, reject) => {
-      axios.get(`${this.url}/api/getStudentClass`, {params: form})
-      .then(x => {
-        resolve(x.data);
-      })
-      .catch(x => {
-        reject(x);
-      })
-    })
-  }
 
 }

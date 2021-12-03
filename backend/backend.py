@@ -893,14 +893,27 @@ def getTotalHours():
                     class_hours = db.getClassTotalHours(username, current_class, start_date, end_date)[0][0]
                     if class_hours:
                         total = int(class_hours)
+                response["total_hours"] = total
+                response["code"] = 1
             else:
+                print(1)
                 student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
+                print(2)
                 if student_progress:
+                    print(3)
                     total = int(student_progress)
+                    print(4)
+                student_class_info = db.getStudentClass(username)[0]
+                print(5)
+                print(student_class_info)
+                class_hours = db.getClassTotalHours(student_class_info[1], student_class_info[0], start_date, end_date)
+                print(class_hours)
+                print(6)
+                response["indiv_hours"] = total
+                response["class_hours"] = class_hours
         except IndexError:
             pass
-        response["total_hours"] = total
-        response["code"] = 1
+        
         return json.dumps(response, indent=4, sort_keys=True, default=str)
     except Exception as e:
         print(e)
@@ -1008,20 +1021,6 @@ def deleteUserAccount():
         print(username + "hello")
         db.deleteUser(username)
         response["code"] = 1
-        return json.dumps(response)
-    except:
-        response["code"] = 0
-        return json.dumps(response)
-
-@app.route("/api/getStudentClass", methods=['GET'])
-@cross_origin()
-def getStudentClass():
-    response = {}
-    try:
-        username = request.args.get("username", default=None)
-        result = db.getStudentClass(username)
-        response["code"] = 1
-        response["class"] = result[0][0]
         return json.dumps(response)
     except:
         response["code"] = 0

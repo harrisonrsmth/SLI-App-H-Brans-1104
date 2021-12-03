@@ -89,17 +89,18 @@ class ViewProgressT extends React.Component {
                         <tbody>
                         {
                                 this.state.campaigns.map((campaign, id) => {
-                                    return (
-                                        <tr key={id}>
-                                            <td>{campaign[0][0]}</td>
-                                            <td>{campaign[0][2]}</td>
-                                            <td>{campaign[0][3]}</td>
-                                            <td>{campaign[1][0][1]}</td>
-                                            <td>{campaign[0][1]}</td>
-                                            <td>{campaign[1][0][2]}% <ProgressBar variant="success" animated now={campaign[1][0][2]}/></td>
-                                        </tr>
-                                    )
-                                    
+                                    if (campaign) {
+                                        return (
+                                            <tr key={id}>
+                                                <td>{campaign[0][0]}</td>
+                                                <td>{campaign[0][2]}</td>
+                                                <td>{campaign[0][3]}</td>
+                                                <td>{campaign[1][0][1]}</td>
+                                                <td>{campaign[0][1]}</td>
+                                                <td>{campaign[1][0][2]}% <ProgressBar variant="success" animated now={campaign[1][0][2]}/></td>
+                                            </tr>
+                                        )
+                                    }
                                 })
                             }
                         </tbody>
