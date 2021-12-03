@@ -178,7 +178,7 @@ class Dashboard extends React.Component {
                   {
                     this.state.campaigns.map(campaign => {
                       var date = new Date(campaign[3])
-                      return <Campaign date={date.getMonth() + 1 + '/' + (date.getDate() + 1)  + '/' + date.getFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                      return <Campaign date={date.getUTCMonth() + 1 + '/' + date.getUTCDate()   + '/' + date.getUTCFullYear()} camp={campaign[0]} hours={campaign[1]} />
                     })
                   }
                 </div>
@@ -224,7 +224,7 @@ class Dashboard extends React.Component {
                     })
                 }
                 {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                {sessionStorage.getItem("role") == 'S' && (this.state.goal.length != 0) && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
+                {sessionStorage.getItem("role") == 'S' && (this.state.goal.length != 0) && <Goal date={this.state.goal_date.getUTCMonth() + 1 + '/' + this.state.goal_date.getUTCDate() + '/' + this.state.goal_date.getUTCFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
                 </div>
               </div>
             </React.Fragment>

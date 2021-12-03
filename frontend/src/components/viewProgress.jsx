@@ -12,8 +12,6 @@ class ViewProgress extends React.Component {
         super(props);
         this.state = {
             campaigns: [],
-            student_filter: "",
-            currentClass: "class01",
             goal: [],
             goalProgress: 0,
             loggedWork: [],
