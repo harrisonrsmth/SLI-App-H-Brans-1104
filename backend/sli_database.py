@@ -371,7 +371,7 @@ class DB:
     def getStudentClass(self, username):
         connection = self.mysql.connect()
         cursor = connection.cursor()
-        sql = "SELECT class FROM InClass WHERE student LIKE %s;"
+        sql = "SELECT class, teacher FROM InClass WHERE student LIKE %s;"
         inputs = (str(username), )
         cursor.execute(sql, inputs)
         results = cursor.fetchall()
