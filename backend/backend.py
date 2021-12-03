@@ -1,4 +1,5 @@
 import datetime
+from types import resolve_bases
 from cryptography.fernet import Fernet
 from flask import Flask
 import sli_database
@@ -991,10 +992,10 @@ def getGoalProgress():
             response["total_hours"] = total_hours
             response["current_hours"] =  current_hours
         response["code"] = 1
-        return response
+        return json.dumps(response)
     except:
         response["code"] = 0
-        return response
+        return json.dumps(response)
 
 
 @app.route("/api/deleteUserAccount", methods=['POST'])
@@ -1007,7 +1008,21 @@ def deleteUserAccount():
         print(username + "hello")
         db.deleteUser(username)
         response["code"] = 1
-        return response
+        return json.dumps(response)
     except:
         response["code"] = 0
-        return response
+        return json.dumps(response)
+
+@app.route("/api/getStudentClass", methods=['GET'])
+@cross_origin()
+def getStudentClass():
+    response = {}
+    try:
+        username = request.args.get("username", default=None)
+        result = db.getStudentClass(username)
+        response["code"] = 1
+        response["class"] = result[0][0]
+        return json.dumps(response)
+    except:
+        response["code"] = 0
+        return json.dumps(response)

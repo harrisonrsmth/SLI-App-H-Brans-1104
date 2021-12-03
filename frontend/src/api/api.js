@@ -272,7 +272,20 @@ export class Api {
 
   deleteUserAccount(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/deleteUserAccount`, form, this.config)
+      axios.post(`${this.url}/api/deleteUserAccount`, form)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+  
+  getStudentClass() {
+    form = {"username": sessionStorage.getItem("username")}
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.url}/api/getStudentClass`, {params: form})
       .then(x => {
         resolve(x.data);
       })
