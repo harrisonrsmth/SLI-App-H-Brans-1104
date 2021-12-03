@@ -46,7 +46,7 @@ app.register_blueprint(manage_stud_accounts)
 app.register_blueprint(authenticate_endpoint)
 
 # key value for encryption
-key = b'mb_odrbq8UOpSh3Zd7mfsRTNLLIlnAuPJUB-FGZ_O7c='
+key = bytes(os.getenv("ENCRYPTION_KEY"), "utf-8")
 
 # create database instance
 db = sli_database.DB(app)
@@ -108,14 +108,19 @@ def login():
         unciphered_text = cipher_suite.decrypt(encrypted_pwd)
         fetched = bytes(unciphered_text).decode("utf-8")
         """
+        cipher_suite = Fernet(key)
+        decoded_password = bytes(records[0][1]).decode("utf-8")
+        encrypted_pwd = str.encode(decoded_password)
+        unciphered_text = cipher_suite.decrypt(encrypted_pwd)
+        fetched = bytes(unciphered_text).decode("utf-8")
         #print(password, str_pwd)
         #get_password = records[0][1]
         #if password == get_password:
-        str_pwd = bytes(records[0][1]).decode("utf-8")
+        # str_pwd = bytes(records[0][1]).decode("utf-8")
         #str_pwd = records[0][1]
         # print(password)
         # print(str_pwd)
-        if password == str_pwd:
+        if password == fetched:
             token = generateToken(32)
             username = records[0][0]
             # print(username, token, "test TOken")
@@ -279,12 +284,16 @@ def createAccount():
     response = {}
     try:
         if data["password"] == data["conf_password"] and len(data["password"]) >= 8:
+            cipher_suite = Fernet(key)
+            enc_pwd = str.encode(data["password"])
+            ciphered_pwd = cipher_suite.encrypt(enc_pwd)
+            ciphered_pwd = bytes(ciphered_pwd).decode("utf-8")
             try:
                 if data["role"] == "S":
-                    db.createAccount(data["username"], data["password"], data["role"])
+                    db.createAccount(data["username"], ciphered_pwd, data["role"])
                     db.addStudentToClass(data["teacher"], data["current_class"], data["username"])
                 else:
-                    db.createAccount(data["username"], data["password"], data["role"], data["fname"], data["lname"])
+                    db.createAccount(data["username"], ciphered_pwd, data["role"], data["fname"], data["lname"])
                     token = generateToken(32)
                     username = data["username"]
                     # print(username, token, "test TOken")
