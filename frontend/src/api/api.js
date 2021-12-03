@@ -3,15 +3,9 @@ import axios from 'axios'
 export class Api {
   url = 'http://127.0.0.1:5000';
 
-  config = {
-    headers: {
-      authorization: 'abc',
-    }
-  }
-
   login(form) {
      return new Promise((resolve, reject) => {
-        axios.post(`${this.url}/api/authenticateLogin`, form, this.config)
+        axios.post(`${this.url}/api/authenticateLogin`, form)
            .then(x => {
                 console.log(x.data["token"]);
                 sessionStorage.setItem("token", x.data["token"]);
@@ -48,7 +42,7 @@ export class Api {
 
     createNewClass(form) {
         return new Promise((resolve, reject) => {
-            axios.post(`${this.url}/api/createNewClass`, form, this.config)
+            axios.post(`${this.url}/api/createNewClass`, form)
                 .then(x => {
                     resolve(x.data);
                 })
@@ -61,7 +55,7 @@ export class Api {
 
   logOut(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/logout`, form, this.config)
+      axios.post(`${this.url}/api/logout`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -73,7 +67,7 @@ export class Api {
 
   createAccount(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/createAccount`, form, this.config)
+      axios.post(`${this.url}/api/createAccount`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -98,7 +92,7 @@ export class Api {
 
   sendPasswordEmail(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/sendPasswordEmail`, form, this.config)
+      axios.post(`${this.url}/api/sendPasswordEmail`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -122,7 +116,7 @@ export class Api {
 
   logWork(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/logWork`, form, this.config)
+      axios.post(`${this.url}/api/logWork`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -186,7 +180,7 @@ export class Api {
 
   createCampaign(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/createCampaign`, form, this.config)
+      axios.post(`${this.url}/api/createCampaign`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -198,7 +192,7 @@ export class Api {
 
   createGoal(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/createGoal`, form, this.config)
+      axios.post(`${this.url}/api/createGoal`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -210,7 +204,7 @@ export class Api {
 
   resetPassword(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/setNewPassword`, form, this.config)
+      axios.post(`${this.url}/api/setNewPassword`, form)
       .then(x => {
         resolve(x.data);
       })
@@ -278,7 +272,20 @@ export class Api {
 
   deleteUserAccount(form) {
     return new Promise((resolve, reject) => {
-      axios.post(`${this.url}/api/deleteUserAccount`, form, this.config)
+      axios.post(`${this.url}/api/deleteUserAccount`, form)
+      .then(x => {
+        resolve(x.data);
+      })
+      .catch(x => {
+        reject(x);
+      })
+    })
+  }
+  
+  getStudentClass() {
+    form = {"username": sessionStorage.getItem("username")}
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.url}/api/getStudentClass`, {params: form})
       .then(x => {
         resolve(x.data);
       })
