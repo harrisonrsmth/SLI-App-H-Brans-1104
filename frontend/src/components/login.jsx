@@ -30,7 +30,7 @@ class Login extends React.Component {
                     console.log("success");
                     window.location.reload();
                 } else {
-                    alert(data.msg);
+                    alert("Please enter a valid username and password");
                     window.location.reload();
                 }
             }
