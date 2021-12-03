@@ -124,7 +124,7 @@ class ViewProgress extends React.Component {
                                 <td>{this.state.goal[1]}</td>
                                 <td>{this.state.goalProgress}</td>
                                 <td>{this.state.goal[0]}</td>
-                                <td>{(this.state.goalProgress / this.state.goal[0]) * 100}% <ProgressBar variant="success" animated now={(this.state.goalProgress / this.state.goal[0]) * 100}/></td>
+                                <td>{Math.round((this.state.goalProgress / this.state.goal[0]) * 100)}% <ProgressBar variant="success" animated now={(this.state.goalProgress / this.state.goal[0]) * 100}/></td>
                             </tr>
                         </tbody>
                     </table>

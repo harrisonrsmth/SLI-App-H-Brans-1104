@@ -158,6 +158,7 @@ class Dashboard extends React.Component {
           this.setState({message: ""})
         }
       })
+      console.log(this.state)
       return true;
     }
 
@@ -223,7 +224,7 @@ class Dashboard extends React.Component {
                     })
                 }
                 {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
-                {sessionStorage.getItem("role") == 'S' && (this.state.goal !== []) && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
+                {sessionStorage.getItem("role") == 'S' && (this.state.goal.length != 0) && <Goal date={this.state.goal_date.getMonth() + 1 + '/' + this.state.goal_date.getDate() + '/' + this.state.goal_date.getFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
                 </div>
               </div>
             </React.Fragment>

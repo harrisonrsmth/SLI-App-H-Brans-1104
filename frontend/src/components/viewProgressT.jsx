@@ -10,7 +10,6 @@ class ViewProgressT extends React.Component {
 
     async componentDidMount() {
         await this.api.getProgress(this.state).then(data => {
-            console.log(data.progress)
             if (data.progress) {
                 this.setState({campaigns: data.progress})
             } else {
@@ -25,13 +24,12 @@ class ViewProgressT extends React.Component {
         })
 
         await this.api.getTotalHours(this.state).then(data => {
-            if (data.total_hours) {
+            if (data.total_hours != null) {
                 this.setState({totalHours: data.total_hours})
             }
         })
 
         await this.api.getRecentWork(this.state).then(data => {
-            console.log(data.recent_work)
             if (data.recent_work) {
                 this.setState({loggedWork: data.recent_work})
             } else {
