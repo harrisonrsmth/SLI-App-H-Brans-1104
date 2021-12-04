@@ -23,6 +23,7 @@ class ViewProgress extends React.Component {
 
     componentDidMount() {
         this.api.getProgress(this.state).then(data => {
+            console.log(data)
             if (data.progress) {
                 this.setState({campaigns: data.progress})
             } else {
@@ -95,6 +96,7 @@ class ViewProgress extends React.Component {
                         <tbody>
                             {
                                 this.state.campaigns.map((campaign, id) => {
+                                    console.log(campaign)
                                     return (
                                         <tr key={id}>
                                             <td>{campaign[0][0]}</td>
@@ -122,12 +124,12 @@ class ViewProgress extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {this.state.goal.length != 0 && <tr>
                                 <td>{this.state.goal[1]}</td>
                                 <td>{this.state.goalProgress}</td>
                                 <td>{this.state.goal[0]}</td>
                                 <td>{Math.round((this.state.goalProgress / this.state.goal[0]) * 100)}% <ProgressBar variant="success" animated now={(this.state.goalProgress / this.state.goal[0]) * 100}/></td>
-                            </tr>
+                            </tr>}
                         </tbody>
                     </table>
                     <h4>Logged Work</h4>

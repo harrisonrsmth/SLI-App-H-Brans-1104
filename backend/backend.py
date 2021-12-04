@@ -779,7 +779,6 @@ def getProgress():
         total_progress = []
         if role == "T":
             # teacher is viewing progress
-            print(1)
             if student_filter:
                 # teacher views progress of specific student
                 campaigns = list(db.studentGetCampaigns(student_filter))
@@ -790,41 +789,36 @@ def getProgress():
                     campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
             else:
-                print(2)
                 # teacher views progress of entire class
                 students = list(db.getStudentsOfClass(username, current_class))
-                print(3)
                 campaigns = list(db.teacherGetCampaigns(username, current_class))
-                print(campaigns)
-                print(4)
                 for campaign in campaigns:
-                    print(5)
                     campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
-                    print(6)
                     for student in students:
-                        print(7)
                         progress = db.getStudentProgress(student[0], campaign[2], campaign[3])
-                        print(8)
                         progress = calculateProgress(progress, student[0], campaign[1])
-                        print(type(progress))
-                        print(9)
                         campaign_progress[1].append(progress)
-                        print(10)
                     total_progress.append(campaign_progress)
-                    print(11)
         else:
             # student is viewing progress
+            print('here')
             campaigns = list(db.studentGetCampaigns(username))
+            print(campaigns)
             for campaign in campaigns:
                 campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                 progress = db.getStudentProgress(username, campaign[0][2], campaign[0][3])
+                print("THIS SI THE PRORES")
+                print(progress)
+                print("PROGRESS END")
                 progress = calculateProgress(progress, username, campaign[0][2])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
+                # print(total_progress)
         response["progress"] = total_progress
         response["code"] = 1
         return json.dumps(response)
     except Exception as e:
+        print(e)
         response["code"] = 0
         return json.dumps(response)
 
@@ -896,19 +890,12 @@ def getTotalHours():
                 response["total_hours"] = total
                 response["code"] = 1
             else:
-                print(1)
-                student_progress = db.getStudentProgress(username, start_date, end_date)[0][1]
-                print(2)
-                if student_progress:
-                    print(3)
+                student_progress = db.getStudentProgress(username, start_date, end_date)
+                if len(student_progress) >= 1 and len(student_progress[0]) >= 2:
+                    student_progress = student_progress[0][1]
                     total = int(student_progress)
-                    print(4)
                 student_class_info = db.getStudentClass(username)[0]
-                print(5)
-                print(student_class_info)
                 class_hours = db.getClassTotalHours(student_class_info[1], student_class_info[0], start_date, end_date)
-                print(class_hours)
-                print(6)
                 response["indiv_hours"] = total
                 response["class_hours"] = class_hours
         except IndexError:
