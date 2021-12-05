@@ -37,7 +37,7 @@ function Campaign(props) {
           <Card.Text>
             You have a total of {props.hours} hours to complete.
           </Card.Text>
-          <ProgressBar variant="success" animated now={50}/>
+          {sessionStorage.getItem("role") == 'S' && <ProgressBar variant="success" animated now={props.progress}/>}
         </Card.Body>
         </Card><br />
       </div>
@@ -69,7 +69,7 @@ function Campaign(props) {
         <Card.Body>
           <Card.Title>{props.name}: {props.hours} hours</Card.Title>
           <Card.Text>
-            {props.description}
+            {props.description}<br></br>
             {props.sdg}
           </Card.Text>
         </Card.Body>
@@ -100,9 +100,24 @@ class Dashboard extends React.Component {
 
     leafMapping = {0: leaf00, 5: leaf05, 10: leaf10, 15: leaf15, 20: leaf20, 25: leaf25, 30: leaf30, 35: leaf35, 40: leaf40, 45: leaf45, 50: leaf50, 55: leaf55, 60: leaf60, 65: leaf65, 70: leaf70, 75: leaf75, 80: leaf80, 85: leaf85, 90: leaf90, 95: leaf95, 100: leaf100};
     async componentDidMount() {
-      await this.api.getCampaigns(this.state).then(data => {
-        this.setState({campaigns: data.campaignList});
-      })
+      if (sessionStorage.getItem("role") === "T") {
+        await this.api.getCampaigns(this.state).then(data => {
+          this.setState({campaigns: data.campaignList});
+        })
+      }
+
+      if (sessionStorage.getItem("role") === "S") {
+        await this.api.getProgress(this.state).then(data => {
+          var campaigns_with_progress = [];
+          for (let i = 0; i < data.progress.length; i++) {
+            var camp = data.progress[i][0];
+            var progress = data.progress[i][1][0];
+            campaigns_with_progress[i] = [camp, progress]
+          }
+          console.log(campaigns_with_progress)
+          this.setState({campaigns: campaigns_with_progress});
+        })
+      }
 
       this.api.getGoalProgress(this.state).then(data => {
         if (data.current_hours) {
@@ -117,7 +132,12 @@ class Dashboard extends React.Component {
           "current_class" : this.state.current_class
         }
         await this.api.getTotalHours(form).then(data => {
-          let total = data.total_hours;
+          let total = 0
+          if (sessionStorage.getItem("role") === "T") {
+            total = data.total_hours;
+          } else {
+            total = data.indiv_hours;
+          }
           total *= 10;
           total = 5 * Math.round(total/5);
           if (total >= 100) {
@@ -176,9 +196,20 @@ class Dashboard extends React.Component {
                   Campaigns                
                 </font>
                   {
+                    sessionStorage.getItem("role") === "T" &&
                     this.state.campaigns.map(campaign => {
                       var date = new Date(campaign[3])
-                      return <Campaign date={date.getUTCMonth() + 1 + '/' + date.getUTCDate()   + '/' + date.getUTCFullYear()} camp={campaign[0]} hours={campaign[1]} />
+                      console.log(campaign)
+                      var cp = <Campaign date={date.getUTCMonth() + 1 + '/' + date.getUTCDate()   + '/' + date.getUTCFullYear()} camp={campaign[0]} hours={campaign[1]}/>
+                      return cp
+                    })
+                  }
+                  {
+                    sessionStorage.getItem("role") === "S" &&
+                    this.state.campaigns.map(campaign => {
+                      var date = new Date(campaign[0][3])
+                      console.log(campaign)
+                      return <Campaign date={date.getUTCMonth() + 1 + '/' + date.getUTCDate()   + '/' + date.getUTCFullYear()} camp={campaign[0][0]} hours={campaign[0][1]} progress={campaign[1][2]}/>
                     })
                   }
                 </div>
@@ -220,7 +251,7 @@ class Dashboard extends React.Component {
                 {sessionStorage.getItem("role") == 'T' &&
                     this.state.recent_work.map(recent => {
                     var date = new Date(recent[3])
-                    return <RecentWork student={recent[0]} date={date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
+                    return <RecentWork student={recent[0]} date={date.getUTCMonth() + 1 + '/' + date.getUTCDate() + '/' + date.getUTCFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
                     })
                 }
                 {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}

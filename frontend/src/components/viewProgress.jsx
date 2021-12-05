@@ -53,9 +53,11 @@ class ViewProgress extends React.Component {
 
         this.api.getTotalHours(this.state).then(data => {
             if (data.indiv_hours) {
+                console.log(data.indiv_hours)
                 this.setState({indiv_hours: data.indiv_hours})
             }
             if (data.class_hours) {
+                console.log(data.class_hours)
                 this.setState({class_hours: data.class_hours})
             }
         })

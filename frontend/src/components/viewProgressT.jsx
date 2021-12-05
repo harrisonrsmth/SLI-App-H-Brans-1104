@@ -78,6 +78,7 @@ class ViewProgressT extends React.Component {
                     <table className="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>Student</th>
                                 <th>Campaign Name</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
@@ -91,14 +92,21 @@ class ViewProgressT extends React.Component {
                                 this.state.campaigns.map((campaign, id) => {
                                     if (campaign) {
                                         return (
-                                            <tr key={id}>
-                                                <td>{campaign[0][0]}</td>
-                                                <td>{campaign[0][2]}</td>
-                                                <td>{campaign[0][3]}</td>
-                                                <td>{campaign[1][0][1]}</td>
-                                                <td>{campaign[0][1]}</td>
-                                                <td>{campaign[1][0][2]}% <ProgressBar variant="success" animated now={campaign[1][0][2]}/></td>
-                                            </tr>
+                                            campaign[1].map((student, id) => {
+                                                if (student) {
+                                                    return (
+                                                        <tr key={id}>
+                                                        <td>{student[0]}</td>
+                                                        <td>{campaign[0][0]}</td>
+                                                        <td>{campaign[0][2]}</td>
+                                                        <td>{campaign[0][3]}</td>
+                                                        <td>{student[1]}</td>
+                                                        <td>{campaign[0][1]}</td>
+                                                        <td>{student[2]}% <ProgressBar variant="success" animated now={student[2]}/></td>
+                                                        </tr>
+                                                    )
+                                                }
+                                            })
                                         )
                                     }
                                 })
