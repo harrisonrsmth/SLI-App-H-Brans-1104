@@ -708,7 +708,7 @@ of work completed in the window set by the start and due dates of each campaign.
 input data format: 
     "role": role of user, either "T" or "S" (from sessionStorage)
     "username": username of student whose progress we want or of teacher whose class we want
-    "class": present if role is "T", name of class we want to see progress of
+    "current_class": present if role is "T", name of class we want to see progress of
     "student_filter": 
 
 output data format:
@@ -785,7 +785,7 @@ def getProgress():
                 for campaign in campaigns:
                     campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
                     progress = db.getStudentProgress(student_filter, campaign[2], campaign[3])
-                    progress = calculateProgress(progress, student_filter, campaign[2])
+                    progress = calculateProgress(progress, student_filter, campaign[1])
                     campaign_progress[1].append(progress)
                     total_progress.append(campaign_progress)
             else:
@@ -801,19 +801,13 @@ def getProgress():
                     total_progress.append(campaign_progress)
         else:
             # student is viewing progress
-            print('here')
             campaigns = list(db.studentGetCampaigns(username))
-            print(campaigns)
             for campaign in campaigns:
                 campaign_progress = [[campaign[0], campaign[1], str(campaign[2]), str(campaign[3])], []]
-                progress = db.getStudentProgress(username, campaign[0][2], campaign[0][3])
-                print("THIS SI THE PRORES")
-                print(progress)
-                print("PROGRESS END")
-                progress = calculateProgress(progress, username, campaign[0][2])
+                progress = db.getStudentProgress(username, campaign[2], campaign[3])
+                progress = calculateProgress(progress, username, campaign[1])
                 campaign_progress[1].append(progress)
                 total_progress.append(campaign_progress)
-                # print(total_progress)
         response["progress"] = total_progress
         response["code"] = 1
         return json.dumps(response)
@@ -895,9 +889,11 @@ def getTotalHours():
                     student_progress = student_progress[0][1]
                     total = int(student_progress)
                 student_class_info = db.getStudentClass(username)[0]
-                class_hours = db.getClassTotalHours(student_class_info[1], student_class_info[0], start_date, end_date)
+                class_hours = db.getClassTotalHours(student_class_info[1], student_class_info[0], start_date, end_date)[0][0]
+                if class_hours == None:
+                    class_hours = 0
                 response["indiv_hours"] = total
-                response["class_hours"] = class_hours
+                response["class_hours"] = int(class_hours)
         except IndexError:
             pass
         
