@@ -57,6 +57,7 @@ export class NavBar extends React.Component {
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/logWork">Log Work</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/createGoal">Set Goal</Nav.Link>}
                         {sessionStorage.getItem("role") == 'S' && <Nav.Link href="/viewProgress">View Progress</Nav.Link>}
+                        {<Nav.Link href="https://sdg-tracker.org/">Learn About SDGs</Nav.Link>}
 
                     </Nav>
                     <Nav className="ms-auto">
