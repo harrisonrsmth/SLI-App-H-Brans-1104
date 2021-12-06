@@ -254,7 +254,7 @@ class Dashboard extends React.Component {
                     return <RecentWork student={recent[0]} date={date.getUTCMonth() + 1 + '/' + date.getUTCDate() + '/' + date.getUTCFullYear()} name={recent[1]} hours={recent[4]} description={recent[5]} sdg={recent[2]}/>
                     })
                 }
-                {sessionStorage.getItem("role") == 'S' && <font>Goals</font>}
+                {sessionStorage.getItem("role") == 'S' && <font>Current Goal</font>}
                 {sessionStorage.getItem("role") == 'S' && (this.state.goal.length != 0) && <Goal date={this.state.goal_date.getUTCMonth() + 1 + '/' + this.state.goal_date.getUTCDate() + '/' + this.state.goal_date.getUTCFullYear()} hours={this.state.goal[0]} completed={(this.state.goalProgress / this.state.goal[0]) * 100}/>}
                 </div>
               </div>
