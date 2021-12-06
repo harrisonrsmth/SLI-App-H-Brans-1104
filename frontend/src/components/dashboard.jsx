@@ -93,7 +93,8 @@ class Dashboard extends React.Component {
             goal_date: new Date("1900-12-01"),
             all_work: false,
             leaf: leaf00,
-            badge: false
+            badge: false,
+            "total_hours": 0
         }
     }
 
@@ -138,6 +139,7 @@ class Dashboard extends React.Component {
           } else {
             total = data.indiv_hours;
           }
+          this.setState({total_hours: total})
           total *= 10;
           total = 5 * Math.round(total/5);
           if (total >= 100) {
@@ -244,6 +246,8 @@ class Dashboard extends React.Component {
                         {this.state.badge && <img src={badge} width="250" height="250"/>}
                       </div>                      
                     </div>
+                    <font>Complete 10 hours of work to earn a badge!</font>
+                    <font>You currently have {this.state["total_hours"]}/10 hours!</font>
                   </div>
                 </div>
                 <div style={{position: 'relative'}} class="col-4">
