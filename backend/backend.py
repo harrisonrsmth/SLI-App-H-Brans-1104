@@ -16,9 +16,7 @@ import smtplib
 from datetime import date, timedelta
 import json
 
-# import endpoint
-from ClassesAdministrator.manage_students_account import manage_stud_accounts
-from Authentication.authenticate import authenticate_endpoint
+
 
 app = Flask(__name__)
 CORS(app)
@@ -43,8 +41,7 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 # mysql = MySQL(app, host = SQL_HOST, user = SQL_USER, password = SQL_PASSWORD, db = "sli_database", autocommit = True, cursorclass = pymysql.cursors.DictCursor)
 # mysql.init_app(app)
 
-app.register_blueprint(manage_stud_accounts)
-app.register_blueprint(authenticate_endpoint)
+
 
 # key value for encryption
 key = bytes(os.getenv("ENCRYPTION_KEY"), "utf-8")
