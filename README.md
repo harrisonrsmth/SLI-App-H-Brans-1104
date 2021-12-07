@@ -91,20 +91,13 @@ The database that backs our application is hosted on AWS’s Relational Database
     - `heroku --version`
     - `heroku login`
     - `cd ~/SLI-APP-BRAN`
-3. Deploy frontend to Heroku
-    - `heroku create sli-frontend`
-    - `git add .`
-    - `git commit -m "Frontend Deployment"`
-    - `heroku git:remote -a sli-frontend`
-    - `heroku buildpacks:set heroku/nodejs`
-    - `git subtree push --prefix frontend heroku master`
-4. Deploy backend to Heroku
+3. Deploy backend to Heroku	
     - `heroku create sli-backend`
     - `git add .`
     - `git commit –m “Backend Deployment"`
     - `heroku git:remote -a sli-backend`
     - `heroku buildpacks:set heroku/python`
-5. Add Configuration Variables on Heroku Dashboard
+4. Add Configuration Variables on Heroku Dashboard
     - Go to your Heroku Dashboard and add these variables under the sli-backend dashbaord
         - SQL_HOST = AWS endpoint server 
 	    - SQL_USER = SQL username from AWS Database
@@ -113,6 +106,15 @@ The database that backs our application is hosted on AWS’s Relational Database
         - EMAIL_PASSWORD = your email password
         - ENCRYPTION-KEY = your encryption key
     ![Heroku Image](./deployment-documentation/Heroku-Backend-5.png)
+    - `git subtree push --prefix backend heroku master`
+5. Deploy frontend to Heroku
+    - Edit the URL at frontend/src/api/api.js line 4: url = "https://sli-server.herokuapp.com"
+    - `heroku create sli-frontend`
+    - `git add .`
+    - `git commit -m "Frontend Deployment"`
+    - `heroku git:remote -a sli-frontend`
+    - `heroku buildpacks:set heroku/nodejs`
+    - `git subtree push --prefix frontend heroku master`
 6. Your app should now be deployed online! You should be able to access it on the link provided in the Heroku Dashboard
 
 # Troubleshooting
