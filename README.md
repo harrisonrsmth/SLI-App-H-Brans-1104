@@ -108,7 +108,7 @@ The database that backs our application is hosted on AWS’s Relational Database
     ![Heroku Image](./deployment-documentation/Heroku-Backend-5.png)
     - `git subtree push --prefix backend heroku master`
 5. Deploy frontend to Heroku
-    - `npm install -g serve"
+    - `npm install -g serve`
     - Edit the URL at frontend/src/api/api.js line 4: url = "https://sli-server.herokuapp.com" (listing to the backend url)
     - Edit the package.json "scripts" to 
     	`"scripts": {
