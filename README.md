@@ -26,6 +26,7 @@
 # Install Guide
 This install guide walks through how to setup the database in AWS and how to deploy the code into Heroku for the frontend and backend.
 ## Pre-requisites and Dependencies
+Computer pre-requisites are Python 3.0+, Git, mySQL, and Node.js installed
 1. Clone the project via github
     - `git clone https://github.com/harrisonrsmth/SLI-App-H-Brans-1104.git`
 
