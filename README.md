@@ -111,13 +111,13 @@ The database that backs our application is hosted on AWS’s Relational Database
     - `npm install -g serve"
     - Edit the URL at frontend/src/api/api.js line 4: url = "https://sli-server.herokuapp.com" (listing to the backend url)
     - Edit the package.json "scripts" to 
-    	`"scripts": {\
-	    "dev": "react-scripts start",\ 
-	    "start": "serve -s build",\
-	    "build": "react-scripts build",\
-	    "test": "react-scripts test --env=jsdom",\
-	    "eject": "react-scripts eject",\
-	    "heroku-postbuild": "npm run build"\
+    	`"scripts": {
+	    "dev": "react-scripts start", 
+	    "start": "serve -s build",
+	    "build": "react-scripts build",
+	    "test": "react-scripts test --env=jsdom",
+	    "eject": "react-scripts eject",
+	    "heroku-postbuild": "npm run build"
 	  }`
     - `heroku create sli-frontend`
     - `git add .`
